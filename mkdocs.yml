@@ -1,0 +1,110 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+site_name: Datus Docs
+site_url: https://datus.ai/docs
+nav:
+  - Home: index.md
+
+  - Getting Started:
+    - Installation: getting_started/installation.md
+    - Quickstart: getting_started/Quickstart.md
+
+  - CLI:
+    - Introduction: cli/introduction.md
+    - Chat Command: cli/chat_command.md
+    - Context Command: cli/context_command.md
+    - Execution Command: cli/execution_command.md
+    - MCP Extensions: cli/mcp_extensions.md
+    - SQL Execution: cli/sql_execution.md
+    - Reference: cli/reference.md
+
+  - Knowledge Base:
+    - Introduction: knowledge_base/introduction.md
+    - Metadata: knowledge_base/metadata.md
+    - Metrics: knowledge_base/metrics.md
+    - SQL History: knowledge_base/sql_history.md
+  - Workflow:
+    - Introduction: workflow/introduction.md
+    - Nodes: workflow/nodes.md
+    - Orchestration: workflow/orchestration.md
+    - API: workflow/api.md
+
+  - Configuration:
+    - Introduction: configuration/introduction.md
+    - Agent: configuration/agent.md
+    - Workflow: configuration/workflow.md
+    - Benchmark: configuration/benchmark.md
+    - Namespace: configuration/namespace.md
+    - Storage: configuration/storage.md
+    - Nodes: configuration/nodes.md
+
+  - Benchmark:
+    - Introduction: benchmark/benchmark_manual.md
+
+  - Training:
+    - Introduction: training/llm_trace_usage.md
+
+  - Develop:
+    - Introduction: develop/README.md
+    - Architecture: develop/architecture.md
+    - Contribution: develop/Contributing.md
+
+theme:
+  name: material
+  logo: assets/logo.png
+  favicon: assets/logo.png
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: deep purple
+    - scheme: slate
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+  features:
+    - navigation.footer
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      repo_url_shorthand: true
+      user: squidfunk
+      repo: mkdocs-material
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      auto_append:
+        - includes/mkdocs.md
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
