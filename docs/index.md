@@ -7,7 +7,7 @@
 Get your Datus Agent up and running in minutes.
 
 !!! tip "Start Here"
-    [:material-rocket-launch: **Quick Installation**](installation.md){ .md-button .md-button--primary }
+    [:material-rocket-launch: **Quick Installation**](getting_started/installation.md){ .md-button .md-button--primary }
     
     Begin using Datus Agent in minutes with a fast, seamless experience
 
