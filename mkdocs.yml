@@ -1,52 +1,49 @@
 # yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
 site_name: Datus Docs
 site_url: https://datus.ai/docs
+copyright: "© 2025 Datus AI"
 nav:
-  - Home: index.md
+  - Home:
+    - Overview: index.md
+    - Getting Started:
+      - Installation: getting_started/installation.md
+      - Quickstart: getting_started/Quickstart.md
+    - CLI:
+      - Introduction: cli/introduction.md
+      - Chat Command: cli/chat_command.md
+      - Context Command: cli/context_command.md
+      - Execution Command: cli/execution_command.md
+      - MCP Extensions: cli/mcp_extensions.md
+      - SQL Execution: cli/sql_execution.md
+      - Reference: cli/reference.md
+    - Knowledge Base:
+      - Introduction: knowledge_base/introduction.md
+      - Metadata: knowledge_base/metadata.md
+      - Metrics: knowledge_base/metrics.md
+      - SQL History: knowledge_base/sql_history.md
+    - Workflow:
+      - Introduction: workflow/introduction.md
+      - Nodes: workflow/nodes.md
+      - Orchestration: workflow/orchestration.md
+      - API: workflow/api.md
+    - Configuration:
+      - Introduction: configuration/introduction.md
+      - Agent: configuration/agent.md
+      - Workflow: configuration/workflow.md
+      - Benchmark: configuration/benchmark.md
+      - Namespace: configuration/namespace.md
+      - Storage: configuration/storage.md
+      - Nodes: configuration/nodes.md
+    - Benchmark:
+      - Introduction: benchmark/benchmark_manual.md
+    - Training:
+      - Introduction: training/llm_trace_usage.md
+    - Develop:
+      - Introduction: develop/README.md
+      - Architecture: develop/architecture.md
+      - Contribution: develop/Contributing.md
 
-  - Getting Started:
-    - Installation: getting_started/installation.md
-    - Quickstart: getting_started/Quickstart.md
-
-  - CLI:
-    - Introduction: cli/introduction.md
-    - Chat Command: cli/chat_command.md
-    - Context Command: cli/context_command.md
-    - Execution Command: cli/execution_command.md
-    - MCP Extensions: cli/mcp_extensions.md
-    - SQL Execution: cli/sql_execution.md
-    - Reference: cli/reference.md
-
-  - Knowledge Base:
-    - Introduction: knowledge_base/introduction.md
-    - Metadata: knowledge_base/metadata.md
-    - Metrics: knowledge_base/metrics.md
-    - SQL History: knowledge_base/sql_history.md
-  - Workflow:
-    - Introduction: workflow/introduction.md
-    - Nodes: workflow/nodes.md
-    - Orchestration: workflow/orchestration.md
-    - API: workflow/api.md
-
-  - Configuration:
-    - Introduction: configuration/introduction.md
-    - Agent: configuration/agent.md
-    - Workflow: configuration/workflow.md
-    - Benchmark: configuration/benchmark.md
-    - Namespace: configuration/namespace.md
-    - Storage: configuration/storage.md
-    - Nodes: configuration/nodes.md
-
-  - Benchmark:
-    - Introduction: benchmark/benchmark_manual.md
-
-  - Training:
-    - Introduction: training/llm_trace_usage.md
-
-  - Develop:
-    - Introduction: develop/README.md
-    - Architecture: develop/architecture.md
-    - Contribution: develop/Contributing.md
+  - Release Notes: release_notes.md
 
 theme:
   name: material
@@ -54,16 +51,21 @@ theme:
   favicon: assets/logo.png
   palette:
     - scheme: default
-      primary: indigo
+      toggle:
+        icon: material/brightness-7 
+        name: Switch to dark mode
+      primary: white
       accent: deep purple
     - scheme: slate
-      primary: indigo
+      primary: white
       accent: deep purple
       toggle:
-        icon: material/weather-night
-        name: Switch to dark mode
+        icon: material/brightness-4
+        name: Switch to light mode
   features:
     - navigation.footer
+    - navigation.tabs
+    - navigation.tabs.sticky
 
 markdown_extensions:
   - abbr
@@ -108,3 +110,4 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.tilde
+  
