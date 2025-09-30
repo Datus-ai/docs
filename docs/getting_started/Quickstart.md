@@ -466,7 +466,7 @@ Now that you have Datus running, explore the Benchmark mode to evaluate performa
     Ensure Docker is installed and running on your system before proceeding.
 
 ```bash title="Terminal"
-docker pull datusai/datus-agent:0.1.13
+docker pull datusai/datus-agent:0.2.0-rc1
 ```
 
 ### Step 2: Launch the Docker Container
@@ -478,7 +478,7 @@ docker pull datusai/datus-agent:0.1.13
     ```bash title="Terminal"
     docker run --name datus \
     --env DEEPSEEK_API_KEY=<your_api_key>  \
-    -d datusai/datus-agent:0.1.13
+    -d datusai/datus-agent:0.2.0-rc1
     ```
 
 === "Spider 2.0-Snow"
@@ -488,7 +488,7 @@ docker pull datusai/datus-agent:0.1.13
     --env SNOWFLAKE_ACCOUNT=<your_snowflake_acount>  \
     --env SNOWFLAKE_USERNAME=<your_snowflake_username>  \
     --env SNOWFLAKE_PASSWORD=<your_snowflake_password>  \
-    -d datusai/datus-agent:0.1.13
+    -d datusai/datus-agent:0.2.0-rc1
     ```
 
 ### Step 3: Run Benchmark Tests

@@ -45,7 +45,7 @@ Datus requires a Python 3.12 environment. Choose your preferred method below:
 === "Beta Release"
 
     ```bash
-    pip install --no-deps -i https://test.pypi.org/simple/ datus-agent==0.1.13
+    pip install --no-deps -i https://test.pypi.org/simple/ datus-agent
     ```
 
 ## Step 2: Initialize the Configuration
