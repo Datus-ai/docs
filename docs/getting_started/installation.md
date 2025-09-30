@@ -79,6 +79,8 @@ Configure your preferred LLM provider:
 
 Set up the database connection. For example, `duckdb-demo.duckdb` is a demo database provided with the project:
 
+
+
 ```bash
 - Namespace name: duckdb-demo
 - Database type [sqlite/duckdb/snowflake/mysql/postgresql/starrocks] (starrocks):duckdb
@@ -86,6 +88,13 @@ Set up the database connection. For example, `duckdb-demo.duckdb` is a demo data
 → Testing database connectivity...
 ✔ Database connection test successful
 ```
+
+!!! tip "Demo Database Connection"
+    Datus provides a pre-configured demo DuckDB database for testing and learning purposes. 
+    
+    **Connection string:** `~/.datus/sample/duckdb-demo.duckdb`
+    
+    This demo database contains sample tables and data that you can use to explore Datus features without setting up your own database. It's automatically available after running `datus-agent init`.
 
 #### 3. Workspace Configuration
 
