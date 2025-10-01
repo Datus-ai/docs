@@ -1,0 +1,19 @@
+/* Theme-specific logo and favicon switching */
+
+/* Hide the default logo image */
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  content: url("../assets/logo-dark.png");
+}
+
+/* Light mode: use dark logo (for contrast on light background) */
+[data-md-color-scheme="default"] .md-header__button.md-logo img,
+[data-md-color-scheme="default"] .md-header__button.md-logo svg {
+  content: url("../assets/logo-light.png");
+}
+
+/* Dark mode: use light logo (for contrast on dark background) */
+[data-md-color-scheme="slate"] .md-header__button.md-logo img,
+[data-md-color-scheme="slate"] .md-header__button.md-logo svg {
+  content: url("../assets/logo-dark.png");
+}
