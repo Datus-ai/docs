@@ -66,6 +66,9 @@ theme:
     - navigation.instant.progress
     - navigation.tracking
     - navigation.indexes
+    - content.code.copy
+    - content.code.select
+  
 
 markdown_extensions:
   - abbr

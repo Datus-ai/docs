@@ -66,7 +66,7 @@ The setup process will guide you through configuring various components:
 
 Configure your preferred LLM provider:
 
-```bash
+```{ .yaml .no-copy }
 - Which LLM provider? [openai/deepseek/claude/kimi/qwen] (deepseek): kimi
 - Enter your API key:
 - Enter your base URL (https://api.deepseek.com):
@@ -81,7 +81,7 @@ Set up the database connection. For example, `duckdb-demo.duckdb` is a demo data
 
 
 
-```bash
+```{ .yaml .no-copy }
 - Namespace name: duckdb-demo
 - Database type [sqlite/duckdb/snowflake/mysql/postgresql/starrocks] (starrocks):duckdb
 - Connection string: ~/.datus/sample/duckdb-demo.duckdb
@@ -100,7 +100,7 @@ Set up the database connection. For example, `duckdb-demo.duckdb` is a demo data
 
 Configure the workspace root directory (where your SQL files are stored):
 
-```bash
+```{ .yaml .no-copy }
 - Workspace path (～/.datus/workspace):
 ✔ Workspace directory created
 ```
@@ -109,7 +109,7 @@ Configure the workspace root directory (where your SQL files are stored):
 
 Initialize the knowledge base for metadata and SQL history:
 
-```bash
+```{ .yaml .no-copy }
 - Initialize vector DB for metadata? [y/n] (n): y
 → Initializing metadata knowledge base...
 → Processed 17 tables with 17 sample records
@@ -141,7 +141,7 @@ datus-cli --namespace duckdb-demo
 
 You should see output similar to:
 
-```
+```{ .yaml .no-copy }
 Datus - AI-powered SQL command-line interface
 Type '.help' for a list of commands or '.exit' to quit.
 

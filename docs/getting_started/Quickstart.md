@@ -15,6 +15,8 @@ Use Datus like a chatbot: type natural language questions, get SQL or summaries 
 
 ```bash title="Terminal"
 datus-cli --namespace duckdb-demo
+```
+```{ .yaml .no-copy }
 Initializing AI capabilities in background...
 
 Datus - AI-powered SQL command-line interface
@@ -35,6 +37,8 @@ List all tables:
 
 ```bash title="Terminal"
 Datus> .tables
+```
+```{ .yaml .no-copy }
 Tables in Database duckdb-demo
 +---------------------+
 | Table Name          |
@@ -63,6 +67,8 @@ Ask any question you like. Here is a table named `gold_vs_bitcoin`. Let's view i
 
 ```bash title="Terminal"
 Datus> desc gold_vs_bitcoin
+```
+```{ .yaml .no-copy }
 +------------------+------------------+------------------+------------------+------------------+------------------+
 | column_name      | column_type      | null             | key              | default          | extra            |
 +==================+==================+==================+==================+==================+==================+
@@ -85,7 +91,7 @@ Datus> /Detailed analysis of gold–Bitcoin correlation.
 Datus will display its thinking process to show how it approaches the task, then provide a detailed report.
 
 ??? example "Detailed Analysis Output"
-    ```text
+    ```{ .yaml .no-copy }
     Creating new chat session...
     Processing chat request...
     +---------------------------------------------------------------------------------------------------------------------------------------+
@@ -179,7 +185,7 @@ FROM gold_vs_bitcoin
 **Analysis Results:**
 
 ??? success "Gold-Bitcoin Correlation Analysis"
-    ```text
+    ```{ .yaml .no-copy }
     +===============================================================================================================+
     |                                        Gold-Bitcoin Correlation Analysis                                     |
     +===============================================================================================================+
@@ -274,7 +280,7 @@ Datus> /@Table duckdb-demo.main.bank_failures
 Datus will automatically analyze the table and add metadata to the context.
 
 ??? example "Context Analysis Output"
-    ```text
+    ```{ .yaml .no-copy }
     Processing chat request...
     +----------------------------------------------------------------------------------------------------------------------------------+
     |                                                    Action Stream                                                                 |
@@ -478,7 +484,7 @@ docker pull datusai/datus-agent:0.2.0-rc1
     ```bash title="Terminal"
     docker run --name datus \
     --env DEEPSEEK_API_KEY=<your_api_key>  \
-    -d datusai/datus-agent:0.2.0-rc1
+    -d datusai/datus-agent:0.2.0
     ```
 
 === "Spider 2.0-Snow"
@@ -488,7 +494,7 @@ docker pull datusai/datus-agent:0.2.0-rc1
     --env SNOWFLAKE_ACCOUNT=<your_snowflake_acount>  \
     --env SNOWFLAKE_USERNAME=<your_snowflake_username>  \
     --env SNOWFLAKE_PASSWORD=<your_snowflake_password>  \
-    -d datusai/datus-agent:0.2.0-rc1
+    -d datusai/datus-agent:0.2.0
     ```
 
 ### Step 3: Run Benchmark Tests
