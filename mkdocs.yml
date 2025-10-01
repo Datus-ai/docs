@@ -36,12 +36,6 @@ nav:
       - Nodes: configuration/nodes.md
     - Benchmark:
       - Introduction: benchmark/benchmark_manual.md
-    - Training:
-      - Introduction: training/llm_trace_usage.md
-    - Develop:
-      - Introduction: develop/README.md
-      - Architecture: develop/architecture.md
-      - Contribution: develop/Contributing.md
 
   - Release Notes: release_notes.md
 
@@ -68,6 +62,10 @@ theme:
     - navigation.footer
     - navigation.tabs
     - navigation.tabs.sticky
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.indexes
 
 markdown_extensions:
   - abbr
