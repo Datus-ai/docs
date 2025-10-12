@@ -28,6 +28,10 @@ catalog
 
 ![Catalog Screen](../assets/catalog_screen.png)
 
+When your focus is on the panel where the **semantic model** is located and modify it via `Ctrl+e`.
+
+![Catalog Screen_Edit_Semantic](../assets/catalog_screen_edit_semantic.png)
+
 ### @subject
 ```
 domain
@@ -35,21 +39,25 @@ domain
       └── layer2
           └── semantic_model
               └── metrics
+              └── historical sqls
 ```
 
-![Subject Screen](../assets/subject_screen.png)
+![Subject Screen_Metrics](../assets/subject_screen_metrics.png)
 
-### @sql
-```
-domain
-  └── layer1
-      └── layer2
-          └── sql_history / sql_snippet
-```
+![Subject Screen_Historical_SQL](../assets/subject_screen_sql.png)
 
-![SQL History Screen](../assets/sql_history_screen.png)
+#### Modify Domain layers and Name
+When your focus is on the **domain tree** on the left, you can modify it via `Ctrl+e`
 
-When you select an item, it will be injected into the current chat turn as a reference — Datus will know its metadata, lineage, and purpose when generating SQL.
+![Subject Screen_Edit_Domain](../assets/subject_screen_edit_domain.png)
+
+
+#### Modify Metrics Details
+When your focus is on the panel where the **metrics details** are located on the right, you can modify it via `Ctrl+e`.
+![Subject_Screen_Edit_Metrics](../assets/subject_screen_edit_metrics.png)
+#### Modify Historical SQL
+When your focus is on the panel on the right where the **historical SQL details** is located, you can modify it via `Ctrl+e`
+![Subject_Screen_Edit_Historical_SQL](../assets/subject_screen_edit_sql.png)
 
 For the initialization of the context tree, you can refer to the Knowledge Base documentation.
 
