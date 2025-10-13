@@ -165,11 +165,7 @@ Limit to selected catalogs/tables and enable only relevant tools/MCPs (DB tools,
 **Example:**
 
 ```bash
-.subagent add kingleague_commercial
-.agent kingleague_commercial desc "Business chatbot for commercialization KPIs and cohorts"
-.agent kingleague_commercial rules add "Join fact_orders.user_id = dim_users.id"
-.agent kingleague_commercial context add @catalog game.prod dim_users fact_orders
-.agent kingleague_commercial tools enable db_tools context_search_tools
+.subagent add california_schools
 ```
 
 ### Delivering and Iterating
@@ -178,24 +174,19 @@ Limit to selected catalogs/tables and enable only relevant tools/MCPs (DB tools,
 
 Serve the subagent as a lightweight chatbot UI for analysts to perform multi-turn analysis and report preview.
 
+```bash
+datus-agent --namespace schools --web
+```
+
+You can then access `http://localhost:8501/?subagent=california_schools` (change `localhost` to your IP address if you're deploying the subagent to your stakeholders).
+
 **Collect and write back feedback**
 
-Analysts upvote good results and report failures with traceable session links. Export successful runs as **success stories**.
+Analysts upvote good results and report issues with traceable session links. Export successful runs as **success stories**.
 
 **Close the loop**
 
-Revise SQL, update rules and metadata, and expand the scoped context. The subagent improves continuously as knowledge is captured.
-
-**Example:**
-
-```bash
-# Serve the agent
-datus serve --namespace game --agent kingleague_commercial
-
-# In the web UI:
-# - Ask: "Weekly revenue by channel with 7-day cohort retention."
-# - Upvote good answers; report issues to feed the improvement queue.
-```
+When data engineers receive issue links from customers, they can revise SQL, update rules and metadata, build more metrics, or expand the scoped context. The subagent improves continuously as knowledge is captured.
 
 ## Next Steps
 
