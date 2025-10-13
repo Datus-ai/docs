@@ -1,265 +1,145 @@
+# Benchmark
 
-# Datus-Agent User Manual
+Evaluate Datus Agent's performance and capabilities using industry-standard benchmarks. Run comprehensive tests against datasets like BIRD and Spider 2.0-Snow to assess accuracy, execution success rate, and query generation quality.
 
-## Installation
+## Overview
 
-```bash
-# You can also use venv or other package management tools; here a Python 3.12 environment is required.
-conda create -n datus-agent python=3.12.8
+Datus Agent benchmark mode enables you to:
 
-conda activate datus-agent
+- **Measure Accuracy**: Evaluate how well the agent generates correct SQL from natural language
+- **Track Success Rates**: Monitor query execution success across different database types
+- **Compare Results**: Validate generated queries against expected outputs
+- **Identify Improvements**: Discover areas for optimization and refinement
 
-pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ datus-agent==0.1.1
+## Quick Start with Docker
+
+Get started quickly with pre-configured Docker containers that include benchmark datasets.
+
+### Step 1: Pull the Docker Image
+
+!!! tip
+    Ensure Docker is installed and running on your system before proceeding.
+
+```bash title="Terminal"
+docker pull datusai/datus-agent:0.2.0-rc1
 ```
 
-## Configuring the LLM and Database
+### Step 2: Launch the Docker Container
 
-### agent.yml
+!!! tip
+    Demo datasets are preloaded, allowing you to quickly explore Datus capabilities without additional setup.
 
-```bash
-cp ~/.datus/conf/agent.yml.build ~/.datus/conf/agent.yml
+=== "BIRD"
+    ```bash title="Terminal"
+    docker run --name datus \
+    --env DEEPSEEK_API_KEY=<your_api_key>  \
+    -d datusai/datus-agent:0.2.0
+    ```
+
+=== "Spider 2.0-Snow"
+    ```bash title="Terminal"
+    docker run --name datus \
+    --env DEEPSEEK_API_KEY=<your_api_key>  \
+    --env SNOWFLAKE_ACCOUNT=<your_snowflake_acount>  \
+    --env SNOWFLAKE_USERNAME=<your_snowflake_username>  \
+    --env SNOWFLAKE_PASSWORD=<your_snowflake_password>  \
+    -d datusai/datus-agent:0.2.0
+    ```
+
+### Step 3: Run Benchmark Tests
+
+!!! warning
+    Each task may take several minutes to complete. Running all tasks may require hours or days depending on your system configuration.
+
+**BIRD Dataset**
+
+!!! info
+    Task ID range: 0-1533
+
+=== "Run by Task ID"
+    ```bash title="Terminal"
+    docker exec -it datus python -m datus.main benchmark  \
+    --namespace bird_sqlite \
+    --benchmark bird_dev \
+    --benchmark_task_ids <task_id>
+    ```
+
+=== "Run All Tasks"
+    ```bash title="Terminal"
+    docker exec -it datus python -m datus.main benchmark  \
+    --namespace bird_sqlite \
+    --benchmark bird_dev
+    ```
+
+**Spider 2.0-Snow Dataset**
+
+!!! info
+    You can find the task ID (instance ID) in the [spider2-snow.jsonl](https://github.com/xlang-ai/Spider2/blob/main/spider2-snow/spider2-snow.jsonl) file.
+
+!!! note
+    Ensure you start the Docker container with Snowflake environment parameters configured.
+
+=== "Run by Task ID"
+    ```bash title="Terminal"
+    docker exec -it datus python -m datus.main benchmark  \
+    --namespace snowflake \
+    --benchmark spider2 \
+    --benchmark_task_ids <task_id>
+    ```
+
+=== "Run All Tasks"
+    ```bash title="Terminal"
+    docker exec -it datus python -m datus.main benchmark  \
+    --namespace snowflake \
+    --benchmark spider2
+    ```
+
+### Step 4: Review Benchmark Results
+
+!!! tip
+    Each benchmark generates a comprehensive performance summary with detailed metrics and task breakdowns.
+
+```text title="Benchmark Result" hl_lines="8-10"
+================================================================================
+BENCHMARK ACCURACY EVALUATION REPORT
+================================================================================
+Generated Time: 2025-09-18 12:07:30
+
+EXECUTIVE SUMMARY
+----------------------------------------
+Total tasks analyzed: 1
+Execution success rate: 100.0%
+Result comparison match rate: 100.0%
+
+DETAILED STATISTICS
+----------------------------------------
+Total comparisons performed: 1
+Successful matches: 1
+Mismatches: 0
+Comparison errors: 0
+Empty result errors: 0
+Mismatch rate: 0.0%
+Error rate: 0.0%
+
+TASK BREAKDOWN BY CATEGORY
+----------------------------------------
+Matched tasks (1):
+14
+
+Mismatched tasks (0):
+None
+
+Failed tasks (0):
+None
+
+ADDITIONAL STATISTICS
+----------------------------------------
+Overall success rate: 100.0%
+Successful tasks: 1
+Failed tasks: 0
+Mismatched tasks: 0
+
+================================================================================ [datus.utils.benchmark_utils]
+2025-09-18 12:07:30 [info     ]
+Final Result: {'status': 'success', 'generated_time': '2025-09-18T12:07:30.497861', 'summary': {'total_files': 1, 'total_output_nodes': 1, 'total_output_success': 1, 'total_output_failure': 0, 'success_rate': 100.0, 'comparison_summary': {'total_comparisons': 1, 'successful_matches': 1, 'mismatches': 0, 'comparison_errors': 0, 'empty_result_errors': 0, 'match_rate': 100.0}}, 'task_ids': {'failed_task_ids': '', 'matched_task_ids': '14', 'mismatched_task_ids': '', 'empty_result_task_ids': ''}, 'details': {'14': {'total_nodes': 6, 'output_nodes': 1, 'output_success': 1, 'output_failure': 0, 'errors': [], 'node_types': {'start': 1, 'schema_linking': 1, 'generate_sql': 1, 'execute_sql': 1, 'reflect': 1, 'output': 1}, 'completion_time': 1758197249.7893646, 'status': 'completed', 'comparison_results': [{'task_id': '14', 'actual_file_exists': True, 'gold_file_exists': True, 'actual_path': 'output/bird_sqlite/14.csv', 'gold_path': '/app/benchmark/dev_20240627/gold/exec_result/14.csv', 'comparison': {'match': True, 'actual_file_exists': True, 'expected_file_exists': True, 'actual_shape': (5, 1), 'expected_shape': (5, 1), 'actual_preview': 'NCESSchool\n       ----------\n       11707\n       4653\n       8283\n       ...', 'expected_preview': 'NCESSchool\n       ----------\n       11707\n       4653\n       8283\n       ...', 'error': None}}]}}} [__main__]
 ```
-
-Edit `~/.datus/conf/agent.yml`:
-
-By default, it uses deepseek v3, with the storage directory at `~/.datus/data`.
-
-However, you need to manually `export` environment variables or add them to `.bashrc` and re-`source` it, as `.env` is not currently supported.
-
-```yaml
-agent:
-  target: deepseek-v3
-  models:
-    deepseek-v3:
-      type: deepseek
-      vendor: deepseek
-      base_url: https://api.deepseek.com
-      api_key: ${DEEPSEEK_API_KEY}
-      model: deepseek-chat
-
-    deepseek-r1:
-      type: deepseek
-      vendor: deepseek
-      base_url: https://api.deepseek.com
-      api_key: ${DEEPSEEK_API_KEY}
-      model: deepseek-reasoner
-
-  # RAG storage base path; final data path examples: 'data/datus_db_spider2', 'data/datus_db_bird_dev', 'data/datus_db_local1', etc.
-  storage_path: ~/.datus/data
-
-  # Benchmark configuration
-  benchmark:
-    bird_dev:
-      benchmark_path: benchmark/bird/dev_20240627
-    spider2:
-      benchmark_path: benchmark/spider2/spider2-snow
-
-  namespace:
-    spidersnow:
-      type: snowflake
-      username: ${SNOWFLAKE_USER}
-      account: ${SNOWFLAKE_ACCOUNT}
-      warehouse: ${SNOWFLAKE_WAREHOUSE}
-      password: ${SNOWFLAKE_PASSWORD}
-    bird_sqlite:
-      type: sqlite
-      path_pattern: benchmark/bird/dev_20240627/dev_databases/**/*.sqlite
-    local_duckdb:
-      type: duckdb
-      uri: ~/.datus/sample/duckdb-demo.duckdb
-
-  nodes:
-    schema_linking:
-      model: deepseek-v3
-      matching_rate: fast
-    generate_sql:
-      model: deepseek-v3
-      prompt_version: "1.0"
-    reasoning:
-      model: deepseek-v3
-    reflect:
-      prompt_version: "2.1"
-```
-
-- **Orange** parts require setting environment variables.
-- **Green** parts are auto-generated during installation.
-- **Yellow** parts require downloading for benchmarks.
-
-## Executables
-
-After installation, two executables are available: `datus-agent` and `datus-cli`.
-
-You can run:
-
-```bash
-datus-agent --help
-```
-
-Sample output:
-
-```
-usage: datus-agent [-h] [--debug] [--config CONFIG] {probe-llm,check-db,bootstrap-kb,benchmark,run} ...
-
-Datus: AI-powered SQL Agent for data engineering
-
-positional arguments:
-  {probe-llm,check-db,bootstrap-kb,benchmark,run}
-                        Action to perform
-    probe-llm           Test LLM connectivity
-    check-db            Check database connectivity
-    bootstrap-kb        Initialize knowledge base
-    benchmark           Run benchmarks
-    run                 Run SQL agent
-
-options:
-  -h, --help            Show this help message and exit
-  --debug               Enable debug level logging
-  --config CONFIG       Path to configuration file (default: conf/agent.yml)
-```
-
-## Connectivity Test
-
-If you've configured `DEEPSEEK_API_KEY`:
-
-```bash
-datus-agent probe-llm
-```
-
-Sample output:
-```
-2025-05-31 07:44:06 [info] Storage modules initialized: [] [sql_agent]
-2025-05-31 07:44:06 [info] Testing LLM model connectivity [sql_agent]
-2025-05-31 07:44:06 [info] Using model type: deepseek, model name: deepseek-chat [sql_agent]
-HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 200 OK"
-2025-05-31 07:44:11 [info] LLM model test successful [sql_agent]
-2025-05-31 07:44:11 [info] Final Result: {'status': 'success', 'message': 'LLM model test successful', 'response': 'Yes, I can "hear" you! Well, technically, I’m reading your message since I don’t have audio capabilities, but I’m here and ready to help. What’s on your mind? 😊'} [main]
-```
-
-## Prompt Template Directory
-
-You can modify Jinja templates as needed to adjust prompts to your business and model. Combined with workflow and node configurations, this allows flexible customization.
-
-```bash
-ls ~/.datus/template
-```
-
-Example templates: `evaluation_1.0.j2`, `gen_sql_system_1.0.j2`, etc.
-
-## Local Testing Data
-
-A 5MB DuckDB file is uploaded; you can try it with:
-
-```bash
-datus-cli --namespace local_duckdb
-```
-
-## Benchmark
-
-### Bird
-
-Download the Bird dataset:
-
-```bash
-wget https://bird-bench.oss-cn-beijing.aliyuncs.com/dev.zip
-unzip dev.zip
-
-mkdir -p benchmark/bird
-mv dev_20240627 benchmark/bird
-cd benchmark/bird/dev_20240627
-unzip dev_databases
-cd ../../..
-```
-
-Edit `agent.yml`:
-
-```yaml
-benchmark:
-  bird_dev:
-    benchmark_path: benchmark/bird/dev_20240627
-
-namespace:
-  bird_sqlite:
-    type: sqlite
-    path_pattern: benchmark/bird/dev_20240627/dev_databases/**/*.sqlite
-```
-
-If in the current directory, run:
-
-```bash
-datus-agent bootstrap-kb --namespace bird_sqlite --benchmark bird_dev --kb_update_strategy overwrite
-```
-
-This builds a LanceDB vector database at `~/.datus/data/datus_db_bird_sqlite`.
-
-Run the benchmark:
-
-```bash
-datus-agent benchmark --namespace bird_sqlite --benchmark bird_dev --plan fixed --schema_linking_rate medium --benchmark_task_ids 1 2
-```
-
-### Spider
-
-Like Bird, download the dataset:
-
-```bash
-mkdir benchmark
-git clone https://github.com/xlang-ai/Spider2.git
-mv Spider2 benchmark/spider2
-```
-
-Edit `agent.yml`:
-
-```yaml
-benchmark:
-  spider2:
-    benchmark_path: benchmark/spider2/spider2-snow
-
-namespace:
-  spidersnow:
-    type: snowflake
-    username: ${SNOWFLAKE_USER}
-    account: ${SNOWFLAKE_ACCOUNT}
-    warehouse: ${SNOWFLAKE_WAREHOUSE}
-    password: ${SNOWFLAKE_PASSWORD}
-```
-
-## Exploring Datus-cli with StarRocks
-
-Initialize the knowledge base (`bootstrap-kb`).
-
-Add a StarRocks namespace in `~/.datus/conf/agent.yml`:
-
-```yaml
-sr:
-  type: starrocks
-  username: ${STARROCKS_USER}
-  password: ${STARROCKS_PASSWORD}
-  host: ${STARROCKS_HOST}
-  port: ${STARROCKS_PORT}
-  database: ${STARROCKS_DATABASE}
-```
-
-Check connectivity:
-
-```bash
-datus-agent check-db --namespace sr
-```
-
-Initialize vector DB (builds vector storage of schema and sample values):
-
-```bash
-datus-agent bootstrap-kb --namespace sr --kb_update_strategy overwrite
-```
-
-Run NL2SQL:
-
-```bash
-datus-agent run --namespace sr --task_db_name ssb_1 --task "how many parts are there?"
-```
-
-## Exploring Datus-cli
-
-```bash
-datus-cli --namespace sr
-```
-
