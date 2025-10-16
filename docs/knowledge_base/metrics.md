@@ -37,8 +37,8 @@ Data Table/Historical SQLs → Semantic Model → Business Metrics
 
 ```bash
 # Initialize metrics component from success story CSV
-datus bootstrap-kb \
-    --namespace your_namespace \
+datus-agent bootstrap-kb \
+    --namespace <your_namespace> \
     --components metrics \
     --success_story path/to/success_story.csv \
     --metric_meta business_meta
@@ -46,8 +46,8 @@ datus bootstrap-kb \
 
 ```bash
 # Initialize metrics component from semantic YAML
-datus bootstrap-kb \
-    --namespace your_namespace \
+datus-agent bootstrap-kb \
+    --namespace <your_namespace> \
     --components metrics \
     --semantic_yaml path/to/semantic_model.yaml \
     --metric_meta business_meta
@@ -93,66 +93,12 @@ data_source:
     - name: amount
       type: double
       agg: sum
-
+---
 metric:
   name: total_revenue
   description: "Total revenue from all transactions"
   constraint: "amount > 0"
 ```
-
-## Advanced Features
-
-### 1. Vector Search
-
-Metrics support semantic search, finding relevant metrics through natural language descriptions:
-
-```python
-# Example search logic
-search_results = metrics_store.search("customer retention metrics")
-# Returns related customer retention metrics
-```
-
-### 2. Hierarchical Organization
-
-Metrics are organized by business hierarchy:
-
-```python
-# Metric ID structure
-f"{domain}_{layer1}_{layer2}_{semantic_model}_{metric_name}"
-# Example: ecommerce_revenue_daily_orders_total_amount
-```
-
-### 3. Multi-strategy Updates
-
-- **overwrite**: Completely rebuild metrics library
-- **incremental**: Incrementally update new metrics
-
-## Best Practices
-
-### 1. Data Preparation
-
-- Use high-quality success story data
-- Ensure SQL queries represent typical business scenarios
-- Provide clear business problem descriptions
-
-### 2. Configuration Optimization
-
-```bash
-# Recommended configuration
-datus bootstrap-kb \
-    --namespace your_db \
-    --components metrics \
-    --success_story clean_success_stories.csv \
-    --metric_meta business_meta \
-    --kb_update_strategy overwrite \
-    --pool_size 4
-```
-
-### 3. Maintenance Strategy
-
-- Regularly update success story library
-- Monitor metrics generation quality
-- Clean up duplicate or outdated metrics
 
 ## Summary
 
