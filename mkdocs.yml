@@ -17,6 +17,11 @@ nav:
       - MCP Extensions: cli/mcp_extensions.md
       - SQL Execution: cli/sql_execution.md
       - Reference: cli/reference.md
+    - Subagent:
+      - Introduction: subagent/introduction.md
+      - Built-in subagents: subagent/builtin_subagents.md
+      - Customized subagents: subagent/customized_subagent.md
+    - Chatbot: web_chatbot/introduction.md
     - Knowledge Base:
       - Introduction: knowledge_base/introduction.md
       - Metadata: knowledge_base/metadata.md
