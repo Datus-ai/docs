@@ -2,6 +2,9 @@
 
 **Datus Agent** is an agentic data-engineering platform that integrates with your stack to transform natural-language requests into production-grade SQL, models, metrics, orchestration, and continuous data quality monitoring—all faster than traditional methods.
 
+![Datus architecture](../assets/home_architecture.png )
+
+
 ## Getting Started
 
 Get your Datus Agent up and running in minutes.
