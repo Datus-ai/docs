@@ -10,8 +10,8 @@ This module contains two types of information: **table definition** and **sample
 
 ## Data Structure of Table Definition
 
-| Field Name | Explanation | Supported Database Types |
-|------------|-------------|--------------------------|
+| Field Name       | Explanation | Supported Database Types |
+|------------------|-------------|--------------------------|
 | `catalog_name` | The top-level container in a database system. It typically represents a collection of databases and provides metadata about them, such as available schemas, tables, and security settings | StarRocks/Snowflake |
 | `database_name` | A logical container that stores related data. It usually groups together multiple schemas and provides boundaries for data organization, security, and management. | DuckDB/MySQL/StarRocks/Snowflake |
 | `schema_name` | A namespace inside a database. It organizes objects such as tables, views, functions, and procedures into logical groups. Schemas help avoid name conflicts and support role-based access. | DuckDB/Snowflake |
@@ -52,17 +52,17 @@ datus-agent bootstrap-kb --namespace <your_namespace> --kb_update_strategy [chec
 
 ### Check Current Status
 ```bash
-datus-agent bootstrap-kb --namespace my_database --kb_update_strategy check
+datus-agent bootstrap-kb --namespace <your_namespace> --kb_update_strategy check
 ```
 
 ### Full Rebuild
 ```bash
-datus-agent bootstrap-kb --namespace my_database --kb_update_strategy overwrite
+datus-agent bootstrap-kb --namespace <your_namespace> --kb_update_strategy overwrite
 ```
 
 ### Incremental Update
 ```bash
-datus-agent bootstrap-kb --namespace my_database --kb_update_strategy incremental
+datus-agent bootstrap-kb --namespace <your_namespace> --kb_update_strategy incremental
 ```
 
 ## Best Practices
@@ -91,6 +91,7 @@ datus-agent bootstrap-kb --namespace my_database --kb_update_strategy incrementa
 
 ### Verification
 After bootstrap completion, verify the metadata was captured correctly:
+
 - Check LanceDB storage directory for populated files
 - Test search functionality through the CLI
 - Verify sample data represents actual table contents

@@ -90,10 +90,10 @@ Set up the database connection. For example, `duckdb-demo.duckdb` is a demo data
 ```
 
 !!! tip "Demo Database Connection"
-    Datus provides a pre-configured demo DuckDB database for testing and learning purposes. 
-    
+    Datus provides a pre-configured demo DuckDB database for testing and learning purposes.
+
     **Connection string:** `~/.datus/sample/duckdb-demo.duckdb`
-    
+
     This demo database contains sample tables and data that you can use to explore Datus features without setting up your own database. It's automatically available after running `datus-agent init`.
 
 #### 3. Workspace Configuration
@@ -155,3 +155,5 @@ Datus>
 ## Next Steps
 
 Follow the [Quickstart guide](./Quickstart.md) to begin your experience with Datus Agent.
+
+For metrics generation and queries, you need to install datus-metricflow, reference to [Datus-Metricflow Introduction](../metricflow/introduction.md)

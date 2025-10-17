@@ -7,6 +7,7 @@ Subagents are specialized AI assistants in Datus that focus on specific tasks. U
 ## What is a Subagent?
 
 A **subagent** is a task-specific AI assistant with:
+
 - **Specialized System Prompts**: Optimized instructions for specific tasks
 - **Custom Tools**: Tailored toolset for the task (e.g., file operations, validation)
 - **Scoped Context**: Optional dedicated context (tables, metrics, SQL history) specific to this subagent
@@ -21,18 +22,21 @@ A **subagent** is a task-specific AI assistant with:
 
 **Use Case**: Convert a database table structure into a YAML semantic model definition.
 
+**Prerequisites**: This subagent relies on [datus-metricflow](../metricflow/introduction.md), install it first.
+
 **Launch Command**:
 ```bash
 /gen_semantic_model Generate a semantic model for the transactions table
 ```
 
 **Key Features**:
+
 - Automatically fetches table DDL
 - Identifies measures, dimensions, and identifiers
 - Validates using MetricFlow
 - Syncs to Knowledge Base
 
-**See Also**: `semantic_model_generation_guide.md`
+**See Also**: [Semantic Model Generation Guide](./gen_semantic_model.md)
 
 ---
 
@@ -42,18 +46,21 @@ A **subagent** is a task-specific AI assistant with:
 
 **Use Case**: Transform ad-hoc SQL calculations into standardized metrics.
 
+**Prerequisites**: This subagent relies on [datus-metricflow](../metricflow/introduction.md), install it first.
+
 **Launch Command**:
 ```bash
 /gen_metrics Generate a metric from this SQL: SELECT SUM(revenue) / COUNT(DISTINCT customer_id) FROM transactions
 ```
 
 **Key Features**:
+
 - Analyzes SQL business logic
 - Determines appropriate metric type (ratio, measure_proxy, etc.)
 - Appends to existing semantic model files
 - Checks for duplicates
 
-**See Also**: `metrics_generation_guide.md`
+**See Also**: [Metrics Generation Guide](./gen_metrics.md)
 
 ---
 
@@ -69,12 +76,13 @@ A **subagent** is a task-specific AI assistant with:
 ```
 
 **Key Features**:
+
 - Generates unique ID for SQL queries
 - Classifies by domain/layer/tags
 - Creates detailed summaries for vector search
 - Supports Chinese and English
 
-**See Also**: `sql_summary_guide.md`
+**See Also**: [SQL Summary Guide](./gen_sql_summary.md)
 
 ---
 
@@ -108,6 +116,7 @@ datus --namespace production
 ```
 
 **Workflow**:
+
 1. Type `/[subagent_name]` followed by your request
 2. Subagent processes the task using specialized tools
 3. Review generated output (YAML, SQL, etc.)
@@ -122,6 +131,7 @@ datus web --namespace production
 ```
 
 **Steps**:
+
 1. Click "🔧 Access Specialized Subagents" on the main page
 2. Select the subagent you need (e.g., "gen_metrics")
 3. Click "🚀 Use [subagent_name]"
@@ -146,11 +156,13 @@ http://localhost:8501/?subagent=gen_sql_summary
 | **Validation** | Optional | Built-in (e.g., MetricFlow validation) |
 
 **When to Use Default Chat**:
+
 - Ad-hoc SQL queries
 - Data exploration
 - Quick questions about your database
 
 **When to Use Subagent**:
+
 - Generate standardized artifacts (semantic models, metrics)
 - Follow specific workflows (classification, validation)
 - Build knowledge repositories
@@ -207,6 +219,7 @@ tools: db_tools.list_tables, db_tools.get_table_ddl, generation_tools.check_metr
 ```
 
 **Available Tool Types**:
+
 - `db_tools.*`: Database operations (list tables, get DDL, execute queries)
 - `generation_tools.*`: Generation helpers (check duplicates, context preparation)
 - `filesystem_tools.*`: File operations (read, write, edit files)
@@ -218,6 +231,7 @@ tools: db_tools.list_tables, db_tools.get_table_ddl, generation_tools.check_metr
 MCP (Model Context Protocol) servers provide additional tools:
 
 **Built-in MCP Servers**:
+
 - `filesystem_mcp`: File system operations within workspace
 - `metricflow_mcp`: MetricFlow CLI integration (validate, query, list)
 
@@ -230,9 +244,9 @@ mcp: metricflow_mcp, filesystem_mcp
 
 Subagents provide **specialized, workflow-optimized AI assistants** for specific tasks:
 
-✅ **Task-Focused**: Optimized prompts and tools for specific workflows
-✅ **Independent Sessions**: Separate conversation history per subagent
-✅ **Artifact Generation**: Create standardized files (YAML, documentation)
-✅ **Built-in Validation**: Automatic checks and validation (e.g., MetricFlow)
-✅ **Knowledge Base Integration**: Sync generated artifacts for reuse
-✅ **Flexible Configuration**: Customize tools, prompts, and behavior
+- **Task-Focused**: Optimized prompts and tools for specific workflows
+- **Independent Sessions**: Separate conversation history per subagent
+- **Artifact Generation**: Create standardized files (YAML, documentation)
+- **Built-in Validation**: Automatic checks and validation (e.g., MetricFlow)
+- **Knowledge Base Integration**: Sync generated artifacts for reuse
+- **Flexible Configuration**: Customize tools, prompts, and behavior

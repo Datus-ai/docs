@@ -213,6 +213,7 @@ Please enter your choice: [1/2]
 ```
 
 **Options:**
+
 - **Option 1**: Saves the semantic model to your Knowledge Base (RAG storage) for AI-powered queries
 - **Option 2**: Keeps the YAML file only without syncing to the Knowledge Base
 
@@ -349,7 +350,7 @@ graph LR
 #### Important Limitations
 
 > **⚠️ Single Table Queries Only**
-> 
+>
 > The current version **only supports generating metrics from single-table SQL queries**. Multi-table JOINs are not supported.
 
 **Supported:**
