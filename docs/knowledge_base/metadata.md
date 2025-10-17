@@ -10,8 +10,8 @@ This module contains two types of information: **table definition** and **sample
 
 ## Data Structure of Table Definition
 
-| Field Name | Explanation | Supported Database Types |
-|------------|-------------|--------------------------|
+| Field Name       | Explanation | Supported Database Types |
+|------------------|-------------|--------------------------|
 | `catalog_name` | The top-level container in a database system. It typically represents a collection of databases and provides metadata about them, such as available schemas, tables, and security settings | StarRocks/Snowflake |
 | `database_name` | A logical container that stores related data. It usually groups together multiple schemas and provides boundaries for data organization, security, and management. | DuckDB/MySQL/StarRocks/Snowflake |
 | `schema_name` | A namespace inside a database. It organizes objects such as tables, views, functions, and procedures into logical groups. Schemas help avoid name conflicts and support role-based access. | DuckDB/Snowflake |
@@ -63,4 +63,34 @@ datus-agent bootstrap-kb --namespace <your_namespace> --kb_update_strategy overw
 ### Incremental Update
 ```bash
 datus-agent bootstrap-kb --namespace <your_namespace> --kb_update_strategy incremental
-```
+
+## Best Practices
+
+### Database Configuration
+- Ensure your database namespace is properly configured in `agent.yml`
+- Verify database connectivity before running bootstrap commands
+- Use appropriate credentials with read access to system tables
+
+### Update Strategy Selection
+- Use `check` to verify current state without making changes
+- Use `overwrite` for initial setup or when schema has changed significantly
+- Use `incremental` for regular updates to capture new tables and changes
+
+### Performance Considerations
+- Large databases may take time to process during initial bootstrap
+- Consider running during off-peak hours for production databases
+- Monitor disk space as metadata is stored locally in LanceDB
+
+## Troubleshooting
+
+### Common Issues
+- **Permission errors**: Ensure database user has access to system/information schema tables
+- **Connection timeouts**: Check network connectivity and database availability
+- **Large result sets**: Consider filtering to specific schemas if database is very large
+
+### Verification
+After bootstrap completion, verify the metadata was captured correctly:
+
+- Check LanceDB storage directory for populated files
+- Test search functionality through the CLI
+- Verify sample data represents actual table contents

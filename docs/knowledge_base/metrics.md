@@ -19,7 +19,12 @@ The Metrics component specifically focuses on automatically extracting and gener
 ## How It Works
 
 ### Data Hierarchy Structure
-Data Table/Historical SQLs → Semantic Model → Business Metrics
+
+```mermaid
+graph LR
+    A[Data Table/Historical SQLs] --> B[Semantic Model]
+    B --> C[Business Metrics]
+```
 
 #### 1. Semantic Model
 - Defines table structure and business meaning
@@ -33,10 +38,13 @@ Data Table/Historical SQLs → Semantic Model → Business Metrics
 
 ## Usage
 
+**Prerequisites**: This command relies on [datus-metricflow](../metricflow/introduction.md), install it first.
+
 ### Basic Command
 
 ```bash
 # Initialize metrics component from success story CSV
+
 datus-agent bootstrap-kb \
     --namespace <your_namespace> \
     --components metrics \
@@ -46,6 +54,7 @@ datus-agent bootstrap-kb \
 
 ```bash
 # Initialize metrics component from semantic YAML
+
 datus-agent bootstrap-kb \
     --namespace <your_namespace> \
     --components metrics \
