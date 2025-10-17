@@ -1,17 +1,79 @@
 # Quickstart
 
-Begin using Datus Agent in minutes
+Get started with Datus Agent in just a few minutes. This guide will walk you through installation, setup, and your first interactions with Datus.
 
-This guide introduces three usage modes so you can adopt Datus based on your needs.
+## Step 1: Installation & Setup
 
-## Datus CLI (Chat Mode)
+### Install Python 3.12
 
-Use Datus like a chatbot: type natural language questions, get SQL or summaries back. Ideal for ad hoc queries and fast metric exploration.
+Datus requires a Python 3.12 environment. Choose your preferred method:
 
-### Step 1: Launch the CLI
+=== "Conda"
+
+    ```bash
+    conda create -n datus python=3.12
+    conda activate datus
+    ```
+
+=== "virtualenv"
+
+    ```bash
+    virtualenv datus --python=python3.12
+    source datus/bin/activate
+    ```
+
+=== "uv"
+
+    ```bash
+    uv venv datus --python 3.12
+    source datus/bin/activate
+    ```
+
+### Install Datus Agent
+
+=== "Stable Release"
+
+    ```bash
+    pip install datus-agent
+    ```
+
+=== "Beta Release"
+
+    ```bash
+    pip install --no-deps -i https://test.pypi.org/simple/ datus-agent
+    ```
+
+### Initialize Configuration
+
+Run the initialization command:
+
+```bash
+datus-agent init
+```
+
+The setup will guide you through:
+
+**1. LLM Configuration** - Configure your preferred LLM provider (OpenAI, DeepSeek, Claude, Kimi, Qwen)
+
+**2. Namespace Setup** - Connect to your database. For a quick start, use the demo database:
+
+!!! tip "Demo Database"
+    Datus provides a pre-configured demo DuckDB database for testing.
+
+    **Connection string:** `~/.datus/sample/duckdb-demo.duckdb`
+
+**3. Workspace Configuration** - Set up your SQL files directory (default: `~/.datus/workspace`)
+
+**4. Knowledge Base (Optional)** - Initialize vector DB for metadata and SQL history
+
+After setup completes, you're ready to launch Datus!
+
+## Step 2: Launch Datus CLI
+
+Start the Datus CLI with your configured namespace:
 
 !!! tip "Configuration"
-    You can connect to your database by adding a new namespace in `agent.yml`. See our [Configuration guide](../configuration/introduction.md) for more details.
+    You can connect to different databases by adding namespaces in `agent.yml`. See our [Configuration guide](../configuration/introduction.md) for details.
 
 ```bash title="Terminal"
 datus-cli --namespace duckdb-demo
@@ -28,7 +90,8 @@ Context: Current: database: duckdb
 Type SQL statements or use ! @ . commands to interact.
 Datus>
 ```
-### Step 2: Start Chat with Datus
+
+## Step 3: Start Using Datus
 
 !!! tip
     You can execute SQL in Datus just like in a SQL editor.
@@ -266,7 +329,9 @@ Would you like to check the details? (y/n): y
 
 Datus will then show details in a new screen.
 
-### Step 3: Context Management
+## Step 4: Advanced Features
+
+### Context Management
 
 !!! note
     If you have initialized the knowledge base for metadata.
@@ -461,4 +526,13 @@ Datus will automatically analyze the table and add metadata to the context.
 
 !!! tip
     For more command references and options, see [CLI](../cli/introduction.md) or simply type `.help`.
+
+## Next Steps
+
+Now that you're up and running with Datus, explore more advanced features:
+
+- **[Contextual Data Engineering](./contextual_data_engineering.md)** - Learn how to use data assets as context
+- **[Configuration Guide](../configuration/introduction.md)** - Connect to your own databases and customize settings
+- **[CLI Reference](../cli/introduction.md)** - Discover all available commands and options
+- **[MetricFlow](../metricflow/introduction.md)** - Generate and query metrics with datus-metricflow
 

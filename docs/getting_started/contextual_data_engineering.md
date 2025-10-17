@@ -52,7 +52,7 @@ We model **Data Engineering Context (Long-Term Memory)** as **two trees**:
 - Use `datus-agent bootstrap-kb` to batch-initialize and cold-start the knowledge base
 - With subagents, you can define a **scoped context** — a curated subset of the global store — enabling precise, domain-aware delivery
 
-### Interactive Context Building and Human-in-the-Loop
+### Interactive Context Building
 
 **Co-authored context**
 
@@ -68,9 +68,9 @@ Exploration with `/chat`, success-story writebacks, and issue/benchmark loops co
 
 ### Subagent System
 
-**Scoped, domain-aware subagents**
-
 ![Subagent System](../assets/subagent.png)
+
+**Scoped, domain-aware subagents**
 
 Package description, rules, and scoped context — unifying tables, SQL patterns, metrics, and constraints for a specific business scenario.
 
@@ -98,7 +98,7 @@ A [benchmarking and bootstrap utility](../benchmark/benchmark_manual.md) — the
 
 - Build initial context from historical data
 - Run benchmarks and evaluations
-- Optionally expose corresponding APIs
+- Expose corresponding APIs
 
 **Datus Chat**
 

@@ -6,7 +6,6 @@ nav:
   - Home:
     - Overview: index.md
     - Getting Started:
-      - Installation: getting_started/installation.md
       - Quickstart: getting_started/Quickstart.md
       - Contextual Data Engineering: getting_started/contextual_data_engineering.md
     - CLI:
