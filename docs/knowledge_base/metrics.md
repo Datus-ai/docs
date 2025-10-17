@@ -44,7 +44,8 @@ graph LR
 
 ```bash
 # Initialize metrics component from success story CSV
-datus bootstrap-kb \
+
+datus-agent bootstrap-kb \
     --namespace <your_namespace> \
     --components metrics \
     --success_story path/to/success_story.csv \
@@ -53,7 +54,8 @@ datus bootstrap-kb \
 
 ```bash
 # Initialize metrics component from semantic YAML
-datus bootstrap-kb \
+
+datus-agent bootstrap-kb \
     --namespace <your_namespace> \
     --components metrics \
     --semantic_yaml path/to/semantic_model.yaml \
@@ -100,7 +102,7 @@ data_source:
     - name: amount
       type: double
       agg: sum
-
+---
 metric:
   name: total_revenue
   description: "Total revenue from all transactions"

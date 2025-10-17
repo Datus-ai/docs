@@ -26,8 +26,8 @@ Bootstrap-KB SQL History is a powerful component that processes, analyzes, and i
 
 ```bash
 # Initialize SQL history component
-datus bootstrap-kb \
-    --namespace your_namespace \
+datus-agent bootstrap-kb \
+    --namespace <your_namespace> \
     --components sql_history \
     --sql_dir /path/to/sql/directory \
     --kb_update_strategy overwrite
@@ -41,14 +41,15 @@ datus bootstrap-kb \
 | `--components` | ✅ | Components to initialize | `sql_history` |
 | `--sql_dir` | ✅ | Directory containing SQL files | `/sql/queries` |
 | `--kb_update_strategy` | ✅ | Update strategy | `overwrite`/`incremental` |
-| `--validate-only` | ❌ | Only validate, don't store | `true`/`false` |
-| `--pool_size` | ❌ | Concurrent processing threads | `8` |
+| `--validate-only` | ❌ | Only validate, don't store |  |
+| `--pool_size` | ❌ | Concurrent processing threads, default value is 4 | `8` |
+| `--subject_tree` | ❌ | Predefined taxonomy structure for classification | `analytics/user_analytics/activity_metrics,analytics/revenue/daily` |
 
 ## SQL File Format
 
 ### Expected Format
 
-SQL files should use comment blocks to describe each query:
+SQL files should use comment blocks to describe each query. Each SQL statement must be terminated with a semicolon (`;`).
 
 ```sql
 -- Daily active users count
@@ -74,125 +75,27 @@ GROUP BY DATE_TRUNC('month', order_date), category
 ORDER BY month, total_revenue DESC;
 ```
 
-## Advanced Features
+### Format Requirements
 
-### 1. Multi-Dialect SQL Validation
+1. **Semicolon Delimiter**: Each SQL statement must end with a semicolon (`;`)
+2. **Comment Format**: Use SQL line comments (`--`) to describe queries (optional)
+      - Comments immediately preceding a SQL statement will be associated with that query
+      - Multiple comment lines are concatenated into a single description
+      - Comments can be omitted if not needed
+3. **SELECT Queries Only**: Only `SELECT` statements are processed and stored
+4. **SQL Dialects**: Supports MySQL, Hive, and Spark SQL dialects
+5. **Parameter Placeholders**: The following parameter styles are supported:
+      - `#parameter#` - hash-delimited parameters
+      - `:parameter` - colon-prefixed parameters
+      - `@parameter` - at-sign parameters
+      - `${parameter}` - shell-style parameters
 
-Support for multiple SQL dialects with automatic detection:
+### File Organization
 
-- **MySQL**: Standard MySQL syntax
-- **Hive**: Hadoop Hive SQL dialect
-- **Spark**: Apache Spark SQL syntax
+- Place all SQL files (`.sql` extension) in a single directory
+- Files are processed recursively
+- Invalid SQL entries are logged to `sql_processing_errors.log` for review
 
-### 2. Intelligent Classification
-
-Automatically categorizes SQL queries into hierarchical structure:
-
-```json
-{
-    "domain": "analytics",
-    "layer1": "user_analytics",
-    "layer2": "activity_metrics",
-    "tags": ["daily", "users", "engagement"]
-}
-```
-
-### 3. Vector Search Capabilities
-
-- **Semantic Search**: Find queries by meaning, not just keywords
-- **Hybrid Search**: Combine vector search with traditional filtering
-- **Relevance Scoring**: Results ranked by semantic relevance
-
-### 4. Incremental Updates
-
-- **Incremental Mode**: Add new queries to existing index
-- **Overwrite Mode**: Complete rebuild of the index
-
-## Best Practices
-
-### 1. File Organization
-
-```
-/sql_queries/
-├── user_analytics.sql
-├── financial_reports.sql
-├── product_metrics.sql
-└── system_monitoring.sql
-```
-
-### 2. Comment Standards
-
-```sql
--- Clear, descriptive title
--- Detailed business context and purpose
--- Important assumptions or business rules
-SELECT
-    column1,
-    column2
-FROM table_name
-WHERE conditions;
-```
-
-### 3. Performance Optimization
-
-```bash
-# High-performance processing
-datus bootstrap-kb \
-    --namespace your_db \
-    --components sql_history \
-    --sql_dir /large_sql_directory \
-    --kb_update_strategy incremental \
-    --pool_size 16
-
-# Validation only (fast check)
-datus bootstrap-kb \
-    --namespace your_db \
-    --components sql_history \
-    --sql_dir /new_sql_files \
-    --validate-only
-```
-
-### 4. Maintenance Strategy
-
-- **Regular Updates**: Add new SQL files incrementally
-- **Quality Checks**: Use validate-only mode for new files
-- **Index Optimization**: Periodic full rebuild for large updates
-
-## Usage Examples
-
-### Initial Setup
-
-```bash
-# First time setup with complete SQL directory
-datus bootstrap-kb \
-    --namespace production_db \
-    --components sql_history \
-    --sql_dir /company/sql_repository \
-    --kb_update_strategy overwrite \
-    --pool_size 8
-```
-
-### Adding New Queries
-
-```bash
-# Add new SQL files incrementally
-datus bootstrap-kb \
-    --namespace production_db \
-    --components sql_history \
-    --sql_dir /new_sql_queries \
-    --kb_update_strategy incremental
-```
-
-### Validation
-
-```bash
-# Validate SQL files before processing
-datus bootstrap-kb \
-    --namespace production_db \
-    --components sql_history \
-    --sql_dir /untested_queries \
-    --validate-only
-```
 
 ## Summary
 

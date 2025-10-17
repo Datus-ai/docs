@@ -4,7 +4,7 @@
 
 The metadata module is primarily used to enable LLMs to quickly match possible related table definition information and sample data based on user questions.
 
-When you use the `bootstrap-kb` command, we initialize the SQL statements and sample data for creating tables/views/materialized views in the data source you specify into LanceDB.
+When you use the `bootstrap-kb` command, we initialize the SQL statements and sample data for creating tables/views/materialized views in the data source you specify into a vector database.
 
 This module contains two types of information: **table definition** and **sample data**.
 
@@ -44,9 +44,9 @@ datus-agent bootstrap-kb --namespace <your_namespace> --kb_update_strategy [chec
 
 - `--namespace`: The key corresponding to your database configuration
 - `--kb_update_strategy`: Execution strategy, there are three options:
-  - `check`: Check the number of data entries currently constructed
-  - `overwrite`: Fully overwrite existing data
-  - `incremental`: Incremental update: if existing data has changed, update it and append non-existent data
+    - `check`: Check the number of data entries currently constructed
+    - `overwrite`: Fully overwrite existing data
+    - `incremental`: Incremental update: if existing data has changed, update it and append non-existent data
 
 ## Usage Examples
 
@@ -63,7 +63,6 @@ datus-agent bootstrap-kb --namespace <your_namespace> --kb_update_strategy overw
 ### Incremental Update
 ```bash
 datus-agent bootstrap-kb --namespace <your_namespace> --kb_update_strategy incremental
-```
 
 ## Best Practices
 

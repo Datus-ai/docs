@@ -22,5 +22,4 @@
 .md-typeset table:not([class]) th:first-child,
 .md-typeset table:not([class]) td:first-child {
   min-width: 180px;
-  width: 180px;
 }
