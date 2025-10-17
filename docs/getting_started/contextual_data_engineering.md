@@ -1,13 +1,15 @@
 # Contextual Data Engineering
 
-## What is Contextual Data Engineering?
+## What's Contextual Data Engineering
 
 **Contextual Data Engineering** is a new paradigm that transforms how data systems are built, maintained, and used in the age of AI. Instead of delivering static tables and pipelines, it focuses on **building evolvable context** — a living, intelligent layer for data that integrates metadata, referenced SQLs, semantic models, and metrics into a unified system that both humans and AI agents can understand.
+
+![Data Engineering Pipeline Comparison](../assets/data_engineering_pipeline.png)
 
 - **In traditional data engineering**, pipelines end with data delivery.
 - **In contextual data engineering**, the pipeline itself becomes **a knowledge graph of your data system**, continuously learning from historical SQL, feedback loops, and human corrections.
 
-It is not just about *moving data* — it's about *understanding and evolving* the context around the data.
+It is not just about *moving data and build tables* — it's about *understanding and evolving* the context around the data.
 
 
 ## Why It Matters
@@ -24,7 +26,7 @@ Modern business questions change daily. Ad-hoc data fetch requests consume half 
 
 The focus has long been on the data consumer side (analytics and dashboards), not the producer side where context and accuracy are built. Contextual data engineering shifts that focus — empowering engineers to produce *living context* rather than static artifacts.
 
-## Why Datus for Contextual Data Engineering
+## Why Datus
 
 **Automatic Context Capture**
 
@@ -40,9 +42,11 @@ The system learns from both machine generation and human feedback, incrementally
 
 ## Core Concepts
 
-### Long-Term Memory for Data Engineering
+### Long-Term Memory
 
 We model **Data Engineering Context (Long-Term Memory)** as **two trees**:
+
+![Context Tree Structure](../assets/context_tree.png)
 
 - In [Datus CLI](../cli/introduction.md), you can browse and edit them via `@catalog` and `@subject`
 - Use `datus-agent bootstrap-kb` to batch-initialize and cold-start the knowledge base
@@ -65,6 +69,8 @@ Exploration with `/chat`, success-story writebacks, and issue/benchmark loops co
 ### Subagent System
 
 **Scoped, domain-aware subagents**
+
+![Subagent System](../assets/subagent.png)
 
 Package description, rules, and scoped context — unifying tables, SQL patterns, metrics, and constraints for a specific business scenario.
 
