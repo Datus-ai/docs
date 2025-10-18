@@ -232,19 +232,25 @@ Submit feedback on workflow execution quality.
 ## Workflow Types
 
 ### reflection
+
 **Intelligent, self-improving SQL generation:**
+
 - Includes reflection for error correction
 - Can adapt and retry queries
 - Best for complex or uncertain queries
 
 ### fixed
+
 **Deterministic SQL generation:**
+
 - Predictable execution path
 - No adaptive behavior
 - Best for well-understood queries
 
 ### metric_to_sql
+
 **Generate SQL from business metrics:**
+
 - Leverages predefined business metrics
 - Includes date parsing for temporal queries
 - Best for standardized business intelligence
