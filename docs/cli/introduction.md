@@ -18,6 +18,7 @@ In addition to the three magic commands, you can also:
 - Use [session commands](chat_command.md#session-commands) such as `.compact` and `.clear` to manage or reset sessions
 - [Explore metadata](sql_execution.md#explore-metadata) with `.tables` and `.databases`
 - Use [`.mcp`](mcp_extensions.md) to add, remove, or test MCP servers to extend functionality
+- Use [plan mode](plan_mode.md) to break down complex tasks into reviewable steps before execution
 
 ## What is Vibe SQL?
 

@@ -16,6 +16,7 @@ nav:
       - MCP Extensions: cli/mcp_extensions.md
       - SQL Execution: cli/sql_execution.md
       - Reference: cli/reference.md
+      - Plan Mode: cli/plan_mode.md
     - Subagent:
       - Introduction: subagent/introduction.md
       - Built-in subagents: subagent/builtin_subagents.md
