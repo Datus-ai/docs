@@ -50,7 +50,7 @@ We model **Data Engineering Context (Long-Term Memory)** as **two trees**:
 
 - In [Datus CLI](../cli/introduction.md), you can browse and edit them via `@catalog` and `@subject`
 - Use `datus-agent bootstrap-kb` to batch-initialize and cold-start the knowledge base
-- With subagents, you can define a **scoped context** — a curated subset of the global store — enabling precise, domain-aware delivery
+- With subagents, you can define a **scoped context** — a curated subset of the global store that enables precise, domain-aware delivery
 
 ### Interactive Context Building
 
@@ -72,7 +72,11 @@ Exploration with `/chat`, success-story writebacks, and issue/benchmark loops co
 
 **Scoped, domain-aware subagents**
 
+<<<<<<< Updated upstream
 Package description, rules, and scoped context — unifying tables, SQL patterns, metrics, and constraints for a specific business scenario.
+=======
+Package description, rules, and scoped context to unify tables, SQL patterns, metrics, and constraints for specific business scenarios.
+>>>>>>> Stashed changes
 
 **Configurable tools and MCPs**
 
