@@ -1,4 +1,4 @@
-# Plan Mode User Guide （Beta）
+# Plan Mode User Guide(Beta)
 
 ## Overview
 

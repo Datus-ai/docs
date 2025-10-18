@@ -4,7 +4,7 @@
 
 With Datus, data engineers shift from writing repetitive SQL to building reusable, AI-ready context. Every query, correction, and domain rule becomes long-term memory—enabling specialized subagents that deliver accurate, domain-aware analytics to your entire organization.
 
-![Datus architecture](../assets/home_architecture.png )
+![Datus architecture](assets/home_architecture.png)
 
 **Three Entry Points for Different Users**
 
@@ -57,7 +57,7 @@ Discover how Datus leverages contextual data engineering from your data assets t
     ---
 
     Command-line interface for local development and real-time preview of your data workflows.
-    
+
     [:octicons-arrow-right-24: Learn more](cli/introduction.md)
 
 -   :material-database: **Knowledge Base**
@@ -65,7 +65,7 @@ Discover how Datus leverages contextual data engineering from your data assets t
     ---
 
     Centralized repository for organizing and managing your data assets and documentation.
-    
+
     [:octicons-arrow-right-24: Browse knowledge base](knowledge_base/introduction.md)
 
 -   :material-robot-outline: **Subagent System**
@@ -81,7 +81,7 @@ Discover how Datus leverages contextual data engineering from your data assets t
     ---
 
     Design and orchestrate complex data pipelines with configurable workflow builder.
-    
+
     [:octicons-arrow-right-24: Explore workflows](workflow/introduction.md)
 
 </div>
