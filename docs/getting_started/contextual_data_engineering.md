@@ -72,11 +72,7 @@ Exploration with `/chat`, success-story writebacks, and issue/benchmark loops co
 
 **Scoped, domain-aware subagents**
 
-<<<<<<< Updated upstream
-Package description, rules, and scoped context — unifying tables, SQL patterns, metrics, and constraints for a specific business scenario.
-=======
 Package description, rules, and scoped context to unify tables, SQL patterns, metrics, and constraints for specific business scenarios.
->>>>>>> Stashed changes
 
 **Configurable tools and MCPs**
 
