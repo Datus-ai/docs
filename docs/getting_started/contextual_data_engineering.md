@@ -56,7 +56,7 @@ We model **Data Engineering Context (Long-Term Memory)** as **two trees**:
 
 **Co-authored context**
 
-LLMs draft semantic models and metrics from tables and SQL history, while engineers refine labels, metadata, and the subject tree.
+LLMs draft semantic models and metrics from tables and reference SQL, while engineers refine labels, metadata, and the subject tree.
 
 **Command-driven iteration**
 
@@ -133,9 +133,9 @@ Try → inspect result → add clarifications (e.g., "use PK join between `order
 
 ### Building Context
 
-**Import SQL history**
+**Import Reference SQL**
 
-Capture proven patterns and edge-case handling. Promote high-value snippets into reusable blocks. See [SQL History Tracking](../knowledge_base/sql_history.md) for details.
+Capture proven patterns and edge-case handling. Promote high-value snippets into reusable blocks. See [Reference SQL Tracking](../knowledge_base/reference_sql.md) for details.
 
 **Generate first-pass assets**
 
@@ -202,7 +202,7 @@ When data engineers receive issue links from customers, they can revise SQL, upd
 
     ---
 
-    Explore detailed context management with metadata, metrics, and SQL history.
+    Explore detailed context management with metadata, metrics, and reference SQL.
 
     [:octicons-arrow-right-24: Learn more](../knowledge_base/introduction.md)
 
@@ -236,5 +236,5 @@ When data engineers receive issue links from customers, they can revise SQL, upd
 
 - [Metadata Management](../knowledge_base/metadata.md) - Organize and manage table schemas and column descriptions
 - [Metrics Definition](../knowledge_base/metrics.md) - Define reusable business metrics
-- [SQL History Tracking](../knowledge_base/sql_history.md) - Capture and leverage historical query patterns
+- [Reference SQL Tracking](../knowledge_base/reference_sql.md) - Capture and leverage historical query patterns
 - [Context Command Reference](../cli/context_command.md) - Complete CLI context command reference

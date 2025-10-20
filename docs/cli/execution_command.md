@@ -64,12 +64,12 @@ Allows filtering by:
 - Layer2 (sub-layer)
 - Top N results
 
-#### `!sh` / `!search_history`
+#### `!ss` / `!search_sql`
 Search historical SQL queries using natural language descriptions.
 
 ```bash
-!sh queries about user retention
-!search_history monthly sales reports
+!ss queries about user retention
+!search_sql monthly sales reports
 ```
 
 Returns:

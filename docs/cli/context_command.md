@@ -8,7 +8,6 @@ Context items are organized into three separate trees:
 
 - `@catalog` — your physical data structure (databases, schemas, tables)
 - `@subject` — your semantic/business layer (domains, layers, semantic models, metrics)
-- `@sql` — your historical knowledge (SQL history, reusable SQL snippets)
 
 By combining these, you give Datus the same mental model you have — so it can reason with your data instead of guessing.
 
@@ -105,4 +104,4 @@ Type `@` (or `@any_text`) followed by any text, then press Tab. Datus will fuzzy
 - Query patterns and best practices
 - Optimization examples
 
-Check the [knowledge base documentation](../knowledge_base/introduction.md) to learn how to build these context trees.  
+Check the [knowledge base documentation](../knowledge_base/introduction.md) to learn how to build these context trees.

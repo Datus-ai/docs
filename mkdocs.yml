@@ -26,7 +26,7 @@ nav:
       - Introduction: knowledge_base/introduction.md
       - Metadata: knowledge_base/metadata.md
       - Metrics: knowledge_base/metrics.md
-      - SQL History: knowledge_base/sql_history.md
+      - Reference SQL: knowledge_base/reference_sql.md
     - Workflow:
       - Introduction: workflow/introduction.md
       - Nodes: workflow/nodes.md

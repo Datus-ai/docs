@@ -10,7 +10,7 @@ A **subagent** is a task-specific AI assistant with:
 
 - **Specialized System Prompts**: Optimized instructions for specific tasks
 - **Custom Tools**: Tailored toolset for the task (e.g., file operations, validation)
-- **Scoped Context**: Optional dedicated context (tables, metrics, SQL history) specific to this subagent
+- **Scoped Context**: Optional dedicated context (tables, metrics,reference SQL) specific to this subagent
 - **Independent Sessions**: Separate conversation history from main chat
 - **Task-Focused Workflow**: Guided steps for completing specific objectives
 

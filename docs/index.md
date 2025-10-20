@@ -1,6 +1,6 @@
 # Introduction
 
-**[Datus](https://github.com/Datus-ai/Datus-agent)** is an open-source data engineering agent that builds **evolvable context** for your data systems. Unlike traditional tools that merely move data, Datus captures, learns, and evolves the knowledge surrounding your data—transforming metadata, SQL history, semantic models, and metrics into a living knowledge base that grounds AI queries and eliminates hallucinations.
+**[Datus](https://github.com/Datus-ai/Datus-agent)** is an open-source data engineering agent that builds **evolvable context** for your data systems. Unlike traditional tools that merely move data, Datus captures, learns, and evolves the knowledge surrounding your data—transforming metadata, reference SQL, semantic models, and metrics into a living knowledge base that grounds AI queries and eliminates hallucinations.
 
 With Datus, data engineers shift from writing repetitive SQL to building reusable, AI-ready context. Every query, correction, and domain rule becomes long-term memory—enabling specialized subagents that deliver accurate, domain-aware analytics to your entire organization.
 
@@ -21,7 +21,7 @@ With Datus, data engineers shift from writing repetitive SQL to building reusabl
 
 The heart of Datus is its **[Context Engine](knowledge_base/introduction.md)**, which combines human expertise with AI capabilities:
 
-- Automatically captures [metadata](knowledge_base/metadata.md), [metrics](knowledge_base/metrics.md), [reference SQL](knowledge_base/sql_history.md), documents, and success stories
+- Automatically captures [metadata](knowledge_base/metadata.md), [metrics](knowledge_base/metrics.md), [reference SQL](knowledge_base/reference_sql.md), documents, and success stories
 - Supports human-in-the-loop curation and refinement
 - Powers both subagents and workflows with rich, domain-specific context
 

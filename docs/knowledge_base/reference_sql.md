@@ -1,8 +1,8 @@
-# SQL History Intelligence
+# Reference SQL Intelligence
 
 ## Overview
 
-Bootstrap-KB SQL History is a powerful component that processes, analyzes, and indexes SQL query files to create an intelligent searchable repository. It transforms raw SQL files with comments into a structured knowledge base with semantic search capabilities.
+Bootstrap-KB Reference SQL is a powerful component that processes, analyzes, and indexes SQL query files to create an intelligent searchable repository. It transforms raw SQL files with comments into a structured knowledge base with semantic search capabilities.
 
 ## Core Value
 
@@ -25,10 +25,10 @@ Bootstrap-KB SQL History is a powerful component that processes, analyzes, and i
 ### Basic Command
 
 ```bash
-# Initialize SQL history component
+# Initialize Reference SQL component
 datus-agent bootstrap-kb \
     --namespace <your_namespace> \
-    --components sql_history \
+    --components reference_sql \
     --sql_dir /path/to/sql/directory \
     --kb_update_strategy overwrite
 ```
@@ -38,7 +38,7 @@ datus-agent bootstrap-kb \
 | Parameter | Required | Description | Example |
 |-----------|----------|-------------|---------|
 | `--namespace` | ✅ | Database namespace | `analytics_db` |
-| `--components` | ✅ | Components to initialize | `sql_history` |
+| `--components` | ✅ | Components to initialize | `reference_sql` |
 | `--sql_dir` | ✅ | Directory containing SQL files | `/sql/queries` |
 | `--kb_update_strategy` | ✅ | Update strategy | `overwrite`/`incremental` |
 | `--validate-only` | ❌ | Only validate, don't store |  |
@@ -99,6 +99,6 @@ ORDER BY month, total_revenue DESC;
 
 ## Summary
 
-The Bootstrap-KB SQL History component transforms scattered SQL files into an intelligent, searchable knowledge base. It combines advanced NLP capabilities with robust SQL processing to create a powerful tool for SQL discovery and reuse.
+The Bootstrap-KB Reference SQL component transforms scattered SQL files into an intelligent, searchable knowledge base. It combines advanced NLP capabilities with robust SQL processing to create a powerful tool for SQL discovery and reuse.
 
-By implementing SQL History, teams can break down knowledge silos and build a collective SQL intelligence asset that grows over time.
+By implementing reference SQL, teams can break down knowledge silos and build a collective SQL intelligence asset that grows over time.

@@ -127,7 +127,7 @@ After generation, you'll see:
 
 ```
 ==========================================================
-Generated SQL History YAML
+Generated Reference SQL YAML
 File: /path/to/sql_summary.yml
 ==========================================================
 [YAML content with syntax highlighting]
@@ -154,8 +154,8 @@ agentic_nodes:
     prompt_version: "1.0"
     tools: generation_tools.prepare_sql_summary_context, generation_tools.generate_sql_summary_id, filesystem_tools.write_file
     hooks: generation_hooks                # Enable confirmation workflow
-    workspace_root: /path/to/sql_history   # Directory to save YAML files
-    agent_description: "SQL history analysis assistant"
+    workspace_root: /path/to/reference_sql   # Directory to save YAML files
+    agent_description: "reference SQL analysis assistant"
 ```
 
 #### Key Configuration Options
@@ -163,7 +163,7 @@ agentic_nodes:
 | Parameter | Description | Example |
 |-----------|-------------|---------|
 | `model` | LLM model for SQL analysis | `deepseek`, `claude`, `openai`, `kimi` |
-| `workspace_root` | Directory for SQL summary YAML files | `/Users/you/.datus/data/sql_history` |
+| `workspace_root` | Directory for SQL summary YAML files | `/Users/you/.datus/data/reference_sql` |
 | `tools` | Required tools for the workflow | See tools section below |
 | `hooks` | Enable interactive confirmation | `generation_hooks` |
 
@@ -182,7 +182,7 @@ sql: |                                     # Complete SQL query
   GROUP BY region
 comment: "Calculate total revenue grouped by region"
 summary: "This query aggregates total revenue from the sales table, grouping results by geographic region. It uses SUM aggregation to calculate revenue totals for each region."
-filepath: "/Users/you/.datus/data/sql_history/revenue_by_region.yml"
+filepath: "/Users/you/.datus/data/reference_sql/revenue_by_region.yml"
 domain: "Sales"                            # Business domain
 layer1: "Reporting"                        # Primary category
 layer2: "Revenue Analysis"                 # Secondary category
@@ -646,7 +646,7 @@ The metrics generation feature provides:
 
 | Subagent | Purpose | Output | Stored In | Highlights |
 |----------|---------|--------|-----------|------------|
-| `gen_sql_summary` | Summarize and classify SQL queries | YAML (SQL summary) | `/data/sql_history` | Taxonomy-based classification |
+| `gen_sql_summary` | Summarize and classify SQL queries | YAML (SQL summary) | `/data/reference_sql` | Taxonomy-based classification |
 | `gen_semantic_model` | Generate semantic model from tables | YAML (semantic model) | `/data/semantic_models` | DDL → MetricFlow compatible model |
 | `gen_metrics` | Generate metrics from SQL | YAML (metric) | `/data/semantic_models` | SQL → MetricFlow metric |
 
