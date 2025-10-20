@@ -52,6 +52,8 @@ theme:
   font: false
   logo: assets/logo-dark.png
   favicon: assets/logo-light.png
+  icon:
+    repo: fontawesome/brands/github
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -77,6 +79,21 @@ theme:
     - navigation.indexes
     - content.code.copy
     - content.code.select
+    - header.autohide
+repo_name: Datus-ai/Datus-agent
+repo_url: https://github.com/Datus-ai/Datus-agent
+
+extra:
+  social:
+    - icon: material/web 
+      link: https://www.datus.ai
+    - icon: fontawesome/brands/github
+      link: https://github.com/Datus-ai/Datus-agent
+    - icon: fontawesome/brands/slack
+      link: https://join.slack.com/t/datus-ai/shared_invite/zt-3g6h4fsdg-iOl5uNoz6A4GOc4xKKWUYg
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/datusai
+
 
 
 markdown_extensions:
@@ -125,4 +142,5 @@ markdown_extensions:
 
 extra_css:
   - stylesheets/extra.css
+
 
