@@ -76,14 +76,14 @@ theme:
   features:
     - navigation.footer
     - navigation.tabs
-    - navigation.tabs.sticky
+    # - navigation.tabs.sticky
     - navigation.instant
     - navigation.instant.progress
     - navigation.tracking
     - navigation.indexes
     - content.code.copy
     - content.code.select
-    - header.autohide
+    # - header.autohide
 repo_name: Datus-ai/Datus-agent
 repo_url: https://github.com/Datus-ai/Datus-agent
 
