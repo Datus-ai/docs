@@ -7,7 +7,7 @@ Datus-CLI is an AI-native, terminal-first SQL client built for data engineers. I
 At its core are three "magic commands" that keep things simple and fast:
 
 - **[`/` Chat command](chat_command.md)** - For multi-turn conversation
-- **[`@` Context command](context_command.md)** - For on-demand recall of metadata/metrics/SQL history
+- **[`@` Context command](context_command.md)** - For on-demand recall of metadata/metrics
 - **[`!` Execution command](execution_command.md)** - For deterministic, scriptable actions
 
 ## Additional Features

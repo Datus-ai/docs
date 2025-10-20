@@ -64,7 +64,7 @@ The setup will guide you through:
 
 **3. Workspace Configuration** - Set up your SQL files directory (default: `~/.datus/workspace`)
 
-**4. Knowledge Base (Optional)** - Initialize vector DB for metadata and SQL history
+**4. Knowledge Base (Optional)** - Initialize vector DB for metadata and reference SQL
 
 After setup completes, you're ready to launch Datus!
 
@@ -336,7 +336,7 @@ Datus will then show details in a new screen.
 !!! note
     If you have initialized the knowledge base for metadata.
 
-If you want to add items such as a file, metric, table, or SQL history to the context, use `@`. Manual retrieval gives the LLM more precise context, narrows the search scope, and improves answer accuracy.
+If you want to add items such as a file, metric or table to the context, use `@`. Manual retrieval gives the LLM more precise context, narrows the search scope, and improves answer accuracy.
 
 ```bash title="Terminal"
 Datus> /@Table duckdb-demo.main.bank_failures

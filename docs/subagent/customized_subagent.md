@@ -1,6 +1,6 @@
 # Introduction
 
-The `.subagent` command is a core feature provided by **Datus CLI** for managing sub‑agents. This document focuses on how to use `.subagent` to create, view, update, or delete sub‑agents, and explains its subcommands in detail. The `SubAgentBootstrapper` is a functional module within `.subagent` that builds or simulates building a **scoped knowledge base** for a specific sub‑agent. And the `.subagent` command allows full lifecycle management of sub‑agents and can trigger knowledge base construction. 
+The `.subagent` command is a core feature provided by **Datus CLI** for managing sub‑agents. This document focuses on how to use `.subagent` to create, view, update, or delete sub‑agents, and explains its subcommands in detail. The `SubAgentBootstrapper` is a functional module within `.subagent` that builds or simulates building a **scoped knowledge base** for a specific sub‑agent. And the `.subagent` command allows full lifecycle management of sub‑agents and can trigger knowledge base construction.
 
 ---
 
@@ -115,10 +115,10 @@ The command uses `argparse.ArgumentParser` with `prog` and `description` paramet
 #### Workflow
 
 1. **Validate and locate sub‑agent** — Parses parameters and checks if the specified sub‑agent exists.
-2. **Normalize component list** — Converts to lowercase and validates against supported components (e.g., `metadata`, `metrics`, `sql_history`). Invalid components are rejected with a supported list displayed.
+2. **Normalize component list** — Converts to lowercase and validates against supported components (e.g., `metadata`, `metrics`, `reference_sql`). Invalid components are rejected with a supported list displayed.
 3. **Execute or simulate build**
 
-   * Without `--plan`: Executes an overwrite strategy, importing database metadata, metrics, or SQL history, generating a new scoped KB directory, and updating the config.
+   * Without `--plan`: Executes an overwrite strategy, importing database metadata, metrics, or reference SQL, generating a new scoped KB directory, and updating the config.
    * With `--plan`: Runs simulation only, calculating the data to be imported without writing files.
 4. **Display results** — Outputs a summary table (`Scoped KB Bootstrap Summary`) with columns:
 
@@ -142,10 +142,10 @@ Simulate metadata and metrics only:
 .subagent bootstrap my_agent --components metadata,metrics --plan
 ```
 
-Build SQL history only:
+Build reference SQL only:
 
 ```bash
-.subagent bootstrap my_agent --components sql_history
+.subagent bootstrap my_agent --components reference_sql
 ```
 
 ---
@@ -153,7 +153,7 @@ Build SQL history only:
 ## Notes
 
 * **Name consistency:** The sub‑agent name (`system_prompt`) uniquely identifies its configuration. Ensure consistent naming for `add`, `update`, `remove`, and `bootstrap` commands.
-* **Supported components:** Must be within predefined components (`metadata`, `metrics`, `sql_history`). Check available options with `.subagent bootstrap -h`.
+* **Supported components:** Must be within predefined components (`metadata`, `metrics`, `reference_sql`). Check available options with `.subagent bootstrap -h`.
 * **Simulation mode (`--plan`):** Used for risk evaluation; it performs no disk write. Omit this flag to perform actual construction.
 * **Automatic rebuild:** Updating a sub‑agent that changes scoped context triggers an automatic rebuild to keep configurations and KBs consistent.
 

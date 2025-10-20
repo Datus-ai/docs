@@ -107,14 +107,14 @@ Configure the workspace root directory (where your SQL files are stored):
 
 #### 4. Knowledge Base (Optional)
 
-Initialize the knowledge base for metadata and SQL history:
+Initialize the knowledge base for metadata and reference SQL:
 
 ```{ .yaml .no-copy }
 - Initialize vector DB for metadata? [y/n] (n): y
 → Initializing metadata knowledge base...
 → Processed 17 tables with 17 sample records
 ✔ Metadata knowledge base initialized
-- Initialize SQL history from workspace? [y/n] (n):
+- Initialize reference SQL from workspace? [y/n] (n):
 ```
 
 #### 5. Configuration Summary
