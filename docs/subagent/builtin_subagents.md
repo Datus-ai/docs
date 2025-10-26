@@ -10,64 +10,30 @@ This document covers three core subagents:
 2. **[gen_semantic_model](#gen_semantic_model)** — Generates MetricFlow semantic models
 3. **[gen_metrics](#gen_metrics)** — Generates MetricFlow metric definitions
 
-## Prerequisites
+## Configuration
 
-!!! warning "Configuration Required"
-    Before using builtin subagents, you must configure them in your `agent.yml` file.
+Builtin subagents work out of the box with default settings. You can optionally customize them in your `agent.yml` file:
 
-**Steps to enable builtin subagents:**
+```yaml
+agent:
+  agentic_nodes:
+    gen_semantic_model:
+      model: anthropic  # Optional: specify the AI model to use
+      max_turns: 10     # Optional: maximum conversation turns (default: 30)
 
-1. **Copy configuration from example file**
+    gen_metrics:
+      model: anthropic
+      max_turns: 8
 
-    The builtin subagents are defined in `conf/agent.yml.example` under the `agentic_nodes` section. Copy the relevant subagent configurations to your `conf/agent.yml`:
+    gen_sql_summary:
+      model: deepseek_v3
+      max_turns: 5
+```
 
-    ```bash
-    # View the example configuration
-    cat conf/agent.yml.example | grep -A 20 "agentic_nodes:"
-    ```
+**Optional configuration parameters:**
 
-2. **Add to your agent.yml**
-
-    Copy the `agentic_nodes` section from `conf/agent.yml.example` to your `conf/agent.yml`:
-
-    ```yaml
-    agent:
-      # ... other configuration ...
-
-      agentic_nodes:
-        gen_semantic_model:
-          model: anthropic
-          system_prompt: gen_semantic_model
-          prompt_version: "1.0"
-          tools: db_tools.*, generation_tools.*, filesystem_tools.*
-          hooks: generation_hooks
-          mcp: metricflow_mcp
-          workspace_root: ~/.datus/data/semantic_models
-          agent_description: "Semantic model generation assistant"
-          # ... more configuration ...
-
-        gen_metrics:
-          model: anthropic
-          system_prompt: gen_metrics
-          # ... more configuration ...
-
-        gen_sql_summary:
-          model: deepseek_v3
-          system_prompt: gen_sql_summary
-          # ... more configuration ...
-    ```
-
-3. **Verify configuration**
-
-    Start Datus CLI and check if subagents are available:
-
-    ```bash
-    datus --namespace <your_namespace>
-    # In Datus CLI, type '/' and press Tab to see available subagents
-    ```
-
-!!! tip "Quick Start"
-    See the complete example configuration at [`conf/agent.yml.example`](https://github.com/Datus-ai/Datus-agent/blob/main/conf/agent.yml.example)
+- `model`: The AI model to use for this subagent (e.g., `anthropic`, `deepseek_v3`)
+- `max_turns`: Maximum number of conversation turns before the subagent completes
 
 ---
 

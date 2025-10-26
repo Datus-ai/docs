@@ -50,39 +50,11 @@ Building on MetricFlow 0.140.0, we have made the following improvements:
 
 ## Installing datus-metricflow
 
-### Prerequisites
-Make sure you have Python 3.12 installed on your system.
+Make sure you have Python 3.12 installed on your system. Then install via pip:
 
-### Installation Steps
-
-1. **Install via pip**
-   ```bash
-   pip install datus-metricflow
-   ```
-
-2. **Setup with Your Database**
-
-   If you have a Datus configuration file with database connections:
-   ```bash
-   datus-mf setup --namespace <your_namespace>
-   ```
-
-   This will automatically generate an env_settings.yml file for Metricflow MCP server from the Datus configuration.
-
-3. **Load Environment Variables**
-
-   If you need run native metricflow command like `mf list-metrics` or `mf query`, you need to load the environment variables for current shell:
-   ```
-   source ~/.datus/metricflow/datus_env.sh
-   ```
-
-## What Happens After Setup?
-
-The setup process creates:
-
-- A semantic models directory at `~/.metricflow/semantic_models/` where you define your metrics
-- Configuration files that store your database connection settings
-- Environment variables needed to connect to your data warehouse
+```bash
+pip install datus-metricflow
+```
 
 ## Next Steps
 
