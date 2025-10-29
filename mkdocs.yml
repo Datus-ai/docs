@@ -88,8 +88,11 @@ repo_name: Datus-ai/Datus-agent
 repo_url: https://github.com/Datus-ai/Datus-agent
 
 extra:
+  analytics:
+    provider: google
+    property: G-8HMXHZDV7F
   social:
-    - icon: material/web 
+    - icon: material/web
       link: https://www.datus.ai
     - icon: fontawesome/brands/github
       link: https://github.com/Datus-ai/Datus-agent
