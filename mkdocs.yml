@@ -47,10 +47,52 @@ nav:
 
   - Release Notes: release_notes.md
 
+plugins:
+  - search
+  - i18n:
+      languages:
+        - locale: en
+          name: English
+          default: true
+        - locale: zh
+          name: "中文"
+          nav_translations:
+            Home: 首页
+            Overview: 概览
+            Getting Started: 入门指南
+            Quickstart: 快速开始
+            Contextual Data Engineering: 上下文数据工程
+            CLI: 命令行
+            Introduction: 介绍
+            Chat Command: 聊天命令
+            Context Command: 上下文命令
+            Execution Command: 执行命令
+            MCP Extensions: MCP 扩展
+            SQL Execution: SQL 执行
+            Reference: 参考
+            Plan Mode: 计划模式
+            Subagent: 子代理
+            Built-in subagents: 内置子代理
+            Customized subagents: 自定义子代理
+            Chatbot: 聊天机器人
+            Knowledge Base: 知识库
+            Metadata: 元数据
+            Metrics: 指标
+            Reference SQL: 参考 SQL
+            Workflow: 工作流
+            Nodes: 节点
+            Orchestration: 编排
+            API: API
+            Configuration: 配置
+            Benchmark: 基准测试
+            Metricflow: MetricFlow
+            Release Notes: 发布说明
+
 theme:
   name: material
+  language: en
   font: false
-  logo: assets/logo-dark.png
+  logo: assets/logo-light.png
   favicon: assets/logo-light.png
   icon:
     repo: fontawesome/brands/github
@@ -83,14 +125,25 @@ theme:
     - navigation.indexes
     - content.code.copy
     - content.code.select
+    - content.action.edit
     # - header.autohide
 repo_name: Datus-ai/Datus-agent
-repo_url: https://github.com/Datus-ai/Datus-agent
+repo_url: https://github.com/Datus-ai/docs
+edit_uri: edit/main/docs/
 
 extra:
   analytics:
     provider: google
     property: G-8HMXHZDV7F
+
+  alternate:
+    - name: English
+      link: /
+      lang: en
+    - name: 中文
+      link: /zh/
+      lang: zh
+
   social:
     - icon: material/web
       link: https://www.datus.ai
