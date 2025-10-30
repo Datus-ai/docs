@@ -71,10 +71,10 @@ plugins:
             SQL Execution: SQL 执行
             Reference: 参考
             Plan Mode: 计划模式
-            Subagent: 子代理
-            Built-in subagents: 内置子代理
-            Customized subagents: 自定义子代理
-            Chatbot: 聊天机器人
+            Subagent: Subagent
+            Built-in subagents: 内置 subagent
+            Customized subagents: 自定义 subagent
+            Chatbot: chatbot
             Knowledge Base: 知识库
             Metadata: 元数据
             Metrics: 指标
