@@ -30,6 +30,7 @@ Datus Agent 工作流是一个将自然语言问题转换为 SQL 并执行的智
 ## 组成：节点（Nodes）
 
 工作流由若干专用“[节点](nodes.md)”组成，每个节点聚焦一件事：
+
 - **[Schema Linking](nodes.md#schema-linking-node)**：为问题找对表
 - **[Generate SQL](nodes.md#generate-sql-node)**：生成查询
 - **[Execute SQL](nodes.md#execute-sql-node)**：执行查询
