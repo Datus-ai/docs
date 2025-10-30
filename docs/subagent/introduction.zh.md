@@ -2,19 +2,19 @@
 
 ## 概览
 
-子代理（Subagent）是 Datus 中专注于特定任务的专用 AI 助手。与处理通用 SQL 查询的默认聊天助手不同，子代理针对特定工作流进行了优化，例如生成语义模型、创建指标或分析 SQL 查询。
+Subagent 是 Datus 中专注于特定任务的专用 AI 助手。与处理通用 SQL 查询的默认聊天助手不同，subagent针对特定工作流进行了优化，例如生成语义模型、创建指标或分析 SQL 查询。
 
-## 什么是子代理？
+## 什么是subagent？
 
-**子代理** 是面向特定任务的 AI 助手，具备以下特性：
+**subagent** 是面向特定任务的 AI 助手，具备以下特性：
 
 - **专用系统提示**：针对特定任务优化的指令
 - **自定义工具**：为任务定制的工具集（例如文件操作、验证）
-- **范围化上下文**：可选，专用于该子代理的上下文（数据表、指标、参考 SQL）
+- **范围化上下文**：可选，专用于该subagent的上下文（数据表、指标、参考 SQL）
 - **独立会话**：与主聊天分离的对话历史
 - **任务导向工作流**：完成特定目标的引导步骤
 
-## 可用子代理
+## 可用subagent
 
 ### 1. `gen_semantic_model`
 
@@ -22,7 +22,7 @@
 
 **使用场景**：将数据库表结构转换为 YAML 语义模型定义。
 
-**前置条件**：此子代理依赖 [datus-metricflow](../metricflow/introduction.md)，请先安装。
+**前置条件**：此subagent依赖 [datus-metricflow](../metricflow/introduction.md)，请先安装。
 
 **启动命令**：
 ```bash
@@ -46,7 +46,7 @@
 
 **使用场景**：将临时 SQL 计算转换为标准化指标。
 
-**前置条件**：此子代理依赖 [datus-metricflow](../metricflow/introduction.md)，请先安装。
+**前置条件**：此subagent依赖 [datus-metricflow](../metricflow/introduction.md)，请先安装。
 
 **启动命令**：
 ```bash
@@ -86,9 +86,9 @@
 
 ---
 
-### 4. 自定义子代理
+### 4. 自定义subagent
 
-你可以在 `agent.yml` 中定义自定义子代理，用于组织特定的工作流。
+你可以在 `agent.yml` 中定义自定义subagent，用于组织特定的工作流。
 
 **配置示例**：
 ```yaml
@@ -102,29 +102,29 @@ agentic_nodes:
     agent_description: "Custom workflow assistant"
 ```
 
-## 如何使用子代理
+## 如何使用subagent
 
 ### 方法 1：CLI 命令（推荐）
 
-使用斜杠命令启动子代理：
+使用斜杠命令启动subagent：
 
 ```bash
 datus --namespace production
 
-# 使用特定任务启动子代理
+# 使用特定任务启动subagent
 /gen_metrics Generate a revenue metric
 ```
 
 **工作流程**：
 
 1. 输入 `/[subagent_name]` 后跟你的请求
-2. 子代理使用专用工具处理任务
+2. subagent使用专用工具处理任务
 3. 审阅生成的输出（YAML、SQL 等）
 4. 确认是否同步到知识库
 
 ### 方法 2：Web 界面
 
-通过网页聊天机器人访问子代理：
+通过网页聊天机器人访问subagent：
 
 ```bash
 datus web --namespace production
@@ -133,7 +133,7 @@ datus web --namespace production
 **步骤**：
 
 1. 在主页面点击 "🔧 Access Specialized Subagents"
-2. 选择需要的子代理（例如 "gen_metrics"）
+2. 选择需要的subagent（例如 "gen_metrics"）
 3. 点击 "🚀 Use [subagent_name]"
 4. 与专用助手对话
 
@@ -144,13 +144,13 @@ http://localhost:8501/?subagent=gen_semantic_model
 http://localhost:8501/?subagent=gen_sql_summary
 ```
 
-## 子代理 vs 默认聊天
+## subagent vs 默认聊天
 
-| 方面 | 默认聊天 | 子代理 |
+| 方面 | 默认聊天 | subagent |
 |--------|-------------|----------|
 | **用途** | 通用 SQL 查询 | 特定任务工作流 |
 | **工具** | 数据库工具、搜索工具 | 任务特定工具（文件操作、验证） |
-| **会话** | 单一对话 | 每个子代理独立 |
+| **会话** | 单一对话 | 每个subagent独立 |
 | **提示** | 通用 SQL 辅助 | 任务优化的指令 |
 | **输出** | SQL 查询 + 解释 | 结构化工件（YAML、文件） |
 | **验证** | 可选 | 内置（例如 MetricFlow 验证） |
@@ -161,7 +161,7 @@ http://localhost:8501/?subagent=gen_sql_summary
 - 数据探索
 - 关于数据库的快速问题
 
-**何时使用子代理**：
+**何时使用subagent**：
 
 - 生成标准化工件（语义模型、指标）
 - 遵循特定工作流（分类、验证）
@@ -171,7 +171,7 @@ http://localhost:8501/?subagent=gen_sql_summary
 
 ### 基础配置
 
-在 `conf/agent.yml` 中定义子代理：
+在 `conf/agent.yml` 中定义subagent：
 
 ```yaml
 agentic_nodes:
@@ -241,10 +241,10 @@ mcp: metricflow_mcp, filesystem_mcp
 
 ## 总结
 
-子代理提供**专用的、工作流优化的 AI 助手**，用于特定任务：
+subagent提供**专用的、工作流优化的 AI 助手**，用于特定任务：
 
 - **任务导向**：针对特定工作流优化的提示和工具
-- **独立会话**：每个子代理拥有独立的对话历史
+- **独立会话**：每个subagent拥有独立的对话历史
 - **工件生成**：创建标准化文件（YAML、文档）
 - **内置验证**：自动检查和验证（例如 MetricFlow）
 - **知识库集成**：同步生成的工件以供复用

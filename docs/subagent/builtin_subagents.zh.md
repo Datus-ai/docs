@@ -2,9 +2,9 @@
 
 ## 概览
 
-**内置 Subagent**  是集成在 Datus Agent 系统中的专用 AI 助手。每个子代理专注于数据工程自动化的特定方面——分析 SQL、生成语义模型、将查询转换为可复用指标——共同构成从原始 SQL 到具备知识感知的数据产品的闭环工作流。
+**内置 Subagent**  是集成在 Datus Agent 系统中的专用 AI 助手。每个subagent专注于数据工程自动化的特定方面——分析 SQL、生成语义模型、将查询转换为可复用指标——共同构成从原始 SQL 到具备知识感知的数据产品的闭环工作流。
 
-本文档涵盖三个核心子代理：
+本文档涵盖三个核心subagent：
 
 1. **[gen_sql_summary](#gen_sql_summary)** — 总结和分类 SQL 查询
 2. **[gen_semantic_model](#gen_semantic_model)** — 生成 MetricFlow 语义模型
@@ -12,7 +12,7 @@
 
 ## 配置
 
-内置子代理开箱即用，默认设置即可工作。你可以在 `agent.yml` 文件中自定义：
+内置subagent开箱即用，默认设置即可工作。你可以在 `agent.yml` 文件中自定义：
 
 ```yaml
 agent:
@@ -32,8 +32,8 @@ agent:
 
 **可选配置参数**：
 
-- `model`：此子代理使用的 AI 模型（例如 `anthropic`、`deepseek_v3`）
-- `max_turns`：子代理完成前的最大对话轮数
+- `model`：此subagent使用的 AI 模型（例如 `anthropic`、`deepseek_v3`）
+- `max_turns`：subagent完成前的最大对话轮数
 
 ---
 
@@ -54,7 +54,7 @@ SQL 摘要功能帮助你分析、分类和编目 SQL 查询，用于知识复�
 
 ### 快速开始
 
-启动 SQL 摘要生成子代理：
+启动 SQL 摘要生成 subagent：
 
 ```bash
 /gen_sql_summary Analyze this SQL: SELECT SUM(revenue) FROM sales GROUP BY region. (You can also add some description on this SQL)
@@ -189,7 +189,7 @@ tags: "revenue, region, aggregation"       # 逗号分隔的标签
 
 ### 快速开始
 
-使用 `datus --namespace <namespace>` 启动 Datus CLI，然后使用子代理命令：
+使用 `datus --namespace <namespace>` 启动 Datus CLI，然后使用subagent命令：
 
 ```bash
 /gen_semantic_model generate a semantic model for table <table_name>
@@ -349,7 +349,7 @@ data_source:
 
 ### 快速开始
 
-使用 `datus --namespace <namespace>` 启动 Datus CLI，然后使用指标生成子代理：
+使用 `datus --namespace <namespace>` 启动 Datus CLI，然后使用指标生成subagent：
 
 ```bash
 /gen_metrics Generate a metric from this SQL: SELECT SUM(amount) FROM transactions, the corresponding question is total amount of all transactions
@@ -610,11 +610,11 @@ metric:
 
 ## 总结
 
-| 子代理 | 用途 | 输出 | 存储位置 | 亮点 |
+| subagent | 用途 | 输出 | 存储位置 | 亮点 |
 |----------|---------|--------|-----------|------------|
 | `gen_sql_summary` | 总结和分类 SQL 查询 | YAML（SQL 摘要） | `/data/reference_sql` | 基于分类体系的分类 |
 | `gen_semantic_model` | 从表生成语义模型 | YAML（语义模型） | `/data/semantic_models` | DDL → MetricFlow 兼容模型 |
 | `gen_metrics` | 从 SQL 生成指标 | YAML（指标） | `/data/semantic_models` | SQL → MetricFlow 指标 |
 
-这些子代理共同自动化了 **数据工程知识管道** ——从 **查询理解 → 模型定义 → 指标生成 → 可搜索的知识库** 。
+这些subagent共同自动化了 **数据工程知识管道** ——从 **查询理解 → 模型定义 → 指标生成 → 可搜索的知识库** 。
 
