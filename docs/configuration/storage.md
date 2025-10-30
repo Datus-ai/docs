@@ -39,6 +39,7 @@ storage:
 ```
 
 The final data paths will be:
+
 - `data/datus_db_<namespace_name>` for each configured namespace
 - Example: `data/datus_db_snowflake`, `data/datus_db_local_sqlite`
 

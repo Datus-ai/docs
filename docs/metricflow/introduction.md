@@ -7,6 +7,7 @@
 MetricFlow is a semantic layer that helps you organize and manage metric definitions in code. It automatically generates clean, reusable SQL queries from your metric definitions, ensuring consistent metric outputs across your organization.
 
 Simply put, MetricFlow allows you to:
+
 - Define your business metrics once in a standardized way
 - Query those metrics consistently across different dimensions
 - Get automatically generated SQL that's optimized for your data warehouse.
@@ -14,16 +15,19 @@ Simply put, MetricFlow allows you to:
 ## Key Features
 
 ### Metric Management
+
 - **Centralized Definitions**: Define all metrics in one place using simple YAML configuration
 - **Multiple Metric Types**: Support for simple metrics, ratios, expressions, and cumulative metrics
 - **Dimension Analysis**: Break down metrics by any dimension (time, geography, product category, etc.)
 
 ### Smart Query Generation
+
 - **Automatic SQL Generation**: Converts metric requests into optimized SQL queries
 - **Multi-hop Joins**: Handles complex joins between fact tables and dimension tables
 - **Time Granularity**: Aggregate metrics at different time periods (daily, weekly, monthly, etc.)
 
 ### Integration & Flexibility
+
 - **Multiple Data Warehouses**: Works with various data platforms
 - **API Integration**: Build custom integrations with downstream tools
 - **Version Control**: Manage metric definitions in Git like regular code

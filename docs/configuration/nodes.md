@@ -39,10 +39,10 @@ schema_linking:
 
 - **model**: LLM model key from agent.models configuration
 - **matching_rate**: Controls how many matching results to return
-  - `fast`: Top 5 matching data (fastest, least comprehensive)
-  - `medium`: Top 10 matching data (balanced)
-  - `slow`: Top 20 matching data (most comprehensive)
-  - `from_llm`: Use LLM to select the most relevant tables from all available metadata
+    - `fast`: Top 5 matching data (fastest, least comprehensive)
+    - `medium`: Top 10 matching data (balanced)
+    - `slow`: Top 20 matching data (most comprehensive)
+    - `from_llm`: Use LLM to select the most relevant tables from all available metadata
 - **prompt_version**: Version of the prompt template to use
 
 ### Generate SQL
@@ -125,6 +125,7 @@ output:
 ```
 
 **Configuration Parameters:**
+
 - **model**: LLM model for result formatting and validation
 - **prompt_version**: Output formatting prompt version
 - **check_result**: When true, LLM validates generated SQL and results for completeness and accuracy
@@ -143,6 +144,7 @@ chat:
 ```
 
 **Configuration Parameters:**
+
 - **workspace_root**: Root directory where file tools can operate
 - **model**: LLM model for multi-turn dialogue
 - **max_turns**: Maximum number of tool-assisted reasoning turns
@@ -242,17 +244,21 @@ nodes:
 ## Model Assignment Strategy
 
 **For Schema Linking:**
+
 - Use fast, cost-effective models: `gpt-3.5-turbo`, `deepseek-chat`
 - For complex schemas: `gpt-4`, `claude-4-sonnet`
 
 **For SQL Generation:**
+
 - Recommended: `deepseek-chat`, `gpt-4-turbo`, `claude-4-sonnet`
 - Avoid: Basic models that struggle with complex SQL
 
 **For Reasoning:**
+
 - Best: `claude-4-sonnet`, `gpt-4-turbo`, `claude-4-opus`
 - Good: `gemini-2.5-flash`
 
 **For Output and Chat:**
+
 - Recommended: `claude-4-sonnet`, `gpt-4-turbo`
 - Good for formatting: `anthropic` models
