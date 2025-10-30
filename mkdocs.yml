@@ -128,8 +128,8 @@ theme:
     - content.action.edit
     # - header.autohide
 repo_name: Datus-ai/Datus-agent
-repo_url: https://github.com/Datus-ai/docs
-edit_uri: edit/main/docs/
+repo_url: https://github.com/Datus-ai/Datus-agent
+edit_uri: https://github.com/Datus-ai/docs/edit/main/docs/
 
 extra:
   analytics:
