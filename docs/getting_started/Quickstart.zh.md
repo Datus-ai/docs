@@ -11,22 +11,22 @@ Datus 需要 Python 3.12 运行环境，可按喜好选择以下方式：
 === "Conda"
 
     ```bash
-    conda create -n .datus python=3.12
-    conda activate .datus
+    conda create -n datus python=3.12
+    conda activate datus
     ```
 
 === "virtualenv"
 
     ```bash
-    virtualenv .datus --python=python3.12
-    source .datus/bin/activate
+    virtualenv datus --python=python3.12
+    source datus/bin/activate
     ```
 
 === "uv"
 
     ```bash
-    uv venv .datus --python 3.12
-    source .datus/bin/activate
+    uv venv --python 3.12
+    source .venv/bin/activate
     ```
 
 ### 安装 Datus Agent
