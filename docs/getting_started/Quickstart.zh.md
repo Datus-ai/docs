@@ -25,11 +25,20 @@ Datus 需要 Python 3.12 运行环境，可按喜好选择以下方式：
 === "uv"
 
     ```bash
-    uv venv datus --python 3.12
-    source datus/bin/activate
+    uv venv --python 3.12
+    source .venv/bin/activate
     ```
 
 ### 安装 Datus Agent
+
+!!! note
+    请确保您的 pip 版本与 Python 3.12 兼容。
+
+    如需升级 pip,可以使用以下命令:
+    ```bash
+    python -m ensurepip --upgrade
+    python -m pip install --upgrade pip setuptools wheel
+    ```
 
 === "稳定版"
 
