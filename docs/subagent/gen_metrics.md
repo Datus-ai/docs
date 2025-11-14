@@ -76,40 +76,44 @@ Please enter your choice: [1/2]
 
 ### Agent Configuration
 
-In `agent.yml`, configure the metrics generation node:
+Most configurations are built-in. In `agent.yml`, minimal setup is needed:
 
 ```yaml
 agentic_nodes:
   gen_metrics:
-    model: claude                          # LLM model for metric generation
-    system_prompt: gen_metrics             # Prompt template name
-    prompt_version: "1.0"                  # Template version
-    tools: generation_tools.*, filesystem_tools.*
-    hooks: generation_hooks                # Enable user confirmation workflow
-    mcp: metricflow_mcp                    # MetricFlow validation server
-    max_turns: 40                          # Max conversation turns
-    workspace_root: /path/to/semantic_models
-    agent_description: "Metric definition generation assistant"
-    rules:
-      - Analyze user-provided SQL queries to generate MetricFlow metrics
-      - Use list_allowed_directories to find existing semantic model files
-      - Use read_file to read semantic model and understand measures
-      - Use check_metric_exists tool to avoid duplicate generation
-      - Use edit_file to append metrics (DO NOT use write_file)
-      - Use mf validate-configs to validate configurations
-      - After validation, call end_generation to trigger confirmation
+    model: claude        # Optional: defaults to configured model
+    max_turns: 40        # Optional: defaults to 30
 ```
 
-### Key Configuration Options
+**Built-in configurations** (automatically enabled):
+- **Tools**: Generation tools and filesystem tools
+- **Hooks**: User confirmation workflow in interactive mode
+- **MCP Server**: MetricFlow validation server
+- **System Prompt**: Built-in template version 1.0
+- **Workspace**: `~/.datus/data/{namespace}/semantic_models`
 
-| Parameter | Description | Example |
-|-----------|-------------|---------|
-| `model` | LLM model for generation | `claude`, `openai`, `deepseek`, claude is recommended |
-| `workspace_root` | Directory containing semantic model YAML files | `/Users/you/.datus/data/semantic_models` |
-| `tools` | Available tools (generation + filesystem) | `generation_tools.*, filesystem_tools.*` |
-| `hooks` | Enable interactive confirmation workflow | `generation_hooks` |
-| `mcp` | MetricFlow validation server | `metricflow_mcp` |
-| `max_turns` | Max conversation turns for complex queries | `40` |
+### Configuration Options
+
+| Parameter | Required | Description | Default |
+|-----------|----------|-------------|---------|
+| `model` | No | LLM model to use | Uses default configured model |
+| `max_turns` | No | Maximum conversation turns | 30 |
+
+### Subject Tree Categorization
+
+Subject tree allows organizing metrics by domain and layers for better management. In CLI mode, include it in your question:
+
+**Example with subject_tree:**
+```
+/gen_metrics Generate a metric from this SQL: SELECT SUM(amount) FROM transactions, subject_tree: finance/revenue/transactions
+```
+
+**Example without subject_tree:**
+```
+/gen_metrics Generate a metric from this SQL: SELECT SUM(amount) FROM transactions
+```
+
+When subject_tree is provided, the metric will be categorized accordingly (e.g., domain: finance, layer1: revenue, layer2: transactions). If not provided, the agent operates in learning mode and may suggest categories based on existing metrics in the Knowledge Base.
 
 
 

@@ -4,37 +4,16 @@ The Metrics component specifically focuses on automatically extracting and gener
 
 ## Core Value
 
-### What Problem Does It Solve?
-
-- **Duplicate SQL queries**: Large numbers of similar business query needs in enterprises
-- **Inconsistent metric definitions**: Different developers have different understandings of the same business metrics
-- **Inefficient data analysis**: SQL needs to be rewritten for each query
-
-### What Value Does It Provide?
-
-- **Metric standardization**: Unified business metric definitions ensuring data consistency
-- **Knowledge reuse**: Converting historical SQL experience into reusable metrics library
-- **Intelligent querying**: Directly calling predefined metrics through natural language
+Solves common enterprise challenges:
+- **Duplicate SQL queries**: Reuse metrics instead of rewriting similar queries
+- **Inconsistent definitions**: Standardize metric definitions across teams
+- **Manual classification**: Organize metrics with hierarchical subject tree taxonomy
 
 ## How It Works
 
-### Data Hierarchy Structure
+Data flows through two layers: **Historical SQLs → Semantic Model → Business Metrics**
 
-```mermaid
-graph LR
-    A[Data Table/Historical SQLs] --> B[Semantic Model]
-    B --> C[Business Metrics]
-```
-
-#### 1. Semantic Model
-- Defines table structure and business meaning
-- Contains dimensions, measures, identifiers, and other metadata
-- Provides semantic foundation for SQL queries
-
-#### 2. Business Metrics
-- Calculable metrics defined based on semantic models
-- Contains metric name, description, calculation logic
-- Supports complex business calculations
+Semantic models define table structure, dimensions, and measures. Metrics are reusable calculations built on top of these models.
 
 ## Usage
 
@@ -43,18 +22,14 @@ graph LR
 ### Basic Command
 
 ```bash
-# Initialize metrics component from success story CSV
-
+# From CSV (historical SQLs)
 datus-agent bootstrap-kb \
     --namespace <your_namespace> \
     --components metrics \
     --success_story path/to/success_story.csv \
     --metric_meta business_meta
-```
 
-```bash
-# Initialize metrics component from semantic YAML
-
+# From YAML (semantic models)
 datus-agent bootstrap-kb \
     --namespace <your_namespace> \
     --components metrics \
@@ -68,11 +43,27 @@ datus-agent bootstrap-kb \
 |-----------|----------|-------------|---------|
 | `--namespace` | ✅ | Database namespace | `sales_db` |
 | `--components` | ✅ | Components to initialize | `metrics` |
-| `--success_story` | ⚠️ | A CSV file containing historical SQLs and questions (required if not using `--semantic_yaml`) | `benchmark/semantic_layer/success_story.csv` |
-| `--semantic_yaml` | ⚠️ | Semantic model YAML file (required if not using `--success_story`) | `models/semantic_model.yaml` |
-| `--metric_meta` | ✅ | Metric metadata | `ecommerce` configuration component in `agent.yml` |
+| `--success_story` | ⚠️ | CSV file with historical SQLs and questions (required if no `--semantic_yaml`) | `success_story.csv` |
+| `--semantic_yaml` | ⚠️ | Semantic model YAML file (required if no `--success_story`) | `semantic_model.yaml` |
+| `--metric_meta` | ✅ | Metric metadata configuration in `agent.yml` | `business_meta` |
 | `--kb_update_strategy` | ✅ | Update strategy | `overwrite`/`incremental` |
+| `--subject_tree` | ❌ | Predefined categories (comma-separated) | `Sales/Reporting/Daily,Finance/Revenue/Monthly` |
 | `--pool_size` | ❌ | Concurrent thread count | `4` |
+
+### Subject Tree Categorization
+
+Organizes metrics using hierarchical taxonomy: `domain/layer1/layer2` (e.g., `Sales/Reporting/Daily`)
+
+**Two modes:**
+- **Predefined**: Use `--subject_tree` to enforce specific categories
+- **Learning**: Omit `--subject_tree` to reuse existing categories or create new ones
+
+```bash
+# Predefined mode example
+--subject_tree "Sales/Reporting/Daily,Finance/Revenue/Monthly"
+
+# Learning mode: omit --subject_tree parameter
+```
 
 ## Data Source Formats
 
@@ -111,6 +102,4 @@ metric:
 
 ## Summary
 
-The Bootstrap-KB Metrics component is the core functionality of Datus Agent, helping enterprises establish standardized data metrics systems through automated metric generation and management. It not only significantly improves data analysis efficiency but also ensures enterprise data consistency and reusability.
-
-By properly using the Metrics component, enterprises can build a strong foundation for data-driven decision making.
+The Metrics component establishes standardized, reusable metric definitions from historical SQLs. With hierarchical subject tree taxonomy and flexible classification modes, it helps teams maintain consistent, discoverable metrics for data-driven decision making.

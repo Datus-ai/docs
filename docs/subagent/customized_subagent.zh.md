@@ -120,7 +120,7 @@ CLI 会以表格形式显示所有已配置的subagent，包含：
 2. **规范化组件列表** — 转换为小写并针对支持的组件（例如 `metadata`、`metrics`、`reference_sql`）进行验证。无效的组件会被拒绝，并显示支持的列表。
 3. **执行或模拟构建**
 
-   * 不使用 `--plan`：执行覆盖策略，导入数据库元数据、指标或参考 SQL，生成新的范围化知识库目录，并更新配置。
+   * 不使用 `--plan`：执行覆盖策略，导入数据库元数据、指标或Reference SQL，生成新的范围化知识库目录，并更新配置。
    * 使用 `--plan`：仅运行模拟，计算要导入的数据而不写入文件。
 4. **显示结果** — 输出摘要表格（`Scoped KB Bootstrap Summary`），包含列：
 
@@ -144,7 +144,7 @@ CLI 会以表格形式显示所有已配置的subagent，包含：
 .subagent bootstrap my_agent --components metadata,metrics --plan
 ```
 
-仅构建参考 SQL：
+仅构建Reference SQL：
 
 ```bash
 .subagent bootstrap my_agent --components reference_sql
