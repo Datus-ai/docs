@@ -27,7 +27,7 @@ The Datus Agent Knowledge Base is a multi-modal intelligence system that transfo
 - **Capabilities**: Find metrics by concept, get calculations, discover related metrics
 - **Use**: Standardized definitions, quick lookup, consistent reporting
 
-### 3. [reference SQL](reference_sql.md)
+### 3. [Reference SQL](reference_sql.md)
 
 **Purpose**: Capture, analyze, and make searchable SQL expertise.
 

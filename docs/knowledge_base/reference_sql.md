@@ -43,7 +43,54 @@ datus-agent bootstrap-kb \
 | `--kb_update_strategy` | ✅ | Update strategy | `overwrite`/`incremental` |
 | `--validate-only` | ❌ | Only validate, don't store |  |
 | `--pool_size` | ❌ | Concurrent processing threads, default value is 4 | `8` |
-| `--subject_tree` | ❌ | Predefined taxonomy structure for classification | `analytics/user_analytics/activity_metrics,analytics/revenue/daily` |
+| `--subject_tree` | ❌ | Predefined subject tree categories for classification | `Analytics/User/Activity,Analytics/Revenue/Daily` |
+
+### Subject Tree Categorization
+
+Subject tree provides a hierarchical taxonomy for organizing SQL queries by domain and layers. This helps maintain consistent classification and improves query discoverability.
+
+#### Format
+
+Subject tree categories follow the format: `domain/layer1/layer2`
+
+Example: `Analytics/User/Activity`, `Analytics/Revenue/Daily`, `Reporting/Sales/Monthly`
+
+#### Usage Modes
+
+**1. Predefined Mode (with --subject_tree)**
+
+When you provide predefined categories, SQL queries will be classified using only these categories:
+
+```bash
+datus-agent bootstrap-kb \
+    --namespace analytics_db \
+    --components reference_sql \
+    --sql_dir /path/to/sql/queries \
+    --kb_update_strategy overwrite \
+    --subject_tree "Analytics/User/Activity,Analytics/Revenue/Daily,Reporting/Sales/Monthly"
+```
+
+**2. Learning Mode (without --subject_tree)**
+
+When no subject_tree is provided, the system operates in learning mode:
+- Reuses existing categories from the Knowledge Base
+- Analyzes similar SQL queries to suggest appropriate categories
+- Creates new categories as needed based on query content
+- Builds taxonomy organically over time
+
+```bash
+datus-agent bootstrap-kb \
+    --namespace analytics_db \
+    --components reference_sql \
+    --sql_dir /path/to/sql/queries \
+    --kb_update_strategy overwrite
+```
+
+**Benefits:**
+- **Consistency**: Ensures SQL queries follow organizational taxonomy
+- **Discoverability**: Makes queries easier to find through semantic search
+- **Knowledge Management**: Organizes SQL expertise in a structured way
+- **Pattern Recognition**: Groups similar queries for better reusability
 
 ## SQL File Format
 
@@ -100,5 +147,12 @@ ORDER BY month, total_revenue DESC;
 ## Summary
 
 The Bootstrap-KB Reference SQL component transforms scattered SQL files into an intelligent, searchable knowledge base. It combines advanced NLP capabilities with robust SQL processing to create a powerful tool for SQL discovery and reuse.
+
+**Key Features:**
+- **Intelligent Organization**: Automatically categorizes SQL queries using subject tree taxonomy
+- **Flexible Classification**: Support both predefined and learning modes for categorization
+- **Semantic Search**: Find SQL queries using natural language descriptions
+- **Knowledge Preservation**: Captures SQL expertise in a structured, searchable format
+- **Automatic Context Retrieval**: Analyzes similar queries to suggest appropriate categories
 
 By implementing reference SQL, teams can break down knowledge silos and build a collective SQL intelligence asset that grows over time.

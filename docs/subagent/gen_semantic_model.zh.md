@@ -63,36 +63,21 @@ Please enter your choice: [1/2]
 
 ## 配置
 
-### 智能体配置
-
-在 `agent.yml` 中，配置语义模型生成节点：
+大部分配置是内置的。在 `agent.yml` 中，最小化设置即可：
 
 ```yaml
 agentic_nodes:
   gen_semantic_model:
-    model: claude                    # 使用的 LLM 模型
-    system_prompt: gen_semantic_model
-    prompt_version: "1.0"
-    tools: db_tools.*, generation_tools.*, filesystem_tools.*
-    hooks: generation_hooks          # 启用用户确认工作流
-    mcp: metricflow_mcp             # MetricFlow 验证服务器
-    workspace_root: /path/to/semantic_models
-    agent_description: "Semantic model generation assistant"
-    rules:
-      - Use get_table_ddl tool to get complete table DDL
-      - Generate comprehensive semantic models
-      - Validate using metricflow_mcp
+    model: claude        # 可选：默认使用已配置的模型
+    max_turns: 30        # 可选：默认为 30
 ```
 
-### 关键配置选项
-
-| 参数 | 描述 | 示例 |
-|-----------|-------------|---------|
-| `model` | 用于生成的 LLM 模型 | `claude`、`deepseek`，推荐使用 claude |
-| `workspace_root` | 保存 YAML 文件的目录 | `/Users/you/.datus/data/semantic_models` |
-| `tools` | 助手可用的工具 | `db_tools.*`、`filesystem_tools.*` |
-| `hooks` | 启用用户确认 | `generation_hooks` |
-| `mcp` | MetricFlow 验证服务器 | `metricflow_mcp` |
+**内置配置**（自动启用）：
+- **工具**：数据库工具、生成工具和文件系统工具
+- **Hooks**：交互模式下的用户确认工作流
+- **MCP 服务器**：MetricFlow 验证服务器
+- **系统提示**：内置模板版本 1.0
+- **工作空间**：`~/.datus/data/{namespace}/semantic_models`
 
 ## 语义模型结构
 

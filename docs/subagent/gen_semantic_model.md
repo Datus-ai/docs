@@ -63,34 +63,28 @@ Please enter your choice: [1/2]
 
 ### Agent Configuration
 
-In `agent.yml`, configure the semantic model generation node:
+Most configurations are built-in. In `agent.yml`, minimal setup is needed:
 
 ```yaml
 agentic_nodes:
   gen_semantic_model:
-    model: claude                    # LLM model to use
-    system_prompt: gen_semantic_model
-    prompt_version: "1.0"
-    tools: db_tools.*, generation_tools.*, filesystem_tools.*
-    hooks: generation_hooks          # Enables user confirmation workflow
-    mcp: metricflow_mcp             # MetricFlow validation server
-    workspace_root: /path/to/semantic_models
-    agent_description: "Semantic model generation assistant"
-    rules:
-      - Use get_table_ddl tool to get complete table DDL
-      - Generate comprehensive semantic models
-      - Validate using metricflow_mcp
+    model: claude        # Optional: defaults to configured model
+    max_turns: 30        # Optional: defaults to 30
 ```
 
-### Key Configuration Options
+**Built-in configurations** (automatically enabled):
+- **Tools**: Database tools, generation tools, and filesystem tools
+- **Hooks**: User confirmation workflow in interactive mode
+- **MCP Server**: MetricFlow validation server
+- **System Prompt**: Built-in template version 1.0
+- **Workspace**: `~/.datus/data/{namespace}/semantic_models`
 
-| Parameter | Description | Example |
-|-----------|-------------|---------|
-| `model` | LLM model for generation | `claude`, `deepseek`, claude is recommended |
-| `workspace_root` | Directory to save YAML files | `/Users/you/.datus/data/semantic_models` |
-| `tools` | Available tools for the assistant | `db_tools.*`, `filesystem_tools.*` |
-| `hooks` | Enable user confirmation | `generation_hooks` |
-| `mcp` | MetricFlow validation server | `metricflow_mcp` |
+### Configuration Options
+
+| Parameter | Required | Description | Default |
+|-----------|----------|-------------|---------|
+| `model` | No | LLM model to use | Uses default configured model |
+| `max_turns` | No | Maximum conversation turns | 30 |
 
 ## Semantic Model Structure
 

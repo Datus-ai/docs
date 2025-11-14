@@ -2,7 +2,7 @@
 
 ## 什么是上下文数据工程
 
-**上下文数据工程（Contextual Data Engineering）** 是在 AI 时代重新定义数据系统构建、维护与使用方式的新范式。它不再仅仅交付静态的表和管道，而是专注于构建 **可演化的上下文**——一个智能、鲜活的数据层，将元数据、参考 SQL、语义模型与指标融为一体，既方便人工也方便 AI 智能体理解。
+**上下文数据工程（Contextual Data Engineering）** 是在 AI 时代重新定义数据系统构建、维护与使用方式的新范式。它不再仅仅交付静态的表和管道，而是专注于构建 **可演化的上下文**——一个智能、鲜活的数据层，将元数据、Reference SQL、语义模型与指标融为一体，既方便人工也方便 AI 智能体理解。
 
 ![Data Engineering Pipeline Comparison](../assets/data_engineering_pipeline.png)
 
@@ -55,7 +55,7 @@ Datus 会按需捕获、存储并召回历史 SQL、数据表结构、指标与�
 
 **协同创作的上下文**
 
-大模型从数据表和参考 SQL 起草语义模型与指标，工程师负责完善标签、元数据和主题树。
+大模型从数据表和Reference SQL 起草语义模型与指标，工程师负责完善标签、元数据和主题树。
 
 **命令驱动的迭代**
 
@@ -131,9 +131,9 @@ Datus 会按需捕获、存储并召回历史 SQL、数据表结构、指标与�
 
 ### 构建上下文
 
-**导入参考 SQL**
+**导入Reference SQL**
 
-捕获成熟模式和边界场景，将高价值片段提升为可复用模块。详见[参考 SQL 追踪](../knowledge_base/reference_sql.md)。
+捕获成熟模式和边界场景，将高价值片段提升为可复用模块。详见[Reference SQL 追踪](../knowledge_base/reference_sql.md)。
 
 **生成初版资产**
 
@@ -200,7 +200,7 @@ datus-agent --namespace schools --web
 
     ---
 
-    探索包含元数据、指标与参考 SQL 的上下文管理细节。
+    探索包含元数据、指标与Reference SQL 的上下文管理细节。
 
     [:octicons-arrow-right-24: 深入了解](../knowledge_base/introduction.md)
 
@@ -234,7 +234,7 @@ datus-agent --namespace schools --web
 
 - [元数据管理](../knowledge_base/metadata.md) —— 组织与管理数据表结构和字段说明
 - [指标定义](../knowledge_base/metrics.md) —— 定义可复用的业务指标
-- [参考 SQL 追踪](../knowledge_base/reference_sql.md) —— 捕获并利用历史查询模式
+- [Reference SQL 追踪](../knowledge_base/reference_sql.md) —— 捕获并利用历史查询模式
 - [上下文命令参考](../cli/context_command.md) —— CLI 上下文命令全览
 
 

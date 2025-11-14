@@ -75,42 +75,37 @@ Please enter your choice: [1/2]
 
 ## 配置
 
-### 智能体配置
-
-在 `agent.yml` 中，配置指标生成节点：
+大部分配置是内置的。在 `agent.yml` 中，最小化设置即可：
 
 ```yaml
 agentic_nodes:
   gen_metrics:
-    model: claude                          # 用于指标生成的 LLM 模型
-    system_prompt: gen_metrics             # 提示模板名称
-    prompt_version: "1.0"                  # 模板版本
-    tools: generation_tools.*, filesystem_tools.*
-    hooks: generation_hooks                # 启用用户确认工作流
-    mcp: metricflow_mcp                    # MetricFlow 验证服务器
-    max_turns: 40                          # 最大对话轮数
-    workspace_root: /path/to/semantic_models
-    agent_description: "Metric definition generation assistant"
-    rules:
-      - Analyze user-provided SQL queries to generate MetricFlow metrics
-      - Use list_allowed_directories to find existing semantic model files
-      - Use read_file to read semantic model and understand measures
-      - Use check_metric_exists tool to avoid duplicate generation
-      - Use edit_file to append metrics (DO NOT use write_file)
-      - Use mf validate-configs to validate configurations
-      - After validation, call end_generation to trigger confirmation
+    model: claude        # 可选：默认使用已配置的模型
+    max_turns: 30        # 可选：默认为 30
 ```
 
-### 关键配置选项
+**内置配置**（自动启用）：
+- **工具**：生成工具和文件系统工具
+- **Hooks**：交互模式下的用户确认工作流
+- **MCP 服务器**：MetricFlow 验证服务器
+- **系统提示**：内置模板版本 1.0
+- **工作空间**：`~/.datus/data/{namespace}/semantic_models`
 
-| 参数 | 描述 | 示例 |
-|-----------|-------------|---------|
-| `model` | 用于生成的 LLM 模型 | `claude`、`openai`、`deepseek`，推荐使用 claude |
-| `workspace_root` | 包含语义模型 YAML 文件的目录 | `/Users/you/.datus/data/semantic_models` |
-| `tools` | 可用工具（生成 + 文件系统） | `generation_tools.*, filesystem_tools.*` |
-| `hooks` | 启用交互式确认工作流 | `generation_hooks` |
-| `mcp` | MetricFlow 验证服务器 | `metricflow_mcp` |
-| `max_turns` | 复杂查询的最大对话轮数 | `40` |
+### 主题树分类
+
+在 CLI 模式下通过问题中包含主题树来组织指标：
+
+**带主题树示例：**
+```bash
+/gen_metrics Generate a metric from this SQL: SELECT SUM(amount) FROM transactions, subject_tree: finance/revenue/transactions
+```
+
+**不带主题树示例：**
+```bash
+/gen_metrics Generate a metric from this SQL: SELECT SUM(amount) FROM transactions
+```
+
+未提供时，agent 会基于知识库中的现有指标自动建议分类。
 
 
 
@@ -262,6 +257,7 @@ metric:
 ✅ **SQL 到指标转换**：分析 SQL 查询并生成 MetricFlow 指标
 ✅ **智能类型检测**：自动选择正确的指标类型
 ✅ **防止重复**：生成前检查现有指标
+✅ **主题树支持**：按 domain/layer1/layer2 组织，支持预定义或学习模式
 ✅ **验证**：MetricFlow 验证确保正确性
 ✅ **交互式工作流**：同步前审阅和批准
 ✅ **知识库集成**：语义搜索以发现指标
