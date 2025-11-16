@@ -111,38 +111,7 @@ Requirements:
 - Interactive confirmation before execution
 - Preserves original query for reference
 
-### 2.5 Advanced AI Commands
-
-#### `!gen_metrics`
-Generate metrics definitions from SQL queries and table structures.
-
-```bash
-!gen_metrics
-```
-
-Features:
-- Extracts metric definitions from SQL
-- Interactive configuration of:
-  - Task description
-  - Source SQL query
-  - Prompt version
-
-#### `!gen_semantic_model`
-Generate semantic models for data modeling and documentation.
-
-```bash
-!gen_semantic_model
-```
-
-Interactive prompts for:
-
-- Table name selection
-- Catalog/database/schema metadata
-- Business layer (layer1/layer2)
-- Domain classification
-- Prompt version
-
-### 2.6 Analysis Commands
+### 2.5 Analysis Commands
 
 #### `!reason`
 Perform SQL reasoning and explanation with streaming output.
@@ -171,7 +140,7 @@ Features:
 - Detailed comparison analysis
 - Discrepancy identification
 
-### 2.7 Utility Commands
+### 2.6 Utility Commands
 
 #### `!save`
 Save the last query result to a file.
