@@ -180,6 +180,129 @@ duckdb:////absolute/path/to/database.db
 duckdb:///relative/path/to/database.db
 ```
 
+## 命名空间管理命令
+
+Datus Agent 提供交互式 CLI 工具来管理命名空间配置，无需手动编辑 YAML 文件。
+
+### 命令
+
+#### 列出命名空间
+
+查看所有已配置的命名空间及其连接详情：
+
+```bash
+datus-agent namespace list
+```
+
+输出示例：
+```
+Configured namespaces:
+
+Namespace: production_snowflake
+  Database: ANALYTICS
+    Type: snowflake
+    Account: my_account
+    Warehouse: COMPUTE_WH
+    Database: ANALYTICS
+    Schema: PUBLIC
+    Username: admin
+
+Namespace: local_duckdb
+  Database: analytics
+    Type: duckdb
+    URI: duckdb:////data/analytics.db
+```
+
+#### 添加命名空间
+
+交互式添加新的命名空间配置：
+
+```bash
+datus-agent namespace add
+```
+
+命令会提示输入：
+
+1. **命名空间名称**：命名空间的唯一标识符
+2. **数据库类型**：从 sqlite、duckdb、snowflake、mysql、starrocks 中选择
+3. **连接参数**：根据数据库类型不同而变化
+
+**文件型数据库（SQLite、DuckDB）：**
+- 连接字符串（文件路径）
+
+**主机型数据库（MySQL、StarRocks）：**
+- 主机地址
+- 端口
+- 用户名
+- 密码
+- 数据库名
+
+**Snowflake：**
+- 用户名
+- 账户
+- 仓库
+- 密码
+- 数据库（可选）
+- Schema（可选）
+
+输入配置后，工具会：
+- 测试数据库连接
+- 连接成功后保存配置到 `conf/agent.yml`
+
+示例会话：
+```
+Add New Namespace
+- Namespace name: my_analytics
+- Database type [sqlite/duckdb/snowflake/mysql/starrocks] (duckdb): snowflake
+- Username: admin
+- Account: my_account
+- Warehouse: COMPUTE_WH
+- Password: ********
+- Database (optional): ANALYTICS
+- Schema (optional): PUBLIC
+→ Testing database connectivity...
+✔ Database connection test successful
+
+Configuration saved to conf/agent.yml
+✔ Namespace 'my_analytics' added successfully
+```
+
+#### 删除命名空间
+
+交互式删除现有命名空间：
+
+```bash
+datus-agent namespace delete
+```
+
+命令会：
+1. 显示可用的命名空间
+2. 提示输入要删除的命名空间名称
+3. 删除前要求确认
+
+示例会话：
+```
+Delete Namespace
+Available namespaces:
+  - production_snowflake
+  - local_duckdb
+  - test_sqlite
+- Namespace name to delete: test_sqlite
+Are you sure you want to delete namespace 'test_sqlite'? This action cannot be undone. [y/N]: y
+Configuration saved to conf/agent.yml
+✔ Namespace 'test_sqlite' deleted successfully
+```
+
+### 使用自定义配置文件
+
+指定自定义配置文件：
+
+```bash
+datus-agent namespace list --config /path/to/agent.yml
+datus-agent namespace add --config /path/to/agent.yml
+datus-agent namespace delete --config /path/to/agent.yml
+```
+
 ## 安全
 ```yaml
 # 推荐
