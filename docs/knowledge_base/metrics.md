@@ -65,6 +65,36 @@ Organizes metrics using hierarchical taxonomy: `domain/layer1/layer2` (e.g., `Sa
 # Learning mode: omit --subject_tree parameter
 ```
 
+**Generated Tag Format:**
+
+When metrics are generated, the subject_tree classification is stored in `locked_metadata.tags` with the format `"subject_tree: {domain}/{layer1}/{layer2}"`:
+
+```yaml
+metric:
+  name: daily_revenue
+  type: measure_proxy
+  type_params:
+    measure: revenue
+  locked_metadata:
+    tags:
+      - "Finance"
+      - "subject_tree: Sales/Reporting/Daily"
+```
+
+**Important for YAML Import:**
+
+When using `--semantic_yaml` to sync metrics from YAML files to lancedb, you must manually add the `locked_metadata.tags` with subject_tree format in your YAML file for successful categorization. The system will not automatically classify metrics imported from YAML - you need to include the tags yourself:
+
+```yaml
+metric:
+  name: your_metric
+  # ... other fields
+  locked_metadata:
+    tags:
+      - "YourDomain"
+      - "subject_tree: Domain/Layer1/Layer2"
+```
+
 ## Data Source Formats
 
 ### CSV Format
@@ -98,6 +128,10 @@ metric:
   name: total_revenue
   description: "Total revenue from all transactions"
   constraint: "amount > 0"
+  locked_metadata:
+    tags:
+      - "Finance"
+      - "subject_tree: Finance/Revenue/Total"
 ```
 
 ## Summary

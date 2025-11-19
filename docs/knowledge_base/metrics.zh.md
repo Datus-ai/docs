@@ -65,6 +65,36 @@ datus-agent bootstrap-kb \
 # 学习模式：省略 --subject_tree 参数
 ```
 
+**生成的标签格式：**
+
+指标生成后，主题树分类存储在 `locked_metadata.tags` 中，格式为 `"subject_tree: {domain}/{layer1}/{layer2}"`：
+
+```yaml
+metric:
+  name: daily_revenue
+  type: measure_proxy
+  type_params:
+    measure: revenue
+  locked_metadata:
+    tags:
+      - "Finance"
+      - "subject_tree: Sales/Reporting/Daily"
+```
+
+**YAML 导入注意事项：**
+
+使用 `--semantic_yaml` 从 YAML 文件同步指标到 lancedb 时，必须在 YAML 文件中手动添加包含 subject_tree 格式的 `locked_metadata.tags` 才能成功分类。系统不会自动对从 YAML 导入的指标进行分类，需要自行添加标签：
+
+```yaml
+metric:
+  name: your_metric
+  # ... 其他字段
+  locked_metadata:
+    tags:
+      - "YourDomain"
+      - "subject_tree: Domain/Layer1/Layer2"
+```
+
 ## 数据源格式
 
 ### CSV 格式
@@ -98,6 +128,10 @@ metric:
   name: total_revenue
   description: "Total revenue from all transactions"
   constraint: "amount > 0"
+  locked_metadata:
+    tags:
+      - "Finance"
+      - "subject_tree: Finance/Revenue/Total"
 ```
 
 ## 总结
