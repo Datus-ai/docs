@@ -228,5 +228,5 @@ datus-agent (核心)
 
 ## 下一步
 
-- [快速开始](../quick_start.md) - 开始使用 Datus Agent
-- [配置参考](../configuration.md) - 详细配置选项
+- [快速开始](../getting_started/Quickstart.md) - 开始使用 Datus Agent
+- [配置参考](../configuration/introduction.md) - 详细配置选项

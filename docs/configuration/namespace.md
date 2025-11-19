@@ -366,3 +366,7 @@ password: ${DB_PASSWORD}
 username: "actual_username"
 password: "actual_password"
 ```
+
+## See Also
+
+- [Database Adapters](../adapters/db_adapters.md) - Install plugin adapters for MySQL, Snowflake, StarRocks, and more

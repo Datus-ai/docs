@@ -228,5 +228,5 @@ The adapter system uses Python's entry points mechanism for automatic discovery.
 
 ## Next Steps
 
-- [Quick Start Guide](../quick_start.md) - Get started with Datus Agent
-- [Configuration Reference](../configuration.md) - Detailed configuration options
+- [Quick Start Guide](../getting_started/Quickstart.md) - Get started with Datus Agent
+- [Configuration Reference](../configuration/introduction.md) - Detailed configuration options

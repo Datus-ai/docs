@@ -313,3 +313,7 @@ password: ${DB_PASSWORD}
 username: "actual_username"
 password: "actual_password"
 ```
+
+## 另请参阅
+
+- [数据库适配器](../adapters/db_adapters.md) - 安装 MySQL、Snowflake、StarRocks 等插件适配器
