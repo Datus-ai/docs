@@ -341,16 +341,16 @@ agent:
 
 📖 Benchmark 配置字段说明
 
-| 字段                    | 说明                                                                                    |
-|-----------------------|---------------------------------------------------------------------------------------|
-| **question_file**     | 题目文件路径，支持 `.csv`、`.json`、`.jsonl` 格式。路径相对于 `{agent.home}/benchmark/{benchmark_name}`。 |
-| **question_id_key**   | 每个任务问题的唯一标识字段名。                                                                       |
-| **question_key**      | 自然语言问题的字段名。                                                                           |
-| **ext_knowledge_key** | 附加知识或问题说明字段名。                                                                         |
-| **gold_sql_path**     | 标准 SQL 文件路径，可以是单一文件（例如BIRD）或按任务拆分（例如spider2））。                                        |
-| **gold_sql_key**      | 当 `gold_sql_path` 为单文件时，标准 SQL 所在字段名。                                                 |
-| **gold_result_path**  | 标准结果文件路径。可为空，如果为空，系统会自动执行标准 SQL 获取结果。                                                 |
-| **gold_result_key**   | 当结果文件为单文件时，结果字段名。                                                                     |
+| 字段                    | 说明                                                                                                                                     |
+|-----------------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| **question_file**     | 题目文件路径，支持 `.csv`、`.json`、`.jsonl` 格式。路径相对于 `{agent.home}/benchmark/{benchmark_name}`。                                                  |
+| **question_id_key**   | 每个任务问题的唯一标识字段名。                                                                                                                        |
+| **question_key**      | 自然语言问题的字段名。                                                                                                                            |
+| **ext_knowledge_key** | 附加知识或问题说明字段名。                                                                                                                          |
+| **gold_sql_path**     | 标准 SQL 文件路径，支持两种情况：<br/>1. 例如BIRD_DEV的单一文件；支持 `.csv`、`.json`、`.jsonl` 格式。<br/>2. 每个任务独立一个SQL文件（例如spider2））。                            |
+| **gold_sql_key**      | 当 `gold_sql_path` 为单文件时，标准 SQL 所在字段名。                                                                                                  |
+| **gold_result_path**  | 标准结果文件路径，每个结果应是CSV格式的字符串。支持三种情况：<br/>1. 单一`.csv`、`.json`、`.jsonl` 格式的文件；<br/>2. 每个任务独立一个CSV文件（例如spider2）。<br/>3. 不配置，系统会执行标准 SQL 获取结果。 |
+| **gold_result_key**   | 标准结果字段，当`gold_result_path`为单文件时，该字段有意义且必须配置。                                                                                           |
 
 ---
 
