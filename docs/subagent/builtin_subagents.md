@@ -12,28 +12,35 @@ This document covers three core subagents:
 
 ## Configuration
 
-Builtin subagents work out of the box with default settings. You can optionally customize them in your `agent.yml` file:
+Builtin subagents work out of the box with minimal configuration. Most settings (tools, hooks, MCP servers, system prompts) are built-in. You can optionally customize them in your `agent.yml` file:
 
 ```yaml
 agent:
   agentic_nodes:
     gen_semantic_model:
-      model: anthropic  # Optional: specify the AI model to use
-      max_turns: 10     # Optional: maximum conversation turns (default: 30)
+      model: claude     # Optional: defaults to configured model
+      max_turns: 30     # Optional: defaults to 30
 
     gen_metrics:
-      model: anthropic
-      max_turns: 8
+      model: claude     # Optional: defaults to configured model
+      max_turns: 30     # Optional: defaults to 30
 
     gen_sql_summary:
-      model: deepseek_v3
-      max_turns: 5
+      model: deepseek   # Optional: defaults to configured model
+      max_turns: 30     # Optional: defaults to 30
 ```
 
 **Optional configuration parameters:**
 
-- `model`: The AI model to use for this subagent (e.g., `anthropic`, `deepseek_v3`)
-- `max_turns`: Maximum number of conversation turns before the subagent completes
+- `model`: The AI model to use (e.g., `claude`, `deepseek`). Defaults to your configured model.
+- `max_turns`: Maximum conversation turns (default: 30)
+
+**Built-in configurations** (no setup needed):
+- **Tools**: Automatically configured based on subagent type
+- **Hooks**: User confirmation workflow in interactive mode
+- **MCP Servers**: MetricFlow validation (for gen_semantic_model and gen_metrics)
+- **System Prompts**: Built-in templates version 1.0
+- **Workspace**: `~/.datus/data/{namespace}/` with subagent-specific subdirectories
 
 ---
 
@@ -76,14 +83,14 @@ graph LR
 **Detailed Steps:**
 
 1. **Understand SQL**: The AI analyzes your query structure and business logic
-2. **Get Context**: Calls `prepare_sql_summary_context()` to retrieve:
-   - Existing taxonomy (domains, categories, tags)
-   - Similar SQL summaries for classification reference
-3. **Generate Unique ID**: Uses `generate_sql_summary_id()` based on SQL + comment
+2. **Get Context**: Automatically retrieves from Knowledge Base:
+   - Existing subject trees (domain/layer1/layer2 combinations)
+   - Similar SQL summaries (top 5 most similar queries) for classification reference
+3. **Generate Unique ID**: Uses `generate_sql_summary_id()` tool based on SQL + comment
 4. **Create Unique Name**: Generates a descriptive name (max 20 characters)
 5. **Classify Query**: Assigns domain, layer1, layer2, and tags following existing patterns
 6. **Generate YAML**: Creates structured summary document
-7. **Save File**: Writes YAML to workspace using `write_file()`
+7. **Save File**: Writes YAML to workspace using `write_file()` tool
 8. **User Confirmation**: Shows the generated YAML and prompts for approval
 9. **Sync to Knowledge Base**: Stores in LanceDB for semantic search
 
@@ -106,32 +113,21 @@ File: /path/to/sql_summary.yml
 Please enter your choice: [1/2]
 ```
 
-### Configuration
+### Subject Tree Categorization
 
-#### Agent Configuration
+Subject tree allows organizing SQL summaries by domain and layers. In CLI mode, include it in your question:
 
-In `agent.yml`:
-
-```yaml
-agentic_nodes:
-  gen_sql_summary:
-    model: deepseek                        # LLM model for analysis
-    system_prompt: gen_sql_summary         # Prompt template
-    prompt_version: "1.0"
-    tools: generation_tools.prepare_sql_summary_context, generation_tools.generate_sql_summary_id, filesystem_tools.write_file
-    hooks: generation_hooks                # Enable confirmation workflow
-    workspace_root: /path/to/reference_sql   # Directory to save YAML files
-    agent_description: "reference SQL analysis assistant"
+**Example with subject_tree:**
+```bash
+/gen_sql_summary Analyze this SQL: SELECT SUM(revenue) FROM sales, subject_tree: sales/reporting/revenue_analysis
 ```
 
-#### Key Configuration Options
+**Example without subject_tree:**
+```bash
+/gen_sql_summary Analyze this SQL: SELECT SUM(revenue) FROM sales
+```
 
-| Parameter | Description | Example |
-|-----------|-------------|---------|
-| `model` | LLM model for SQL analysis | `deepseek`, `claude`, `openai`, `kimi` |
-| `workspace_root` | Directory for SQL summary YAML files | `/Users/you/.datus/data/reference_sql` |
-| `tools` | Required tools for the workflow | See tools section below |
-| `hooks` | Enable interactive confirmation | `generation_hooks` |
+When not provided, the agent suggests categories based on existing subject trees and similar queries in the Knowledge Base.
 
 ### YAML Structure
 
@@ -242,39 +238,6 @@ Please enter your choice: [1/2]
 - **Option 1**: Saves the semantic model to your Knowledge Base (RAG storage) for AI-powered queries
 - **Option 2**: Keeps the YAML file only without syncing to the Knowledge Base
 
-### Configuration
-
-#### Agent Configuration
-
-In `agent.yml`, configure the semantic model generation node:
-
-```yaml
-agentic_nodes:
-  gen_semantic_model:
-    model: claude                    # LLM model to use
-    system_prompt: gen_semantic_model
-    prompt_version: "1.0"
-    tools: db_tools.*, generation_tools.*, filesystem_tools.*
-    hooks: generation_hooks          # Enables user confirmation workflow
-    mcp: metricflow_mcp             # MetricFlow validation server
-    workspace_root: /path/to/semantic_models
-    agent_description: "Semantic model generation assistant"
-    rules:
-      - Use get_table_ddl tool to get complete table DDL
-      - Generate comprehensive semantic models
-      - Validate using metricflow_mcp
-```
-
-#### Key Configuration Options
-
-| Parameter | Description | Example |
-|-----------|-------------|---------|
-| `model` | LLM model for generation | `claude`, `deepseek` (claude is recommended) |
-| `workspace_root` | Directory to save YAML files | `/Users/you/.datus/data/semantic_models` |
-| `tools` | Available tools for the assistant | `db_tools.*`, `filesystem_tools.*` |
-| `hooks` | Enable user confirmation | `generation_hooks` |
-| `mcp` | MetricFlow validation server | `metricflow_mcp` |
-
 ### Semantic Model Structure
 
 #### Basic Template
@@ -322,6 +285,7 @@ data_source:
 The semantic model generation feature provides:
 
 - ✅ Automated YAML generation from table DDL
+- ✅ Built-in tools, hooks, and MCP server integration
 - ✅ Interactive validation and error fixing
 - ✅ User confirmation before storage
 - ✅ Knowledge Base integration
@@ -414,44 +378,21 @@ Please enter your choice: [1/2]
 - **Option 1**: Syncs the metric to your Knowledge Base for AI-powered semantic search
 - **Option 2**: Keeps the YAML file only without syncing to the Knowledge Base
 
-### Configuration
+### Subject Tree Categorization
 
-#### Agent Configuration
+Subject tree allows organizing metrics by domain and layers. In CLI mode, include it in your question:
 
-In `agent.yml`, configure the metrics generation node:
-
-```yaml
-agentic_nodes:
-  gen_metrics:
-    model: claude                          # LLM model for metric generation
-    system_prompt: gen_metrics             # Prompt template name
-    prompt_version: "1.0"                  # Template version
-    tools: generation_tools.*, filesystem_tools.*
-    hooks: generation_hooks                # Enable user confirmation workflow
-    mcp: metricflow_mcp                    # MetricFlow validation server
-    max_turns: 40                          # Max conversation turns
-    workspace_root: /path/to/semantic_models
-    agent_description: "Metric definition generation assistant"
-    rules:
-      - Analyze user-provided SQL queries to generate MetricFlow metrics
-      - Use list_allowed_directories to find existing semantic model files
-      - Use read_file to read semantic model and understand measures
-      - Use check_metric_exists tool to avoid duplicate generation
-      - Use edit_file to append metrics (DO NOT use write_file)
-      - Use mf validate-configs to validate configurations
-      - After validation, call end_generation to trigger confirmation
+**Example with subject_tree:**
+```bash
+/gen_metrics Generate a metric from this SQL: SELECT SUM(amount) FROM transactions, subject_tree: finance/revenue/transactions
 ```
 
-#### Key Configuration Options
+**Example without subject_tree:**
+```bash
+/gen_metrics Generate a metric from this SQL: SELECT SUM(amount) FROM transactions
+```
 
-| Parameter | Description | Example |
-|-----------|-------------|---------|
-| `model` | LLM model for generation | `claude`, `openai`, `deepseek` (claude is recommended) |
-| `workspace_root` | Directory containing semantic model YAML files | `/Users/you/.datus/data/semantic_models` |
-| `tools` | Available tools (generation + filesystem) | `generation_tools.*, filesystem_tools.*` |
-| `hooks` | Enable interactive confirmation workflow | `generation_hooks` |
-| `mcp` | MetricFlow validation server | `metricflow_mcp` |
-| `max_turns` | Max conversation turns for complex queries | `40` |
+When not provided, the agent operates in learning mode and suggests categories based on existing metrics in the Knowledge Base.
 
 ### Usage Examples
 
@@ -601,6 +542,7 @@ The metrics generation feature provides:
 - ✅ **SQL-to-Metric Conversion**: Analyze SQL queries and generate MetricFlow metrics
 - ✅ **Intelligent Type Detection**: Automatically selects the right metric type
 - ✅ **Duplicate Prevention**: Checks for existing metrics before generation
+- ✅ **Subject Tree Support**: Organize by domain/layer1/layer2 with predefined or learned categories
 - ✅ **Validation**: MetricFlow validation ensures correctness
 - ✅ **Interactive Workflow**: Review and approve before syncing
 - ✅ **Knowledge Base Integration**: Semantic search for metric discovery
@@ -610,10 +552,18 @@ The metrics generation feature provides:
 
 ## Summary
 
-| Subagent | Purpose | Output | Stored In | Highlights |
-|----------|---------|--------|-----------|------------|
-| `gen_sql_summary` | Summarize and classify SQL queries | YAML (SQL summary) | `/data/reference_sql` | Taxonomy-based classification |
-| `gen_semantic_model` | Generate semantic model from tables | YAML (semantic model) | `/data/semantic_models` | DDL → MetricFlow compatible model |
-| `gen_metrics` | Generate metrics from SQL | YAML (metric) | `/data/semantic_models` | SQL → MetricFlow metric |
+| Subagent | Purpose | Output | Stored In | Key Features |
+|----------|---------|--------|-----------|--------------|
+| `gen_sql_summary` | Summarize and classify SQL queries | YAML (SQL summary) | `/data/reference_sql` | Subject tree categorization, auto context retrieval |
+| `gen_semantic_model` | Generate semantic model from tables | YAML (semantic model) | `/data/semantic_models` | DDL → MetricFlow model, built-in validation |
+| `gen_metrics` | Generate metrics from SQL | YAML (metric) | `/data/semantic_models` | SQL → MetricFlow metric, subject tree support |
+
+**Built-in Features Across All Subagents:**
+- Minimal configuration required (only `model` and `max_turns` optional)
+- Automatic tool setup, hooks, and MCP server integration
+- Built-in system prompts (version 1.0)
+- User confirmation workflow in interactive mode
+- Knowledge Base integration for semantic search
+- Automatic workspace management
 
 Together, these subagents automate the **data engineering knowledge pipeline** — from **query understanding → model definition → metric generation → searchable Knowledge Base**.
