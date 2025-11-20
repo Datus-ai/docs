@@ -30,7 +30,7 @@ Datus 的核心是其 **[上下文引擎](knowledge_base/introduction.md)**，�
 Datus 可以无缝对接你现有的技术栈：
 
 - **大模型**：支持 OpenAI、Claude、DeepSeek、Qwen、Kimi 等（参见[配置](configuration/agent.md)）
-- **数据仓库**：支持 StarRocks、Snowflake、DuckDB、SQLite、PostgreSQL 等（参见[命名空间配置](configuration/namespace.md)）
+- **数据仓库**：支持 StarRocks、Snowflake、DuckDB、SQLite、PostgreSQL 等（参见[命名空间配置](configuration/namespace.md)、[数据库适配器](adapters/db_adapters.md)）
 - **语义层**：兼容 [MetricFlow](metricflow/introduction.md) 的指标定义与查询
 - **可扩展性**：通过 [MCP](cli/mcp_extensions.md)（Model Context Protocol）集成自定义扩展
 

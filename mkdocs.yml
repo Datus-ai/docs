@@ -40,6 +40,8 @@ nav:
       - Namespace: configuration/namespace.md
       - Storage: configuration/storage.md
       - Nodes: configuration/nodes.md
+    - Adapters:
+      - Database Adapters: adapters/db_adapters.md
     - Benchmark:
       - Introduction: benchmark/benchmark_manual.md
     - Metricflow:
@@ -84,6 +86,8 @@ plugins:
             Orchestration: 编排
             API: API
             Configuration: 配置
+            Adapters: 适配器
+            Database Adapters: 数据库适配器
             Benchmark: 基准测试
             Metricflow: MetricFlow
             Release Notes: 发布说明
