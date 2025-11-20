@@ -21,7 +21,7 @@ Get started quickly with pre-configured Docker containers that include benchmark
     Ensure Docker is installed and running on your system before proceeding.
 
 ```bash title="Terminal"
-docker pull datusai/datus-agent:0.2.0-rc1
+docker pull datusai/datus-agent:0.2.2
 ```
 
 ### Step 2: Launch the Docker Container
@@ -33,17 +33,17 @@ docker pull datusai/datus-agent:0.2.0-rc1
     ```bash title="Terminal"
     docker run --name datus \
     --env DEEPSEEK_API_KEY=<your_api_key>  \
-    -d datusai/datus-agent:0.2.0
+    -d datusai/datus-agent:0.2.2
     ```
 
 === "Spider 2.0-Snow"
     ```bash title="Terminal"
     docker run --name datus \
     --env DEEPSEEK_API_KEY=<your_api_key>  \
-    --env SNOWFLAKE_ACCOUNT=<your_snowflake_acount>  \
+    --env SNOWFLAKE_ACCOUNT=<your_snowflake_account>  \
     --env SNOWFLAKE_USERNAME=<your_snowflake_username>  \
     --env SNOWFLAKE_PASSWORD=<your_snowflake_password>  \
-    -d datusai/datus-agent:0.2.0
+    -d datusai/datus-agent:0.2.2
     ```
 
 ### Step 3: Run Benchmark Tests
@@ -61,7 +61,7 @@ docker pull datusai/datus-agent:0.2.0-rc1
     docker exec -it datus python -m datus.main benchmark  \
     --namespace bird_sqlite \
     --benchmark bird_dev \
-    --benchmark_task_ids <task_id>
+    --benchmark_task_ids <task_id1> <task_id2>
     ```
 
 === "Run All Tasks"
@@ -84,7 +84,7 @@ docker pull datusai/datus-agent:0.2.0-rc1
     docker exec -it datus python -m datus.main benchmark  \
     --namespace snowflake \
     --benchmark spider2 \
-    --benchmark_task_ids <task_id>
+    --benchmark_task_ids <task_id1> <task_id2>
     ```
 
 === "Run All Tasks"
@@ -94,52 +94,293 @@ docker pull datusai/datus-agent:0.2.0-rc1
     --benchmark spider2
     ```
 
-### Step 4: Review Benchmark Results
+### Step 4: Evaluate Results
 
-!!! tip
-    Each benchmark generates a comprehensive performance summary with detailed metrics and task breakdowns.
-
-```text title="Benchmark Result" hl_lines="8-10"
-================================================================================
-BENCHMARK ACCURACY EVALUATION REPORT
-================================================================================
-Generated Time: 2025-09-18 12:07:30
-
-EXECUTIVE SUMMARY
-----------------------------------------
-Total tasks analyzed: 1
-Execution success rate: 100.0%
-Result comparison match rate: 100.0%
-
-DETAILED STATISTICS
-----------------------------------------
-Total comparisons performed: 1
-Successful matches: 1
-Mismatches: 0
-Comparison errors: 0
-Empty result errors: 0
-Mismatch rate: 0.0%
-Error rate: 0.0%
-
-TASK BREAKDOWN BY CATEGORY
-----------------------------------------
-Matched tasks (1):
-14
-
-Mismatched tasks (0):
-None
-
-Failed tasks (0):
-None
-
-ADDITIONAL STATISTICS
-----------------------------------------
-Overall success rate: 100.0%
-Successful tasks: 1
-Failed tasks: 0
-Mismatched tasks: 0
-
-================================================================================ [datus.utils.benchmark_utils]
-2025-09-18 12:07:30 [info     ]
-Final Result: {'status': 'success', 'generated_time': '2025-09-18T12:07:30.497861', 'summary': {'total_files': 1, 'total_output_nodes': 1, 'total_output_success': 1, 'total_output_failure': 0, 'success_rate': 100.0, 'comparison_summary': {'total_comparisons': 1, 'successful_matches': 1, 'mismatches': 0, 'comparison_errors': 0, 'empty_result_errors': 0, 'match_rate': 100.0}}, 'task_ids': {'failed_task_ids': '', 'matched_task_ids': '14', 'mismatched_task_ids': '', 'empty_result_task_ids': ''}, 'details': {'14': {'total_nodes': 6, 'output_nodes': 1, 'output_success': 1, 'output_failure': 0, 'errors': [], 'node_types': {'start': 1, 'schema_linking': 1, 'generate_sql': 1, 'execute_sql': 1, 'reflect': 1, 'output': 1}, 'completion_time': 1758197249.7893646, 'status': 'completed', 'comparison_results': [{'task_id': '14', 'actual_file_exists': True, 'gold_file_exists': True, 'actual_path': 'output/bird_sqlite/14.csv', 'gold_path': '/app/benchmark/dev_20240627/gold/exec_result/14.csv', 'comparison': {'match': True, 'actual_file_exists': True, 'expected_file_exists': True, 'actual_shape': (5, 1), 'expected_shape': (5, 1), 'actual_preview': 'NCESSchool\n       ----------\n       11707\n       4653\n       8283\n       ...', 'expected_preview': 'NCESSchool\n       ----------\n       11707\n       4653\n       8283\n       ...', 'error': None}}]}}} [__main__]
+#### Run Evaluation
+=== "Evaluate by Task IDs"
+```bash title="Run Evaluation"
+docker exec -it datus python -m datus.main eval  \
+  --namespace snowflake \
+  --benchmark spider2 \
+  --output_file evaluation.json \
+  --task_ids <task_id1> <task_id2>
 ```
+=== "Evaluate All"
+```bash title="Run Evaluation"
+docker exec -it datus python -m datus.main eval  \
+  --namespace snowflake \
+  --output_file evaluation.json \
+  --benchmark spider2
+```
+
+#### Evaluation Results
+
+=== "Summary"
+```text title="Evaluation Result" hl_lines="8-10"
+────────────────────────────────────────────────────────────────────────────────
+ Datus Evaluation Summary (Total: 30 Queries)
+────────────────────────────────────────────────────────────────────────────────
+ ✅ Passed:                                 19    (63%)
+ ⚠️  No SQL / Empty Result:                 0    (0%)
+ ❌ Failed:                                 11    (37%)
+     • Table Mismatch:                      4    (13%)
+     • Table Matched (Result Mismatch):     7    (23%)
+         - Row Count Mismatch:              1    (3%)
+         - Column Value Mismatch:           6    (20%)
+────────────────────────────────────────────────────────────────────────────────
+
+ Passed Queries:                        12, 40, 63, 80, 209, 279, 340, 436, 738, 774, 778, 853, 864, 1013, 1069, 1177, 1329, 1439, 1488
+ No SQL / Empty Result Queries:         None
+ Failed (Table Mismatch):               263, 388, 484, 584
+ Failed (Row Count Mismatch):           455
+ Failed (Column Value Mismatch):        76, 131, 617, 642, 1011, 1205
+
+────────────────────────────────────────────────────────────────────────────────
+```
+
+=== "Details"
+```json
+{
+  "status": "success",
+  "generated_time": "2025-11-07T15:56:40.050678",
+  "summary": {
+    "total_files": 1,
+    "total_output_nodes": 1,
+    "total_output_success": 1,
+    "total_output_failure": 0,
+    "success_rate": 100.0,
+    "comparison_summary": {
+      "total_comparisons": 1,
+      "match_count": 1,
+      "mismatch_count": 0,
+      "comparison_error_count": 0,
+      "empty_result_count": 0,
+      "match_rate": 100.0
+    }
+  },
+  "task_ids": {
+    "failed_task_ids": "",
+    "matched_task_ids": "0",
+    "mismatched_task_ids": "",
+    "empty_result_task_ids": ""
+  },
+  "details": {
+    "0": {
+      "total_node_count": 4,
+      "output_node_count": 1,
+      "output_success_count": 1,
+      "output_failure_count": 0,
+      "errors": [],
+      "node_types": {
+        "start": 1,
+        "chat": 1,
+        "execute_sql": 1,
+        "output": 1
+      },
+      "tool_calls": {
+        "list_tables": 1,
+        "describe_table": 2,
+        "search_files": 1,
+        "read_query": 3
+      },
+      "completion_time": 1762173198.4857101,
+      "status": "completed",
+      "comparison_results": [
+        {
+          "task_id": "0",
+          "actual_file_exists": true,
+          "gold_file_exists": true,
+          "actual_path": "/Users/lyf/.datus/save/bird_school/0.csv",
+          "gold_path": "/Users/lyf/.datus/benchmark/california_schools/california_schools.csv",
+          "comparison": {
+            "match_rate": 1.0,
+            "matched_columns": [
+              [
+                "eligible_free_rate",
+                "`Free Meal Count (K-12)` / `Enrollment (K-12)`"
+              ]
+            ],
+            "missing_columns": [],
+            "extra_columns": [
+              "School Name",
+              "District Name",
+              "Academic Year"
+            ],
+            "actual_shape": [1, 4],
+            "expected_shape": [1, 1],
+            "actual_preview": "School Name | District Name | eligible_free_rate | Academic Year\n       ----------------------------------------------------------------\n       Oakland Community Day Middle | Oakland Unified | 1.0 | 2014-2015",
+            "expected_preview": "`Free Meal Count (K-12)` / `Enrollment (K-12)`\n       ----------------------------------------------\n       1.0",
+            "actual_tables": ["frpm"],
+            "expected_tables": ["frpm"],
+            "matched_tables": ["frpm"],
+            "actual_sql_error": null,
+            "sql_error": null,
+            "actual_sql": "SELECT \n    \"School Name\",\n    \"District Name\", \n    \"Percent (%) Eligible Free (K-12)\" as eligible_free_rate,\n    \"Academic Year\"\nFROM frpm \nWHERE \"County Name\" = 'Alameda'\n    AND \"Percent (%) Eligible Free (K-12)\" IS NOT NULL\nORDER BY \"Percent (%) Eligible Free (K-12)\" DESC\nLIMIT 1;",
+            "gold_sql": "SELECT `Free Meal Count (K-12)` / `Enrollment (K-12)` FROM frpm WHERE `County Name` = 'Alameda' ORDER BY (CAST(`Free Meal Count (K-12)` AS REAL) / `Enrollment (K-12)`) DESC LIMIT 1",
+            "tools_comparison": {
+              "expected_file": {"expected": "", "actual": [], "matched_actual": [], "match": true},
+              "expected_sql": {"expected": "", "actual": [], "matched_actual": [], "match": true},
+              "expected_semantic_model": {"expected": "", "actual": [], "matched_actual": [], "match": true},
+              "expected_metrics": {
+                "expected": ["Eligible free rate for K-12"],
+                "actual": [],
+                "matched_expected": [],
+                "matched_actual": [],
+                "missing_expected": ["Eligible free rate for K-12"],
+                "match": false
+              }
+            },
+            "error": null
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+**Key fields under `details`:**
+- **comparison_results**: Comparison results for each task
+    - `actual_sql`: SQL generated by Datus Agent
+    - `actual_path`: Executed result produced by Datus Agent
+    - `gold_sql`: Reference (gold) SQL
+    - `gold_path`: Reference (gold) result path
+    - `comparison`: Side-by-side comparison results
+        - `match_rate`: Matching ratio
+        - `matched_columns`: Columns that match
+        - `missing_columns`: Columns missing compared to reference
+        - `extra_columns`: Extra columns not present in the reference
+        - `actual_tables`: Tables used by the generated result
+        - `expected_tables`: Tables used by the reference answer
+        - `matched_tables`: Intersected tables
+- **tool_calls**: Count of each tool invocation
+
+## Use built-in datasets for benchmarking and evaluation
+
+### Step 1: Initialize the dataset
+```bash
+datus-agent tutorial
+```
+
+![tutorial](../assets/tutorial.png)
+
+This step does the following:
+1. Added database configuration and benchmark configuration for California School to agent.yml
+2. Initialize the metadata information of the table for California School
+3. Use `benchmark/california_schools/success_story.csv` to build metric information
+4. Build reference SQL using the sql file of `benchmark/california_schools/reference_sql`
+
+### Benchmarking and evaluation
+```bash
+datus-agent benchmark --namespace california_schools --benchmark california_schools --benchmark_task_ids 0 1 2 --workflow <your workflow>
+```
+👉 See [Step 3: Run Benchmark Tests](#step-3-run-benchmark-tests)
+
+```bash
+datus-agent eval --namespace california_schools --benchmark california_schools --task_ids 0 1 2 
+```
+👉 See [Step 4: Evaluate Results](#step-4-evaluate-results)
+
+## Custom Benchmark
+
+### Add Benchmark Configuration
+
+```yaml
+agent:
+  namespace:
+    california_schools:
+      type: sqlite
+      name: california_schools
+      uri: sqlite:///benchmark/bird/dev_20240627/dev_databases/california_schools/california_schools.sqlite # Database file path. Use sqlite:/// for relative paths; sqlite://// for absolute paths.
+  benchmark:
+    california_schools:              # Benchmark name
+      question_file: california_schools.csv       # File containing benchmark questions
+      question_id_key: task_id                    # Field name for question ID
+      question_key: question                      # Field name for question text
+      ext_knowledge_key: expected_knowledge       # Field name for external knowledge or additional context
+
+      # Configuration for evaluation phase
+      gold_sql_path: california_schools.csv       # File path for reference (gold) SQL
+      gold_sql_key: gold_sql                      # Field name for reference SQL
+      gold_result_path: california_schools.csv    # File path for reference (gold) results
+      gold_result_key: ""                         # Field name for results when using a single file
+```
+
+---
+
+📖 **Benchmark Configuration Field Description**
+
+| Field                 | Description                                                                                                                                                                                                                                                                                                         |
+|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **question_file**     | Path to the question file, supporting `.csv`, `.json`, and `.jsonl` formats. The path is relative to `{agent.home}/benchmark/{benchmark_name}`.                                                                                                                                                                     |
+| **question_id_key**   | Unique identifier field name for each benchmark question.                                                                                                                                                                                                                                                           |
+| **question_key**      | Field name for the natural language question.                                                                                                                                                                                                                                                                       |
+| **ext_knowledge_key** | Field name for additional knowledge or problem description.                                                                                                                                                                                                                                                         |
+| **gold_sql_path**     | Standard SQL file path, supporting two scenarios:<br/>1. A single file, e.g., BIRD_DEV; supporting `.csv`, `.json`, and `.jsonl` formats. <br/>2. A separate SQL file for each task (e.g., spider2).                                                                                                                |
+| **gold_sql_key**      | When `gold_sql_path` is a single file, this specifies the field name containing the reference SQL.                                                                                                                                                                                                                  |
+| **gold_result_path**  | Standard result file path, with each result being a string in CSV format. Three scenarios are supported:<br/>1. A single file in `.csv`, `.json`, or `.jsonl` format;<br/>2. A separate CSV file for each task (e.g., spider2);<br/>3. If not configured, the system will execute standard SQL to retrieve results. |
+| **gold_result_key**   | Standard result field. When `gold_result_path` is a single file, this field is meaningful and must be configured.                                                                                                                                                                                                   |
+
+---
+
+### Build Knowledge Base
+
+Construct the metadata, metrics, and reference SQL knowledge bases according to your dataset.  
+👉 See [knowledge_base/introduction](../knowledge_base/introduction.md) for details.
+
+### Run Benchmark
+
+👉 See [Step 3: Run Benchmark Tests](#step-3-run-benchmark-tests)
+
+### Evaluate Results
+
+👉 See [Step 4: Evaluate Results](#step-4-evaluate-results)
+
+
+## Multi-round Benchmark And Evaluation
+
+Use `datus/multi_round_benchmark.py` to execute repeated benchmark + evaluation cycles and compare the outcomes.
+
+```shell
+python -m datus.multi_round_benchmark \
+  --namespace bird_sqlite \
+  --benchmark bird_dev \
+  --workflow chat_agentic \
+  --max_round 4 \
+  --max_workers 2
+```
+
+Key options:
+
+- `--workflow`: The name of the workflow used by the benchmark.
+- `--max_round`: number of benchmark/evaluation loops (default 4).
+- `--task_ids`: explicit task id list (space separated).
+- `--max_workers`: same as the regular benchmark flag to control concurrency.
+
+For each round the script rewrites the agent's output directories to `{agent.home}/integration/{workflow}_{round}/` so
+the following artifacts stay isolated:
+
+- `save/` – The directory where the SQL and results are located.
+- `trajectory/` – The trajectory process of the workflow.
+- `evaluation_round_{round}.json` – the evaluation report.
+
+After all rounds finish, the tool aggregates every task's status into
+`{agent.home}/integration/{workflow}_summary.xlsx` with the schema:
+
+| task_id                  | round_0        | round_1         | ... | Matching Rate |
+|--------------------------|----------------|-----------------|-----|---------------|
+| 0                        | Matched        | Result Mismatch | ... | 50%           |
+| 1                        | Colum Mismatch | Matched         | ... | 50%           |
+| Summary of Matching Rate | 50%            | 50%             | ... | 50%           |
+
+Statuses currently map to(Priority starts from front to back):
+
+1. `Not Executed`: Benchmark or assessment encounters an anomaly.
+2. `Matched`: Successful matches with standard answers
+3. `Gen SQL Failed`: The SQL generated by the agent fails to execute in the database
+4. `Gold SQL Failed`: Gold SQL execution in the database has failed. Check whether the configuration is incorrect or the
+   Gold SQL query is faulty.
+5. `Match Failed`: The evaluation result was not obtained, possibly due to an uncaught exception.
+6. `Table Mismatch`: Indicating that the table located by the Agent is inaccurate (incorrect or missing).
+7. `Result Mismatch`: Table matching successful, but row or column matching failed.
+8. `Column Mismatch`: Tables, rows, and certain columns matched successfully
