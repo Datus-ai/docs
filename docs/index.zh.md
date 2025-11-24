@@ -1,6 +1,6 @@
 # 介绍
 
-**[Datus](https://github.com/Datus-ai/Datus-agent)** 是一个开源数据工程智能体，用于为你的数据系统构建 **可演化的上下文**。与只负责搬运数据的传统工具不同，Datus 会捕获、学习并进化围绕数据的知识，将元数据、参考 SQL、语义模型和指标转化为一个不断生长的知识库，为 AI 查询提供依据并消除幻觉。
+**[Datus](https://github.com/Datus-ai/Datus-agent)** 是一个开源数据工程智能体，用于为你的数据系统构建 **可演化的上下文**。与只负责搬运数据的传统工具不同，Datus 会捕获、学习并进化围绕数据的知识，将元数据、Reference SQL、语义模型和指标转化为一个不断生长的知识库，为 AI 查询提供依据并消除幻觉。
 
 借助 Datus，数据工程师能够把精力从编写重复的 SQL 转向构建可复用、面向 AI 的上下文。每一次查询、纠错和领域规则都会成为长期记忆帮助专用子代理为整个组织提供准确、具备领域认知的分析。
 
@@ -21,7 +21,7 @@
 
 Datus 的核心是其 **[上下文引擎](knowledge_base/introduction.md)**，融合了人工专业知识与 AI 能力：
 
-- 自动捕获[元数据](knowledge_base/metadata.md)、[指标](knowledge_base/metrics.md)、[参考 SQL](knowledge_base/reference_sql.md)、文档和成功案例
+- 自动捕获[元数据](knowledge_base/metadata.md)、[指标](knowledge_base/metrics.md)、[Reference SQL](knowledge_base/reference_sql.md)、文档和成功案例
 - 支持人在回路的策划与迭代
 - 为子代理和工作流提供丰富、具领域特异性的上下文
 

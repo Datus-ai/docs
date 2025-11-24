@@ -31,21 +31,21 @@ Launch the SQL summary generation subagent:
 ### Generation Workflow
 
 ```
-User provides SQL + description → Agent analyzes query → Retrieves context (taxonomy + similar queries) →
+User provides SQL + description → Agent analyzes query → Automatically retrieves context (taxonomy + similar queries) →
 Generates unique ID → Creates YAML → Saves file → User confirms → Syncs to Knowledge Base
 ```
 
 ### Step-by-Step Process
 
 1. **Understand SQL**: The AI analyzes your query structure and business logic
-2. **Get Context**: Calls `prepare_sql_summary_context()` to retrieve:
-   - Existing taxonomy (domains, categories, tags)
+2. **Get Context**: Automatically retrieves from Knowledge Base:
+   - Existing subject trees (domain/layer1/layer2 combinations)
    - Similar SQL summaries for classification reference
-3. **Generate Unique ID**: Uses `generate_sql_summary_id()` based on SQL + comment
+3. **Generate Unique ID**: Uses `generate_sql_summary_id()` tool based on SQL + comment
 4. **Create Unique Name**: Generates a descriptive name (max 20 characters)
 5. **Classify Query**: Assigns domain, layer1, layer2, and tags following existing patterns
 6. **Generate YAML**: Creates structured summary document
-7. **Save File**: Writes YAML to workspace using `write_file()`
+7. **Save File**: Writes YAML to workspace using `write_file()` tool
 8. **User Confirmation**: Shows the generated YAML and prompts for approval
 9. **Sync to Knowledge Base**: Stores in LanceDB for semantic search
 
@@ -72,28 +72,46 @@ Please enter your choice: [1/2]
 
 ### Agent Configuration
 
-In `agent.yml`:
+Most configurations are built-in. In `agent.yml`, minimal setup is needed:
 
 ```yaml
 agentic_nodes:
   gen_sql_summary:
-    model: deepseek                        # LLM model for analysis
-    system_prompt: gen_sql_summary         # Prompt template
-    prompt_version: "1.0"
-    tools: generation_tools.prepare_sql_summary_context, generation_tools.generate_sql_summary_id, filesystem_tools.write_file
-    hooks: generation_hooks                # Enable confirmation workflow
-    workspace_root: /path/to/reference_sql   # Directory to save YAML files
-    agent_description: "reference SQL analysis assistant"
+    model: deepseek      # Optional: defaults to configured model
+    max_turns: 30        # Optional: defaults to 30
 ```
 
-### Key Configuration Options
+**Built-in configurations** (automatically enabled):
+- **Tools**: Filesystem tools (`read_file`, `write_file`, `edit_file`, `list_directory`) and `generate_sql_summary_id`
+- **Hooks**: User confirmation workflow in interactive mode
+- **System Prompt**: Built-in template version 1.0
+- **Workspace**: `~/.datus/data/{namespace}/reference_sql`
+- **Context Retrieval**: Automatically queries existing subject trees and similar SQLs from Knowledge Base
 
-| Parameter | Description | Example |
-|-----------|-------------|---------|
-| `model` | LLM model for SQL analysis | `deepseek`, `claude`, `openai`, `kimi`|
-| `workspace_root` | Directory for SQL summary YAML files | `/Users/you/.datus/data/reference_sql` |
-| `tools` | Required tools for the workflow | See tools section below |
-| `hooks` | Enable interactive confirmation | `generation_hooks` |
+### Configuration Options
+
+| Parameter | Required | Description | Default |
+|-----------|----------|-------------|---------|
+| `model` | No | LLM model to use | Uses default configured model |
+| `max_turns` | No | Maximum conversation turns | 30 |
+
+### Subject Tree Categorization
+
+Subject tree allows organizing SQL summaries by domain and layers. In CLI mode, include it in your question:
+
+**Example with subject_tree:**
+```
+/gen_sql_summary Analyze this SQL: SELECT SUM(revenue) FROM sales, subject_tree: sales/reporting/revenue_analysis
+```
+
+**Example without subject_tree:**
+```
+/gen_sql_summary Analyze this SQL: SELECT SUM(revenue) FROM sales
+```
+
+When subject_tree is provided, the SQL summary will be categorized accordingly (e.g., domain: sales, layer1: reporting, layer2: revenue_analysis). If not provided, the agent operates in learning mode and automatically suggests categories based on:
+- Existing subject trees in the Knowledge Base
+- Similar SQL summaries (top 5 most similar queries)
 
 ## YAML Structure
 
@@ -138,9 +156,10 @@ tags: "revenue, region, aggregation"       # Comma-separated tags
 The SQL Summary feature provides:
 
 ✅ **Automated Analysis**: AI understands query structure and purpose
-✅ **Smart Classification**: Taxonomy-based categorization with consistency
-✅ **Deduplication**: Automatic hash-based duplicate detection
+✅ **Smart Classification**: Taxonomy-based categorization with consistency using existing patterns
+✅ **Automatic Context Retrieval**: Queries existing subject trees and similar SQLs from Knowledge Base
+✅ **Deduplication**: Automatic hash-based duplicate detection using `generate_sql_summary_id` tool
 ✅ **Semantic Search**: Vector embeddings enable intelligent query discovery
-✅ **Language Preservation**: Maintains Chinese/English consistency
-✅ **Interactive Workflow**: Review and approve before syncing
+✅ **Interactive Workflow**: Review and approve before syncing (in interactive mode)
+✅ **Subject Tree Support**: Organize by domain/layer1/layer2 with predefined or learned categories
 ✅ **Knowledge Reuse**: Build searchable SQL query library
