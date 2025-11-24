@@ -35,7 +35,9 @@ This launches an interactive wizard prompting for basic information such as the 
 If the creation is canceled mid‑process, a cancellation message appears, and no configuration is saved.
 
 ![Add subagent](../assets/add_subagent.png)
-> 💡 **Tip:** During step three (ScopedContext configuration), you can use **Tab** for hierarchical completion but preview is unavailable. Press **F2** to preview.
+> 💡 **Tip:** 
+> 1. In Step 2 (Native Tools Configuration), if you need to configure `context_search_tools`, please select `list_domain_layers_tree`. Failure to do so may render `search_metrics` and `search_reference_sql` inoperative.
+> 2. During step three (ScopedContext configuration), you can use **Tab** for hierarchical completion but preview is unavailable. Press **F2** to preview.
 
 ---
 
