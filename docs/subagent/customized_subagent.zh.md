@@ -37,7 +37,9 @@
 如果创建过程中途取消，会显示取消消息，不会保存任何配置。
 
 ![Add subagent](../assets/add_subagent.png)
-> 💡 **提示**：在第三步（ScopedContext 配置）中，可以使用 **Tab** 进行层级补全，但预览不可用。按 **F2** 可预览。
+> 💡 **提示**：
+> 1. 在第二步（Native Tools 配置）中，如果需要配置 `context_search_tools`，请选中`list_domain_layers_tree`，否则可能会导致`search_metrics`和`search_reference_sql`失效。
+> 2. 在第三步（ScopedContext 配置）中，可以使用 **Tab** 进行层级补全，但预览不可用。按 **F2** 可预览。
 
 ---
 
