@@ -231,6 +231,129 @@ duckdb:////absolute/path/to/database.db      # Absolute path
 duckdb:///relative/path/to/database.db       # Relative path
 ```
 
+## Namespace Manager CLI
+
+Datus Agent provides an interactive CLI tool for managing namespace configurations without manually editing YAML files.
+
+### Commands
+
+#### List Namespaces
+
+View all configured namespaces and their connection details:
+
+```bash
+datus-agent namespace list
+```
+
+Output example:
+```
+Configured namespaces:
+
+Namespace: production_snowflake
+  Database: ANALYTICS
+    Type: snowflake
+    Account: my_account
+    Warehouse: COMPUTE_WH
+    Database: ANALYTICS
+    Schema: PUBLIC
+    Username: admin
+
+Namespace: local_duckdb
+  Database: analytics
+    Type: duckdb
+    URI: duckdb:////data/analytics.db
+```
+
+#### Add Namespace
+
+Interactively add a new namespace configuration:
+
+```bash
+datus-agent namespace add
+```
+
+The command will prompt you for:
+
+1. **Namespace name**: Unique identifier for the namespace
+2. **Database type**: Choose from sqlite, duckdb, snowflake, mysql, starrocks
+3. **Connection parameters**: Varies by database type
+
+**For file-based databases (SQLite, DuckDB):**
+- Connection string (file path)
+
+**For host-based databases (MySQL, StarRocks):**
+- Host
+- Port
+- Username
+- Password
+- Database name
+
+**For Snowflake:**
+- Username
+- Account
+- Warehouse
+- Password
+- Database (optional)
+- Schema (optional)
+
+After entering the configuration, the tool will:
+- Test database connectivity
+- Save the configuration to `conf/agent.yml` if successful
+
+Example session:
+```
+Add New Namespace
+- Namespace name: my_analytics
+- Database type [sqlite/duckdb/snowflake/mysql/starrocks] (duckdb): snowflake
+- Username: admin
+- Account: my_account
+- Warehouse: COMPUTE_WH
+- Password: ********
+- Database (optional): ANALYTICS
+- Schema (optional): PUBLIC
+→ Testing database connectivity...
+✔ Database connection test successful
+
+Configuration saved to conf/agent.yml
+✔ Namespace 'my_analytics' added successfully
+```
+
+#### Delete Namespace
+
+Interactively delete an existing namespace:
+
+```bash
+datus-agent namespace delete
+```
+
+The command will:
+1. Display available namespaces
+2. Prompt for the namespace name to delete
+3. Ask for confirmation before deletion
+
+Example session:
+```
+Delete Namespace
+Available namespaces:
+  - production_snowflake
+  - local_duckdb
+  - test_sqlite
+- Namespace name to delete: test_sqlite
+Are you sure you want to delete namespace 'test_sqlite'? This action cannot be undone. [y/N]: y
+Configuration saved to conf/agent.yml
+✔ Namespace 'test_sqlite' deleted successfully
+```
+
+### Usage with Custom Config
+
+Specify a custom configuration file:
+
+```bash
+datus-agent namespace list --config /path/to/agent.yml
+datus-agent namespace add --config /path/to/agent.yml
+datus-agent namespace delete --config /path/to/agent.yml
+```
+
 ## Security Considerations
 
 ### Credential Management
@@ -243,3 +366,7 @@ password: ${DB_PASSWORD}
 username: "actual_username"
 password: "actual_password"
 ```
+
+## See Also
+
+- [Database Adapters](../adapters/db_adapters.md) - Install plugin adapters for MySQL, Snowflake, StarRocks, and more
