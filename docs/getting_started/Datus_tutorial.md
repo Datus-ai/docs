@@ -9,7 +9,6 @@ This tutorial walks you through the full workflow of Datus-agent:
 4. Benchmark them to compare accuracy and performance
 5. Run multi-round evaluation to demonstrate the value of [contextual data engineering](contextual_data_engineering.md)
 
-![Datus Tutorial Overview](../assets/datus_tutorial.png)
 
 ## 1. Prerequisites: Initialize Your Datus Agent
 
@@ -30,10 +29,12 @@ Start the guided tutorial:
 datus-agent tutorial
 ```
 
-You will see a structured 5-step workflow. This will take approximately 10 minutes to initialize through multi-turn agent calls. 
+![Datus Tutorial Overview](../assets/datus_tutorial.png)
+
+You will see a structured 5-step workflow. This will take approximately 10 minutes to initialize through multi-turn agent calls. You can watch Datus's execution process during the wait to understand how it works. 
 
 
-### 🔹 Step [1/5] Validate Data & Configuration
+### Step [1/5] Validate Data & Configuration
 
 ```
 Welcome to Datus tutorial 🎉
@@ -52,11 +53,15 @@ The tutorial checks:
 - Updates agent.yml with the configuration 
 
 
-### 🔹 Step [2/5] Initialize Metadata
+### Step [2/5] Initialize Metadata
 
-```
+```bash
 [2/5] Initialize Metadata using command:
-datus-agent bootstrap-kb   --config ~/.datus/conf/agent.yml   --namespace california_schools   --components metadata   --kb_update_strategy overwrite
+datus-agent bootstrap-kb \
+  --config ~/.datus/conf/agent.yml \
+  --namespace california_schools \
+  --components metadata \
+  --kb_update_strategy overwrite
 ```
 
 Example output:
@@ -68,13 +73,19 @@ Example output:
 
 Datus will connect to the example dataset, extract table schemas and data samples, then store them into the [knowledge base](../knowledge_base/introduction.md) with vector index. Learn more about [metadata management](../knowledge_base/metadata.md).
 
-### 🔹 Step [3/5] Initialize Metrics
+### Step [3/5] Initialize Metrics
 
 Metrics generation depends heavily on semantic modeling, so strong agentic models are preferred. (Recommended models: DeepSeek / Claude). For more details, see [metrics documentation](../knowledge_base/metrics.md).
 
-```
+```bash
 [3/5] Initialize Metrics using command:
-datus-agent bootstrap-kb   --config ~/.datus/conf/agent.yml   --namespace california_schools   --components metrics   --kb_update_strategy overwrite   --success_story ~/.datus/benchmark/california_schools/success_story.csv   --subject_tree "california_schools/Continuation_School/Free_Rate,california_schools/Charter/Education_Location"
+datus-agent bootstrap-kb \
+  --config ~/.datus/conf/agent.yml \
+  --namespace california_schools \
+  --components metrics \
+  --kb_update_strategy overwrite \
+  --success_story ~/.datus/benchmark/california_schools/success_story.csv \
+  --subject_tree "california_schools/Continuation_School/Free_Rate,california_schools/Charter/Education_Location"
 ```
 
 **Understanding the parameters:**
@@ -94,12 +105,18 @@ Example output:
 > **Note**
 > If metrics initialization fails, adjust the model configuration for `gen_semantic_model` and `gen_metrics` in [agent.yml](../configuration/agent.md). These errors can be safely ignored if you don't have enough success story examples at the beginning.
 
-### 🔹 Step [4/5] Initialize Reference SQL
+### Step [4/5] Initialize Reference SQL
 
 For more information about reference SQL, see the [reference SQL documentation](../knowledge_base/reference_sql.md).
 
-```
-datus-agent bootstrap-kb   --config ~/.datus/conf/agent.yml   --namespace california_schools   --components reference_sql   --kb_update_strategy overwrite   --sql_dir ~/.datus/benchmark/california_schools/reference_sql   --subject_tree "california_schools/Continuation/Free_Rate,california_schools/Charter/Education_Location/,california_schools/SAT_Score/Average,california_schools/SAT_Score/Excellence_Rate,california_schools/FRPM_Enrollment/Rate,california_schools/Enrollment/Total"
+```bash
+datus-agent bootstrap-kb \
+  --config ~/.datus/conf/agent.yml \
+  --namespace california_schools \
+  --components reference_sql \
+  --kb_update_strategy overwrite \
+  --sql_dir ~/.datus/benchmark/california_schools/reference_sql \
+  --subject_tree "california_schools/Continuation/Free_Rate,california_schools/Charter/Education_Location/,california_schools/SAT_Score/Average,california_schools/SAT_Score/Excellence_Rate,california_schools/FRPM_Enrollment/Rate,california_schools/Enrollment/Total"
 ```
 
 **Understanding the parameters:**
@@ -123,7 +140,7 @@ Datus-cli --namespace california_schools
 
 ![Subject Tree Structure](../assets/tutorial_subject_tree.png)
 
-### 🔹 Step [5/5] Build Subagents
+### Step [5/5] Build Subagents
 
 The tutorial automatically generates two [subagents](../subagent/introduction.md):
 
@@ -166,14 +183,16 @@ Check the [`agent.yml`](../configuration/agent.md) configuration file to see the
 
 **Understanding the configuration:**
 
-- **agentic_nodes**: Defines the two subagents with different capabilities
-  - `datus_schools`: Baseline agent with only `db_tools` and `date_parsing_tools`
-  - `datus_schools_context`: Context-rich agent with additional `context_search_tools` that can access metrics and reference SQL from the knowledge base
+**agentic_nodes**: Defines the two subagents with different capabilities
 
-- **workflow**: Defines the execution flow for each agent. These [workflows](../workflow/introduction.md) are designed to output results to files, making it easy to evaluate and compare agent performance.
-  - Step 1: Subagent analyzes the question and generates SQL
-  - Step 2: `execute_sql` node executes the generated SQL to produce the final result
-  - Step 3: `output` node formats and writes the results to local disk
+- `datus_schools`: Baseline agent with only `db_tools` and `date_parsing_tools`
+- `datus_schools_context`: Context-rich agent with additional `context_search_tools` that can access metrics and reference SQL from the knowledge base
+
+**workflow**: Defines the execution flow for each agent. These [workflows](../workflow/introduction.md) are designed to output results to files, making it easy to evaluate and compare agent performance.
+
+- Step 1: Subagent analyzes the question and generates SQL
+- Step 2: `execute_sql` node executes the generated SQL to produce the final result
+- Step 3: `output` node formats and writes the results to local disk
 
 The key difference is that `datus_schools_context` has access to `context_search_tools`, enabling it to leverage the [metrics](../knowledge_base/metrics.md) and [reference SQL](../knowledge_base/reference_sql.md) you built in previous steps.
 
@@ -193,13 +212,13 @@ This is the key part of the tutorial: comparing a **non-context** agent vs. a **
 
 ### 3.1 Evaluate `datus_schools` (baseline)
 
-```
+```bash
 datus-agent benchmark   --namespace california_schools   --benchmark california_schools   --workflow datus_schools
 ```
 
 Save the results:
 
-```
+```bash
 datus-agent eval   --namespace california_schools   --benchmark california_schools   --output_file schools1.txt
 ```
 
@@ -207,13 +226,13 @@ datus-agent eval   --namespace california_schools   --benchmark california_schoo
 
 ### 3.2 Evaluate `datus_schools_context` (full context)
 
-```
+```bash
 datus-agent benchmark   --namespace california_schools   --benchmark california_schools   --workflow datus_schools_context
 ```
 
 Save the results:
 
-```
+```bash
 datus-agent eval   --namespace california_schools   --benchmark california_schools   --output_file schools2.txt
 ```
 
@@ -225,8 +244,14 @@ datus-agent eval   --namespace california_schools   --benchmark california_schoo
 
 This is the most powerful demonstration of contextual data engineering:
 
-```
-python -m datus.multi_round_benchmark   --config ~/.datus/conf/agent.yml   --namespace california_schools   --benchmark california_schools   --workflow datus_schools_context   --max_round 4   --group_name context_tools
+```bash
+python -m datus.multi_round_benchmark \
+  --config ~/.datus/conf/agent.yml \
+  --namespace california_schools \
+  --benchmark california_schools \
+  --workflow datus_schools_context \
+  --max_round 4 \
+  --group_name context_tools
 ```
 
 ![Benchmark Comparison](../assets/benchmark_comparsion.png)
@@ -249,10 +274,10 @@ By completing this tutorial, you have:
 
 You now have:
 
-✔ A fully usable domain [subagent](../subagent/introduction.md)
-✔ An evolvable [knowledge base](../knowledge_base/introduction.md)
-✔ A repeatable benchmark pipeline
-✔ A real demonstration of [contextual data engineering](contextual_data_engineering.md)
+* ✔ A fully usable domain [subagent](../subagent/introduction.md)
+* ✔ An evolvable [knowledge base](../knowledge_base/introduction.md)
+* ✔ A repeatable benchmark pipeline
+* ✔ A real demonstration of [contextual data engineering](contextual_data_engineering.md)
 
 ## Next Steps
 
