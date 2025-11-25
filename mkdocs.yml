@@ -8,6 +8,7 @@ nav:
     - Getting Started:
       - Quickstart: getting_started/Quickstart.md
       - Contextual Data Engineering: getting_started/contextual_data_engineering.md
+      - Tutorial: getting_started/Datus_tutorial.md
     - CLI:
       - Introduction: cli/introduction.md
       - Chat Command: cli/chat_command.md
@@ -64,6 +65,7 @@ plugins:
             Getting Started: 入门指南
             Quickstart: 快速开始
             Contextual Data Engineering: 上下文数据工程
+            Tutorial: 教程
             CLI: 命令行
             Introduction: 介绍
             Chat Command: 聊天命令
