@@ -221,7 +221,7 @@ datus-agent benchmark   --namespace california_schools   --benchmark california_
 datus-agent eval   --namespace california_schools   --benchmark california_schools   --output_file schools1.txt
 ```
 
-
+![评估结果](../assets/eval_schools.png)
 
 ### 3.2 评估 `datus_schools_context`（完整上下文）
 
@@ -235,11 +235,9 @@ datus-agent benchmark   --namespace california_schools   --benchmark california_
 datus-agent eval   --namespace california_schools   --benchmark california_schools   --output_file schools2.txt
 ```
 
-![评估结果](../assets/eval_schools.png)
+通过比较 `schools1.txt` 和 `schools2.txt`，您可以明确地看到上下文丰富的 agent 如何提高 SQL 准确性、减少错误并生成更符合语义的查询，相比基线 agent 有显著改进。
 
-*显示两个 agent 详细指标和性能分析的评估输出示例。*
-
-## 4. 多轮基准测试：展示上下文演化
+## 4. 多轮基准测试
 
 这是上下文数据工程最强大的演示：
 

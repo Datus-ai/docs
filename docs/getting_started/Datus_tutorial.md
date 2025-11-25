@@ -206,7 +206,7 @@ You can now:
 Or use the chatbot in [Datus-Chat](../web_chatbot/introduction.md). 
 
 
-## 3. Compare Subagent Performance
+## 3. Benchmark and evaluation
 
 This is the key part of the tutorial: comparing a **non-context** agent vs. a **context-rich** agent.
 
@@ -222,7 +222,7 @@ Save the results:
 datus-agent eval   --namespace california_schools   --benchmark california_schools   --output_file schools1.txt
 ```
 
-
+![Evaluation Results](../assets/eval_schools.png)
 
 ### 3.2 Evaluate `datus_schools_context` (full context)
 
@@ -236,9 +236,9 @@ Save the results:
 datus-agent eval   --namespace california_schools   --benchmark california_schools   --output_file schools2.txt
 ```
 
-![Evaluation Results](../assets/eval_schools.png)
-
 *Example evaluation output showing detailed metrics and performance analysis for both agents.*
+
+By comparing `schools1.txt` and `schools2.txt`, you can explicitly see how the context-rich agent improves SQL accuracy, reduces errors, and generates more semantically correct queries compared to the baseline agent.
 
 ## 4. Multi-round Benchmark: Demonstrate Context Evolution
 
@@ -259,6 +259,7 @@ python -m datus.multi_round_benchmark \
 *The left graph shows the benchmark result without data context tools (`datus_schools`), while the right graph shows the benchmark result with data context tools (`datus_schools_context`). Notice the significant improvement in accuracy when context is available.*
 
 
+
 ## 5. Summary
 
 By completing this tutorial, you have:
@@ -276,7 +277,7 @@ You now have:
 
 * ✔ A fully usable domain [subagent](../subagent/introduction.md)
 * ✔ An evolvable [knowledge base](../knowledge_base/introduction.md)
-* ✔ A repeatable benchmark pipeline
+* ✔ A repeatable benchmark and evaluation framework
 * ✔ A real demonstration of [contextual data engineering](contextual_data_engineering.md)
 
 ## Next Steps
