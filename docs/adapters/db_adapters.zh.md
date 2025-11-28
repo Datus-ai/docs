@@ -117,10 +117,13 @@ namespace:
 namespace:
   lakehouse:
     type: clickzetta
-    host: your_host
-    username: your_username
-    password: your_password
-    database: your_workspace
+    service: CLICKZETTA_SERVICE
+    username: CLICKZETTA_USERNAME
+    password: CLICKZETTA_PASSWORD
+    instance: CLICKZETTA_INSTANCE
+    workspace: CLICKZETTA_WORKSPACE
+    schema: CLICKZETTA_SCHEMA
+    vcluster: CLICKZETTA_VCLUSTER
 ```
 
 ## 多数据库连接
