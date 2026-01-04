@@ -121,14 +121,14 @@ agentic_nodes:
 **智能体操作**：
 1. 查找 `orders.yml` 语义模型
 2. 读取文件以发现 `order_count` 度量
-3. 生成 MEASURE_PROXY 指标：
+3. 生成 simple 指标：
 
 ```yaml
 ---
 metric:
   name: total_orders
   description: Total number of orders
-  type: measure_proxy
+  type: simple
   type_params:
     measure: order_count
   locked_metadata:
@@ -136,66 +136,57 @@ metric:
     increase_is_good: true
 ```
 
-### 示例 2：转化率
+### 示例 2：收入指标
 
 **用户输入**：
 ```
 /gen_metrics Create a metric from this SQL:
-SELECT
-  COUNT(DISTINCT CASE WHEN status = 'completed' THEN order_id END) /
-  COUNT(DISTINCT order_id) AS completion_rate
-FROM orders
+SELECT SUM(amount) as total_revenue FROM transactions WHERE status = 'completed'
 ```
 
 **智能体操作**：
-1. 分析 SQL 逻辑（带条件计数的比率）
-2. 查找 `orders.yml` 并读取度量
-3. 生成带约束的 RATIO 指标：
+1. 分析 SQL 聚合（带过滤的 SUM）
+2. 查找或创建 `transactions.yml` 语义模型
+3. 生成 simple 指标：
 
 ```yaml
 ---
 metric:
-  name: order_completion_rate
-  description: Percentage of orders that reached completed status
-  type: ratio
+  name: total_revenue
+  description: Total revenue from completed transactions
+  type: simple
   type_params:
-    numerator:
-      name: order_count
-      constraint: status = 'completed'
-    denominator: order_count
+    measure: total_amount
+  filter: "{{ Dimension('transaction__status') }} = 'completed'"
   locked_metadata:
-    display_name: "Order Completion Rate"
-    value_format: ".2%"
+    display_name: "Total Revenue"
+    value_format: "$,.2f"
     increase_is_good: true
 ```
 
-### 示例 3：复杂计算
+### 示例 3：计数指标
 
 **用户输入**：
 ```
-/gen_metrics Generate average basket size metric:
-SELECT SUM(total_amount) / COUNT(DISTINCT order_id)
-FROM order_items
+/gen_metrics Generate unique customer count metric:
+SELECT COUNT(DISTINCT customer_id) FROM orders
 ```
 
 **智能体操作**：
-1. 定位 `order_items.yml`
-2. 识别为 RATIO（平均值）
-3. 生成指标：
+1. 定位 `orders.yml` 语义模型
+2. 识别 COUNT DISTINCT 聚合
+3. 生成 simple 指标：
 
 ```yaml
 ---
 metric:
-  name: avg_basket_size
-  description: Average order value (basket size)
-  type: ratio
+  name: unique_customer_count
+  description: Total number of unique customers
+  type: simple
   type_params:
-    numerator: total_amount
-    denominator: order_count
+    measure: unique_customers
   locked_metadata:
-    display_name: "Average Basket Size"
-    value_format: "$$,.2f"
-    unit: "dollars"
+    display_name: "Unique Customers"
     increase_is_good: true
 ```
 
@@ -203,10 +194,13 @@ metric:
 
 ### 文件组织
 
-使用 YAML 文档分隔符 `---` 将指标追加到现有语义模型文件：
+指标与语义模型分开存储在不同文件中：
 
+- **语义模型**：`{table_name}.yml` - 包含 data_source 定义，含度量和维度
+- **指标**：`metrics/{table_name}_metrics.yml` - 包含指标定义
+
+**语义模型文件** (`transactions.yml`)：
 ```yaml
-# 现有语义模型
 data_source:
   name: transactions
   sql_table: transactions
@@ -214,32 +208,36 @@ data_source:
     - name: revenue
       agg: SUM
       expr: amount
+    - name: transaction_count
+      agg: COUNT
+      expr: "1"
   dimensions:
     - name: transaction_date
       type: TIME
+```
 
----
-# 第一个指标（追加）
+**指标文件** (`metrics/transactions_metrics.yml`)：
+```yaml
 metric:
   name: total_revenue
-  type: measure_proxy
+  description: Total revenue from all transactions
+  type: simple
   type_params:
     measure: revenue
 
 ---
-# 第二个指标（追加）
 metric:
-  name: avg_transaction_value
-  type: ratio
+  name: total_transactions
+  description: Total number of transactions
+  type: simple
   type_params:
-    numerator: revenue
-    denominator: transaction_count
+    measure: transaction_count
 ```
 
-**为什么追加而不是单独文件？**
-- 保持相关指标靠近其语义模型
-- 更易于维护和验证
-- MetricFlow 可以一起验证所有定义
+**为什么分开存储？**
+- 清晰分离 schema 定义和业务指标
+- 更易于独立管理指标
+- 指标文件内使用 YAML 文档分隔符 `---` 分隔多个指标
 
 ### 知识库存储
 
@@ -261,5 +259,5 @@ metric:
 ✅ **验证**：MetricFlow 验证确保正确性
 ✅ **交互式工作流**：同步前审阅和批准
 ✅ **知识库集成**：语义搜索以发现指标
-✅ **文件管理**：安全地追加到现有语义模型文件
+✅ **文件管理**：将指标组织在独立于语义模型的专用文件中
 

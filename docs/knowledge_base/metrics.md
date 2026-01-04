@@ -1,19 +1,48 @@
 # Business Metrics Intelligence
 
-The Metrics component specifically focuses on automatically extracting and generating business metrics from historical SQL queries, establishing an enterprise-level metrics management system.
+Starting from **version 0.2.4**, the Metrics component focuses on creating standardized, queryable business metrics as an independent semantic query layer. Metrics can be executed directly through MetricFlow, rather than serving solely as references for LLM SQL generation.
 
 ## Core Value
 
 Solves common enterprise challenges:
-- **Duplicate SQL queries**: Reuse metrics instead of rewriting similar queries
-- **Inconsistent definitions**: Standardize metric definitions across teams
+- **Duplicate SQL queries**: Query metrics directly instead of rewriting similar SQL
+- **Inconsistent definitions**: Standardize metric definitions across teams through executable specifications
 - **Manual classification**: Organize metrics with hierarchical subject tree taxonomy
+- **Ad-hoc SQL complexity**: Use semantic queries (`query_metrics`) instead of generating SQL for common metrics
 
 ## How It Works
 
-Data flows through two layers: **Historical SQLs → Semantic Model → Business Metrics**
+Metrics are business-level calculations built on top of semantic models. Starting from version 0.2.4, they operate independently:
 
-Semantic models define table structure, dimensions, and measures. Metrics are reusable calculations built on top of these models.
+- **Metrics** (this document): Standardized KPIs queryable via MetricFlow
+- **Semantic Models** (see [semantic_model.md](semantic_model.md)): Schema extensions for ad-hoc SQL generation
+
+Both can be generated from historical SQLs, but metrics focus on reusable business logic while semantic models focus on schema understanding.
+
+## Querying Metrics
+
+Once metrics are defined, query them directly using MetricFlow tools:
+
+```python
+# In agent conversation or workflow
+# Search for relevant metrics
+search_semantic_objects(query="daily active users", kinds=["metric"])
+
+# Execute metric query
+query_metrics(
+    metrics=["daily_active_users"],
+    dimensions=["platform", "country"],
+    start_time="2024-01-01",
+    end_time="2024-01-31"
+)
+```
+
+**Metrics-First Strategy**: When user queries involve KPIs (e.g., "show me DAU by platform"), the agent will:
+1. Search for matching metrics using `search_semantic_objects`
+2. Execute via `query_metrics` if found (preferred)
+3. Fall back to ad-hoc SQL generation only if no metric exists
+
+This ensures consistent metric definitions across the organization.
 
 ## Usage
 
@@ -26,15 +55,13 @@ Semantic models define table structure, dimensions, and measures. Metrics are re
 datus-agent bootstrap-kb \
     --namespace <your_namespace> \
     --components metrics \
-    --success_story path/to/success_story.csv \
-    --metric_meta business_meta
+    --success_story path/to/success_story.csv
 
 # From YAML (semantic models)
 datus-agent bootstrap-kb \
     --namespace <your_namespace> \
     --components metrics \
-    --semantic_yaml path/to/semantic_model.yaml \
-    --metric_meta business_meta
+    --semantic_yaml path/to/semantic_model.yaml
 ```
 
 ### Key Parameters
@@ -45,8 +72,7 @@ datus-agent bootstrap-kb \
 | `--components` | ✅ | Components to initialize | `metrics` |
 | `--success_story` | ⚠️ | CSV file with historical SQLs and questions (required if no `--semantic_yaml`) | `success_story.csv` |
 | `--semantic_yaml` | ⚠️ | Semantic model YAML file (required if no `--success_story`) | `semantic_model.yaml` |
-| `--metric_meta` | ✅ | Metric metadata configuration in `agent.yml` | `business_meta` |
-| `--kb_update_strategy` | ✅ | Update strategy | `overwrite`/`incremental` |
+| `--kb_update_strategy` | ❌ | Update strategy | `overwrite`/`incremental` |
 | `--subject_tree` | ❌ | Predefined categories (comma-separated) | `Sales/Reporting/Daily,Finance/Revenue/Monthly` |
 | `--pool_size` | ❌ | Concurrent thread count | `4` |
 
@@ -72,7 +98,7 @@ When metrics are generated, the subject_tree classification is stored in `locked
 ```yaml
 metric:
   name: daily_revenue
-  type: measure_proxy
+  type: simple
   type_params:
     measure: revenue
   locked_metadata:
@@ -105,35 +131,34 @@ How many customers have been added per day?,"SELECT ds AS date, SUM(1) AS new_cu
 What is the total transaction amount?,SELECT SUM(transaction_amount_usd) as total_amount FROM transactions;
 ```
 
-### YAML Format
+### YAML Format (Metrics Only)
+
+When importing metrics from YAML files, the metric definition references an existing semantic model:
 
 ```yaml
-data_source:
-  name: transactions
-  description: "Transaction records"
-  identifiers:
-    - name: transaction_id
-      type: primary
-  dimensions:
-    - name: transaction_date
-      type: time
-    - name: transaction_type
-      type: categorical
-  measures:
-    - name: amount
-      type: double
-      agg: sum
----
 metric:
   name: total_revenue
   description: "Total revenue from all transactions"
-  constraint: "amount > 0"
+  type: simple
+  type_params:
+    measure: amount  # References measure from semantic model
+  filter: "amount > 0"
   locked_metadata:
     tags:
       - "Finance"
       - "subject_tree: Finance/Revenue/Total"
 ```
 
+**Note**: The underlying semantic model (`data_source` with dimensions/measures) should already exist. See [semantic_model.md](semantic_model.md) for how to define semantic models.
+
 ## Summary
 
-The Metrics component establishes standardized, reusable metric definitions from historical SQLs. With hierarchical subject tree taxonomy and flexible classification modes, it helps teams maintain consistent, discoverable metrics for data-driven decision making.
+The Metrics component establishes a **semantic query layer** that transforms historical SQLs into standardized, executable metric definitions. Unlike traditional semantic layers that only serve as LLM references, Datus metrics can be directly queried through MetricFlow, eliminating the need for ad-hoc SQL generation for common KPIs.
+
+Key differentiators:
+- **Executable Metrics**: Query via `query_metrics` instead of generating SQL
+- **Metrics-First Strategy**: Agent prioritizes metric queries over ad-hoc SQL
+- **Independent from Semantic Models**: Metrics operate as a separate query tool, not embedded in schema definitions
+- **Hierarchical Organization**: Subject tree taxonomy for discoverability
+
+This approach ensures consistent metric definitions across teams while reducing query complexity and improving performance.
