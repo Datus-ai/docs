@@ -18,6 +18,7 @@ This design keeps the core package lightweight while allowing you to add support
 | SQLite | Built-in | Included | Ready |
 | DuckDB | Built-in | Included | Ready |
 | MySQL | datus-mysql | `pip install datus-mysql` | Ready |
+| PostgreSQL | datus-postgresql | `pip install datus-postgresql` | Ready |
 | StarRocks | datus-starrocks | `pip install datus-starrocks` | Ready |
 | Snowflake | datus-snowflake | `pip install datus-snowflake` | Ready |
 | ClickZetta | datus-clickzetta | `pip install datus-clickzetta` | Ready |
@@ -35,6 +36,9 @@ Install the adapter package for your database:
 ```bash
 # MySQL
 pip install datus-mysql
+
+# PostgreSQL
+pip install datus-postgresql
 
 # Snowflake
 pip install datus-snowflake
@@ -67,7 +71,7 @@ namespace:
 namespace:
   analytics:
     type: duckdb
-    database: /path/to/database.duckdb
+    uri: duckdb:///path/to/database.duckdb
 ```
 
 ### MySQL
@@ -81,6 +85,21 @@ namespace:
     username: your_username
     password: your_password
     database: your_database
+```
+
+### PostgreSQL
+
+```yaml
+namespace:
+  production:
+    type: postgresql
+    host: localhost
+    port: 5432
+    username: your_username
+    password: your_password
+    database: your_database
+    schema: public  # optional, default is public
+    sslmode: prefer  # optional, default is prefer
 ```
 
 ### Snowflake
@@ -167,6 +186,13 @@ All adapters support:
 - SHOW CREATE TABLE/VIEW support
 - Full CRUD operations
 
+#### PostgreSQL
+- INFORMATION_SCHEMA queries
+- Tables, views, and materialized views support
+- Multi-schema namespace support
+- SSL connection modes (disable, allow, prefer, require, verify-ca, verify-full)
+- SQLAlchemy-based (psycopg2 driver)
+
 #### Snowflake
 - Multi-database and schema support
 - Tables, views, and materialized views
@@ -207,6 +233,7 @@ Check the following:
 Some adapters require additional system dependencies:
 
 - **MySQL**: Requires `pymysql` (installed automatically)
+- **PostgreSQL**: Requires `psycopg2-binary` (installed automatically)
 - **Snowflake**: Requires `snowflake-connector-python` (installed automatically)
 
 ## Architecture
@@ -220,6 +247,7 @@ datus-agent (Core)
 └── Plugin System (Entry Points)
     ├── datus-sqlalchemy (Base layer)
     │   ├── datus-mysql
+    │   ├── datus-postgresql
     │   └── datus-starrocks
     │
     └── Native SDK Adapters
