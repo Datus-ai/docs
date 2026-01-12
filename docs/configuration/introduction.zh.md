@@ -97,7 +97,7 @@ connection_string: "postgresql://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT:-543
 
 通过多份配置文件管理不同环境：
 
-```
+```text
 conf/
 ├── agent.yml              # 主配置
 ├── agent.yml.dev          # 开发环境覆盖

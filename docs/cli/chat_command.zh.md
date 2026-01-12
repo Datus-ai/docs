@@ -12,13 +12,13 @@
 
 输入 `/` 加消息即可开启新会话：
 
-```
+```text
 / How many orders were placed last week?
 ```
 
 智能体会返回推理过程与建议的 SQL。随后可以自然跟进：
 
-```
+```text
 / Filter only for VIP customers
 ```
 

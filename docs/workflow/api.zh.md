@@ -99,7 +99,7 @@ client_id=your_client_id&client_secret=your_client_secret&grant_type=client_cred
 
 #### 同步模式（mode: "sync"）
 **请求头：**
-```
+```yaml
 Authorization: Bearer your_jwt_token
 Content-Type: application/json
 ```
@@ -136,7 +136,7 @@ Content-Type: application/json
 
 #### 异步模式（mode: "async"）
 **请求头：**
-```
+```yaml
 Authorization: Bearer your_jwt_token
 Content-Type: application/json
 Accept: text/event-stream

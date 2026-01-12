@@ -172,7 +172,7 @@ benchmark_dbs:
 **常用模式**：`*.sqlite`、`**/*.sqlite`、`data/2024/*.db`、`benchmark/bird/**/*.sqlite`
 
 ## URI 格式
-```
+```text
 sqlite:////absolute/path/to/database.db
 sqlite:///relative/path/to/database.db
 
@@ -250,7 +250,7 @@ datus-agent namespace add
 - 连接成功后保存配置到 `conf/agent.yml`
 
 示例会话：
-```
+```text
 Add New Namespace
 - Namespace name: my_analytics
 - Database type [sqlite/duckdb/snowflake/mysql/starrocks] (duckdb): snowflake

@@ -211,7 +211,7 @@ pip install datus-mysql
 
 ## 架构
 
-```
+```text
 datus-agent (核心)
 ├── 内置适配器
 │   ├── SQLite Connector

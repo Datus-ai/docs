@@ -18,7 +18,7 @@ By combining these, you give Datus the same mental model you have — so it can 
 You can summon the context browser by typing `@` and pressing Tab. Depending on which command you choose, you'll see a tree view you can drill down:
 
 ### @catalog
-```
+```text
 catalog
   └── database
       └── schema
@@ -32,7 +32,7 @@ When your focus is on the panel where the **semantic model** is located and modi
 ![Catalog Screen_Edit_Semantic](../assets/catalog_screen_edit_semantic.png)
 
 ### @subject
-```
+```text
 domain
   └── layer1
       └── layer2

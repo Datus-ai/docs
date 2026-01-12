@@ -100,12 +100,12 @@ agentic_nodes:
 Subject tree allows organizing SQL summaries by domain and layers. In CLI mode, include it in your question:
 
 **Example with subject_tree:**
-```
+```text
 /gen_sql_summary Analyze this SQL: SELECT SUM(revenue) FROM sales, subject_tree: sales/reporting/revenue_analysis
 ```
 
 **Example without subject_tree:**
-```
+```text
 /gen_sql_summary Analyze this SQL: SELECT SUM(revenue) FROM sales
 ```
 

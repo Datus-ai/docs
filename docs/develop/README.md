@@ -139,7 +139,7 @@ python -m datus.main probe-llm
 ```
 
 Example Output:
-```
+```text
 LLM model test successful
 Final Result: {"status": "success", "message": "LLM model test successful", "response": "Yes, I can 'hear' you! 😊 How can I assist you today?"}
 ```

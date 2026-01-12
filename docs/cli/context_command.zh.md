@@ -18,7 +18,7 @@
 输入 `@` 并按 Tab 可以唤起上下文浏览器。根据不同命令，会显示可逐级展开的树状视图：
 
 ### @catalog
-```
+```text
 catalog
   └── database
       └── schema
@@ -32,7 +32,7 @@ catalog
 ![Catalog Screen_Edit_Semantic](../assets/catalog_screen_edit_semantic.png)
 
 ### @subject
-```
+```text
 domain
   └── layer1
       └── layer2

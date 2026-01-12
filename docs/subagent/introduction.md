@@ -138,7 +138,7 @@ datus web --namespace production
 4. Chat with the specialized assistant
 
 **Direct URL Access**:
-```
+```text
 http://localhost:8501/?subagent=gen_metrics
 http://localhost:8501/?subagent=gen_semantic_model
 http://localhost:8501/?subagent=gen_sql_summary

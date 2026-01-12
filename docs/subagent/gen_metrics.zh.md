@@ -114,7 +114,7 @@ agentic_nodes:
 ### 示例 1：简单聚合
 
 **用户输入**：
-```
+```text
 /gen_metrics Generate a metric for total order count
 ```
 
@@ -167,7 +167,7 @@ metric:
 ### 示例 3：计数指标
 
 **用户输入**：
-```
+```text
 /gen_metrics Generate unique customer count metric:
 SELECT COUNT(DISTINCT customer_id) FROM orders
 ```

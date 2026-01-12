@@ -101,7 +101,7 @@ connection_string: "postgresql://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT:-543
 
 Configure different environments using separate configuration files:
 
-```
+```text
 conf/
 ├── agent.yml              # Main configuration
 ├── agent.yml.dev          # Development overrides

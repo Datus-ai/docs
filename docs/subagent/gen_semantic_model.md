@@ -16,7 +16,7 @@ A semantic model is a YAML configuration that defines:
 
 Start Datus CLI with `datus --namespace <namespace>`, and begin with a subagent command:
 
-```
+```text
   /gen_semantic_model generate a semantic model for table <table_name>
 ```
 
@@ -32,7 +32,7 @@ When you request a semantic model, the AI assistant:
 
 ### Generation Workflow
 
-```
+```text
 User Request → DDL Analysis → YAML Generation → Validation → User Confirmation → Storage
 ```
 
@@ -40,7 +40,7 @@ User Request → DDL Analysis → YAML Generation → Validation → User Confir
 
 After generating the semantic model, you'll see:
 
-```
+```text
 =============================================================
 Generated YAML: table_name.yml
 Path: /path/to/file.yml

@@ -104,12 +104,12 @@ agentic_nodes:
 Subject tree allows organizing metrics by domain and layers for better management. In CLI mode, include it in your question:
 
 **Example with subject_tree:**
-```
+```text
 /gen_metrics Generate a metric from this SQL: SELECT SUM(amount) FROM transactions, subject_tree: finance/revenue/transactions
 ```
 
 **Example without subject_tree:**
-```
+```text
 /gen_metrics Generate a metric from this SQL: SELECT SUM(amount) FROM transactions
 ```
 
@@ -122,7 +122,7 @@ When subject_tree is provided, the metric will be categorized accordingly (e.g.,
 ### Example 1: Simple Aggregation
 
 **User Input**:
-```
+```text
 /gen_metrics Generate a metric for total order count
 ```
 
@@ -175,7 +175,7 @@ metric:
 ### Example 3: Count Metric
 
 **User Input**:
-```
+```text
 /gen_metrics Generate unique customer count metric:
 SELECT COUNT(DISTINCT customer_id) FROM orders
 ```
