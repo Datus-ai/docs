@@ -157,7 +157,7 @@ metric:
   type: simple
   type_params:
     measure: total_amount
-  filter: "{{ Dimension('transaction__status') }} = 'completed'"
+  filter: "status = 'completed'"
   locked_metadata:
     display_name: "Total Revenue"
     value_format: "$,.2f"

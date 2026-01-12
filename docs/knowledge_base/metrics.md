@@ -31,7 +31,7 @@ search_semantic_objects(query="daily active users", kinds=["metric"])
 # Execute metric query
 query_metrics(
     metrics=["daily_active_users"],
-    dimensions=["platform", "country"],
+    group_by=["platform", "country"],
     start_time="2024-01-01",
     end_time="2024-01-31"
 )
