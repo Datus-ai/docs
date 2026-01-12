@@ -140,7 +140,7 @@ When generating SQL, the agent uses semantic models to:
 
 Example query flow:
 
-```
+```text
 User: "Show me total revenue by customer status"
 
 Agent process:
