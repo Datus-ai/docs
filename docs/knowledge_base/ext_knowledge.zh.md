@@ -42,30 +42,30 @@ datus bootstrap-kb \
 
 ### 关键参数
 
-| 参数 | 必需 | 描述                                                 | 示例 |
-|-----------|----------|----------------------------------------------------|---------|
-| `--namespace` | ✅ | 数据库命名空间                                            | `analytics_db` |
-| `--components` | ✅ | 要初始化的组件                                            | `ext_knowledge` |
-| `--ext_knowledge` | ⚠️ | 知识 CSV 文件路径（如果没有 `--success_story` 则必需）            | `/data/knowledge.csv` |
-| `--success_story` | ⚠️ | Success story CSV 文件路径（如果没有 `--ext_knowledge` 则必需） | `/data/success_story.csv` |
-| `--kb_update_strategy` | ✅ | 更新策略                                               | `overwrite`/`incremental` |
-| `--subject_tree` | ❌ | 预定义主题树分类                                           | `Finance/Revenue,User/Engagement` |
-| `--pool_size` | ❌ | 并发处理线程数，默认为 1                                      | `8` |
+| 参数                   | 必需 | 描述                                                            | 示例                              |
+| ---------------------- | ---- | --------------------------------------------------------------- | --------------------------------- |
+| `--namespace`          | ✅   | 数据库命名空间                                                  | `analytics_db`                    |
+| `--components`         | ✅   | 要初始化的组件                                                  | `ext_knowledge`                   |
+| `--ext_knowledge`      | ⚠️   | 知识 CSV 文件路径（如果没有 `--success_story` 则必需）          | `/data/knowledge.csv`             |
+| `--success_story`      | ⚠️   | Success story CSV 文件路径（如果没有 `--ext_knowledge` 则必需） | `/data/success_story.csv`         |
+| `--kb_update_strategy` | ✅   | 更新策略                                                        | `overwrite`/`incremental`         |
+| `--subject_tree`       | ❌   | 预定义主题树分类                                                | `Finance/Revenue,User/Engagement` |
+| `--pool_size`          | ❌   | 并发处理线程数，默认为 1                                        | `8`                               |
 
 ## 数据源格式
 
-### 直接导入 (--ext_knowledge)
+### 直接导入
 
 从 CSV 文件直接导入预定义的知识条目。
 
 #### CSV 格式
 
-| 列 | 必需 | 描述 | 示例 |
-|--------|----------|-------------|---------|
-| `subject_path` | 是 | 层级分类路径 | `Finance/Revenue/Metrics` |
-| `name` | 是 | 知识条目名称 | `GMV Definition` |
-| `search_text` | 是 | 可搜索的业务术语 | `GMV` |
-| `explanation` | 是 | 详细说明 | `Gross Merchandise Volume...` |
+| 列             | 必需 | 描述             | 示例                          |
+| -------------- | ---- | ---------------- | ----------------------------- |
+| `subject_path` | 是   | 层级分类路径     | `Finance/Revenue/Metrics`     |
+| `name`         | 是   | 知识条目名称     | `GMV Definition`              |
+| `search_text`  | 是   | 可搜索的业务术语 | `GMV`                         |
+| `explanation`  | 是   | 详细说明         | `Gross Merchandise Volume...` |
 
 #### 示例 CSV
 
@@ -76,17 +76,17 @@ User/Engagement/DAU,DAU Definition,DAU,"Daily Active Users (DAU) counts unique u
 User/Engagement/Retention,Retention Rate,retention rate,"The percentage of users who return to the platform after their first visit, typically measured at Day 1, Day 7, and Day 30 intervals."
 ```
 
-### AI 生成 (--success_story)
+### AI 生成
 
 使用 AI Agent 从问题-SQL 对自动生成知识。
 
 #### CSV 格式
 
-| 列 | 必需 | 描述 | 示例 |
-|--------|----------|-------------|---------|
-| `question` | 是 | 业务问题或查询意图 | `What is the total GMV for last month?` |
-| `sql` | 是 | 回答问题的 SQL 查询 | `SELECT SUM(amount) FROM orders...` |
-| `subject_path` | 否 | 层级分类路径（可选） | `Finance/Revenue/Metrics` |
+| 列             | 必需 | 描述                 | 示例                                    |
+| -------------- | ---- | -------------------- | --------------------------------------- |
+| `question`     | 是   | 业务问题或查询意图   | `What is the total GMV for last month?` |
+| `sql`          | 是   | 回答问题的 SQL 查询  | `SELECT SUM(amount) FROM orders...`     |
+| `subject_path` | 否   | 层级分类路径（可选） | `Finance/Revenue/Metrics`               |
 
 #### 示例 CSV
 
@@ -108,7 +108,7 @@ success story 模式使用 GenExtKnowledgeAgenticNode 来：
 
 ## 更新策略
 
-**1. 覆盖模式**
+### 1. 覆盖模式
 
 清除现有知识并加载新数据：
 
@@ -120,7 +120,7 @@ datus bootstrap-kb \
     --kb_update_strategy overwrite
 ```
 
-**2. 增量模式**
+### 2. 增量模式
 
 添加新知识条目同时保留现有条目（重复项会被跳过）：
 
@@ -132,11 +132,11 @@ datus bootstrap-kb \
     --kb_update_strategy incremental
 ```
 
-### 主题树分类
+## 主题树分类
 
 主题树提供层级分类法来组织知识条目。
 
-**1. 预定义模式（使用 --subject_tree）**
+### 1. 预定义模式
 
 ```bash
 datus bootstrap-kb \
@@ -147,13 +147,13 @@ datus bootstrap-kb \
     --subject_tree "Finance/Revenue/Metrics,User/Engagement/DAU"
 ```
 
-**2. 学习模式（不使用 --subject_tree）**
+### 2. 学习模式
 
 当未提供 subject_tree 时，系统会：
+
 - 复用知识库中的现有分类
 - 根据内容按需创建新分类
 - 随时间自然构建分类体系
-
 
 ## 与 SQL Agent 集成
 
@@ -175,6 +175,7 @@ datus bootstrap-kb \
 Bootstrap-KB 外部知识组件将分散的业务知识转化为智能、可搜索的知识库。
 
 **核心特性：**
+
 - **双重导入模式**：直接 CSV 导入或从 success story AI 驱动生成
 - **统一知识库**：业务术语和规则的集中存储
 - **语义搜索**：使用自然语言查询查找知识

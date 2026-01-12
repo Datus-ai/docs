@@ -42,30 +42,30 @@ datus bootstrap-kb \
 
 ### Key Parameters
 
-| Parameter | Required | Description                                                       | Example |
-|-----------|----------|-------------------------------------------------------------------|---------|
-| `--namespace` | ✅ | Database namespace                                                | `analytics_db` |
-| `--components` | ✅ | Components to initialize                                          | `ext_knowledge` |
-| `--ext_knowledge` | ⚠️ | Path to knowledge CSV file (required if no `--success_story`)     | `/data/knowledge.csv` |
-| `--success_story` | ⚠️ | Path to success story CSV file (required if no `--ext_knowledge`) | `/data/success_story.csv` |
-| `--kb_update_strategy` | ✅ | Update strategy                                                   | `overwrite`/`incremental` |
-| `--subject_tree` | ❌ | Predefined subject tree categories                                | `Finance/Revenue,User/Engagement` |
-| `--pool_size` | ❌ | Concurrent processing threads, default is 1                       | `8` |
+| Parameter              | Required | Description                                                       | Example                           |
+| ---------------------- | -------- | ----------------------------------------------------------------- | --------------------------------- |
+| `--namespace`          | ✅       | Database namespace                                                | `analytics_db`                    |
+| `--components`         | ✅       | Components to initialize                                          | `ext_knowledge`                   |
+| `--ext_knowledge`      | ⚠️       | Path to knowledge CSV file (required if no `--success_story`)     | `/data/knowledge.csv`             |
+| `--success_story`      | ⚠️       | Path to success story CSV file (required if no `--ext_knowledge`) | `/data/success_story.csv`         |
+| `--kb_update_strategy` | ✅       | Update strategy                                                   | `overwrite`/`incremental`         |
+| `--subject_tree`       | ❌       | Predefined subject tree categories                                | `Finance/Revenue,User/Engagement` |
+| `--pool_size`          | ❌       | Concurrent processing threads, default is 1                       | `8`                               |
 
 ## Data Source Formats
 
-### Direct Import (--ext_knowledge)
+### Direct Import
 
 Import pre-defined knowledge entries directly from a CSV file.
 
 #### CSV Format
 
-| Column | Required | Description | Example |
-|--------|----------|-------------|---------|
-| `subject_path` | Yes | Hierarchical category path | `Finance/Revenue/Metrics` |
-| `name` | Yes | Knowledge entry name | `GMV Definition` |
-| `search_text` | Yes | Searchable business term | `GMV` |
-| `explanation` | Yes | Detailed description | `Gross Merchandise Volume...` |
+| Column         | Required | Description                | Example                       |
+| -------------- | -------- | -------------------------- | ----------------------------- |
+| `subject_path` | Yes      | Hierarchical category path | `Finance/Revenue/Metrics`     |
+| `name`         | Yes      | Knowledge entry name       | `GMV Definition`              |
+| `search_text`  | Yes      | Searchable business term   | `GMV`                         |
+| `explanation`  | Yes      | Detailed description       | `Gross Merchandise Volume...` |
 
 #### Example CSV
 
@@ -76,17 +76,17 @@ User/Engagement/DAU,DAU Definition,DAU,"Daily Active Users (DAU) counts unique u
 User/Engagement/Retention,Retention Rate,retention rate,"The percentage of users who return to the platform after their first visit, typically measured at Day 1, Day 7, and Day 30 intervals."
 ```
 
-### AI Generation (--success_story)
+### AI Generation
 
 Generate knowledge automatically from question-SQL pairs using AI agent.
 
 #### CSV Format
 
-| Column | Required | Description | Example |
-|--------|----------|-------------|---------|
-| `question` | Yes | Business question or query intent | `What is the total GMV for last month?` |
-| `sql` | Yes | SQL query that answers the question | `SELECT SUM(amount) FROM orders...` |
-| `subject_path` | No | Hierarchical category path (optional) | `Finance/Revenue/Metrics` |
+| Column         | Required | Description                           | Example                                 |
+| -------------- | -------- | ------------------------------------- | --------------------------------------- |
+| `question`     | Yes      | Business question or query intent     | `What is the total GMV for last month?` |
+| `sql`          | Yes      | SQL query that answers the question   | `SELECT SUM(amount) FROM orders...`     |
+| `subject_path` | No       | Hierarchical category path (optional) | `Finance/Revenue/Metrics`               |
 
 #### Example CSV
 
@@ -108,7 +108,7 @@ The success story mode uses GenExtKnowledgeAgenticNode to:
 
 ## Update Strategies
 
-**1. Overwrite Mode**
+### 1. Overwrite Mode
 
 Clears existing knowledge and loads fresh data:
 
@@ -120,7 +120,7 @@ datus bootstrap-kb \
     --kb_update_strategy overwrite
 ```
 
-**2. Incremental Mode**
+### 2. Incremental Mode
 
 Adds new knowledge entries while preserving existing ones (duplicates are skipped):
 
@@ -132,11 +132,11 @@ datus bootstrap-kb \
     --kb_update_strategy incremental
 ```
 
-### Subject Tree Categorization
+## Subject Tree Categorization
 
 Subject tree provides a hierarchical taxonomy for organizing knowledge entries.
 
-**1. Predefined Mode (with --subject_tree)**
+### 1. Predefined Mode
 
 ```bash
 datus bootstrap-kb \
@@ -147,13 +147,13 @@ datus bootstrap-kb \
     --subject_tree "Finance/Revenue/Metrics,User/Engagement/DAU"
 ```
 
-**2. Learning Mode (without --subject_tree)**
+### 2. Learning Mode
 
 When no subject_tree is provided, the system:
+
 - Reuses existing categories from the Knowledge Base
 - Creates new categories as needed based on content
 - Builds taxonomy organically over time
-
 
 ## Integration with SQL Agent
 
@@ -175,6 +175,7 @@ External knowledge integrates with the SQL generation agent through context sear
 The Bootstrap-KB External Knowledge component transforms scattered business knowledge into an intelligent, searchable knowledge base.
 
 **Key Features:**
+
 - **Dual Import Modes**: Direct CSV import or AI-driven generation from success stories
 - **Unified Repository**: Centralized storage for business terminology and rules
 - **Semantic Search**: Find knowledge using natural language queries
