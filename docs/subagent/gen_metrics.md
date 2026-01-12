@@ -104,12 +104,12 @@ agentic_nodes:
 Subject tree allows organizing metrics by domain and layers for better management. In CLI mode, include it in your question:
 
 **Example with subject_tree:**
-```
+```text
 /gen_metrics Generate a metric from this SQL: SELECT SUM(amount) FROM transactions, subject_tree: finance/revenue/transactions
 ```
 
 **Example without subject_tree:**
-```
+```text
 /gen_metrics Generate a metric from this SQL: SELECT SUM(amount) FROM transactions
 ```
 
@@ -122,21 +122,21 @@ When subject_tree is provided, the metric will be categorized accordingly (e.g.,
 ### Example 1: Simple Aggregation
 
 **User Input**:
-```
+```text
 /gen_metrics Generate a metric for total order count
 ```
 
 **Agent Actions**:
 1. Finds `orders.yml` semantic model
 2. Reads file to discover `order_count` measure
-3. Generates MEASURE_PROXY metric:
+3. Generates simple metric:
 
 ```yaml
 ---
 metric:
   name: total_orders
   description: Total number of orders
-  type: measure_proxy
+  type: simple
   type_params:
     measure: order_count
   locked_metadata:
@@ -144,66 +144,57 @@ metric:
     increase_is_good: true
 ```
 
-### Example 2: Conversion Rate
+### Example 2: Revenue Metric
 
 **User Input**:
 ```
 /gen_metrics Create a metric from this SQL:
-SELECT
-  COUNT(DISTINCT CASE WHEN status = 'completed' THEN order_id END) /
-  COUNT(DISTINCT order_id) AS completion_rate
-FROM orders
+SELECT SUM(amount) as total_revenue FROM transactions WHERE status = 'completed'
 ```
 
 **Agent Actions**:
-1. Analyzes SQL logic (ratio with conditional counting)
-2. Finds `orders.yml` and reads measures
-3. Generates RATIO metric with constraint:
+1. Analyzes SQL aggregation (SUM with filter)
+2. Finds or creates `transactions.yml` semantic model
+3. Generates simple metric:
 
 ```yaml
 ---
 metric:
-  name: order_completion_rate
-  description: Percentage of orders that reached completed status
-  type: ratio
+  name: total_revenue
+  description: Total revenue from completed transactions
+  type: simple
   type_params:
-    numerator:
-      name: order_count
-      constraint: status = 'completed'
-    denominator: order_count
+    measure: total_amount
+  filter: "status = 'completed'"
   locked_metadata:
-    display_name: "Order Completion Rate"
-    value_format: ".2%"
+    display_name: "Total Revenue"
+    value_format: "$,.2f"
     increase_is_good: true
 ```
 
-### Example 3: Complex Calculation
+### Example 3: Count Metric
 
 **User Input**:
-```
-/gen_metrics Generate average basket size metric:
-SELECT SUM(total_amount) / COUNT(DISTINCT order_id)
-FROM order_items
+```text
+/gen_metrics Generate unique customer count metric:
+SELECT COUNT(DISTINCT customer_id) FROM orders
 ```
 
 **Agent Actions**:
-1. Locates `order_items.yml`
-2. Identifies this as a RATIO (average)
-3. Generates metric:
+1. Locates `orders.yml` semantic model
+2. Identifies COUNT DISTINCT aggregation
+3. Generates simple metric:
 
 ```yaml
 ---
 metric:
-  name: avg_basket_size
-  description: Average order value (basket size)
-  type: ratio
+  name: unique_customer_count
+  description: Total number of unique customers
+  type: simple
   type_params:
-    numerator: total_amount
-    denominator: order_count
+    measure: unique_customers
   locked_metadata:
-    display_name: "Average Basket Size"
-    value_format: "$$,.2f"
-    unit: "dollars"
+    display_name: "Unique Customers"
     increase_is_good: true
 ```
 
@@ -211,10 +202,13 @@ metric:
 
 ### File Organization
 
-Metrics are appended to existing semantic model files using the YAML document separator `---`:
+Metrics are stored in separate files from semantic models:
 
+- **Semantic Model**: `{table_name}.yml` - Contains data_source definition with measures and dimensions
+- **Metrics**: `metrics/{table_name}_metrics.yml` - Contains metric definitions
+
+**Semantic Model File** (`transactions.yml`):
 ```yaml
-# Existing semantic model
 data_source:
   name: transactions
   sql_table: transactions
@@ -222,32 +216,36 @@ data_source:
     - name: revenue
       agg: SUM
       expr: amount
+    - name: transaction_count
+      agg: COUNT
+      expr: "1"
   dimensions:
     - name: transaction_date
       type: TIME
+```
 
----
-# First metric (appended)
+**Metrics File** (`metrics/transactions_metrics.yml`):
+```yaml
 metric:
   name: total_revenue
-  type: measure_proxy
+  description: Total revenue from all transactions
+  type: simple
   type_params:
     measure: revenue
 
 ---
-# Second metric (appended)
 metric:
-  name: avg_transaction_value
-  type: ratio
+  name: total_transactions
+  description: Total number of transactions
+  type: simple
   type_params:
-    numerator: revenue
-    denominator: transaction_count
+    measure: transaction_count
 ```
 
-**Why append instead of separate files?**
-- Keeps related metrics close to their semantic model
-- Easier maintenance and validation
-- MetricFlow can validate all definitions together
+**Why separate files?**
+- Clear separation between schema definitions and business metrics
+- Easier to manage metrics independently
+- Multiple metrics use YAML document separator `---` within the metrics file
 
 ### Knowledge Base Storage
 
@@ -268,4 +266,4 @@ The metrics generation feature provides:
 ✅ **Validation**: MetricFlow validation ensures correctness
 ✅ **Interactive Workflow**: Review and approve before syncing
 ✅ **Knowledge Base Integration**: Semantic search for metric discovery
-✅ **File Management**: Appends to existing semantic model files safely
+✅ **File Management**: Organizes metrics in dedicated files separate from semantic models

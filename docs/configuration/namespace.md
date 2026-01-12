@@ -220,13 +220,13 @@ benchmark_dbs:
 ## URI Formats
 
 ### SQLite URI Format
-```
+```text
 sqlite:////absolute/path/to/database.db      # Absolute path
 sqlite:///relative/path/to/database.db       # Relative path
 ```
 
 ### DuckDB URI Format
-```
+```text
 duckdb:////absolute/path/to/database.db      # Absolute path
 duckdb:///relative/path/to/database.db       # Relative path
 ```
@@ -301,7 +301,7 @@ After entering the configuration, the tool will:
 - Save the configuration to `conf/agent.yml` if successful
 
 Example session:
-```
+```text
 Add New Namespace
 - Namespace name: my_analytics
 - Database type [sqlite/duckdb/snowflake/mysql/starrocks] (duckdb): snowflake

@@ -27,7 +27,7 @@ When you submit a request in plan mode, the AI will:
 - Display the proposed execution plan
 
 Example output:
-```
+```text
 Plan Generated Successfully!
 Execution Plan:
   1. Query the customer database for recent orders
@@ -40,7 +40,7 @@ Execution Plan:
 
 After the plan is generated, you'll be prompted to select an execution mode:
 
-```
+```text
 CHOOSE EXECUTION MODE:
 
   1. Manual Confirm - Confirm each step
@@ -58,7 +58,7 @@ CHOOSE EXECUTION MODE:
   - Options to continue, switch to auto mode, revise, or cancel
 
 Example interaction:
-```
+```text
 Plan Progress:
   ✓ 1. Query the customer database for recent orders
   ▶ 2. Calculate total revenue by product category
@@ -82,7 +82,7 @@ Your choice (1-4) [1]:
 - **Note**: You can still cancel execution at any point
 
 Example interaction:
-```
+```text
 Plan Progress:
   ✓ 1. Query the customer database for recent orders
   ▶ 2. Calculate total revenue by product category
@@ -103,7 +103,7 @@ Execute? (y/n) [y]:
   - You can revise multiple times until satisfied
 
 Example:
-```
+```text
 Feedback for replanning: Add data validation step before calculation
 
 Replanning with feedback: Add data validation step before calculation

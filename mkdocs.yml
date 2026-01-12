@@ -26,6 +26,7 @@ nav:
     - Knowledge Base:
       - Introduction: knowledge_base/introduction.md
       - Metadata: knowledge_base/metadata.md
+      - Semantic Models: knowledge_base/semantic_model.md
       - Metrics: knowledge_base/metrics.md
       - Reference SQL: knowledge_base/reference_sql.md
     - Workflow:
@@ -81,6 +82,7 @@ plugins:
             Chatbot: chatbot
             Knowledge Base: 知识库
             Metadata: 元数据
+            Semantic Models: 语义模型
             Metrics: 指标
             Reference SQL: Reference SQL
             Workflow: 工作流

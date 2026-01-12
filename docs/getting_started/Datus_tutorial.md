@@ -36,7 +36,7 @@ You will see a structured 5-step workflow. This will take approximately 10 minut
 
 ### Step [1/5] Validate Data & Configuration
 
-```
+```text
 Welcome to Datus tutorial 🎉
 Let's start learning how to prepare for benchmarking step by step using a dataset from California schools.
 
@@ -95,7 +95,7 @@ datus-agent bootstrap-kb \
 
 Example output:
 
-```
+```text
 ⠦ Metrics initializing...
   → Processed 3 metrics
 ⚠️ The metrics has not been fully initialised successfully:
@@ -198,7 +198,7 @@ The key difference is that `datus_schools_context` has access to `context_search
 
 You can now:
 
-```
+```text
 /datus_schools <your question>
 /datus_schools_context <your question>
 ```

@@ -1,19 +1,48 @@
 # 业务指标智能化
 
-指标组件专注于从历史 SQL 查询中自动提取和生成业务指标，建立企业级指标管理系统。
+从 **0.2.4 版本**开始，指标组件专注于创建标准化、可查询的业务指标，作为独立的语义查询层。指标可通过 MetricFlow 直接执行查询，而不仅仅作为 LLM 生成 SQL 的参考。
 
 ## 核心价值
 
 解决常见的企业挑战：
-- **重复的 SQL 查询**：复用指标而非重写相似查询
-- **不一致的定义**：跨团队标准化指标定义
+- **重复的 SQL 查询**：直接查询指标，而非重写相似的 SQL
+- **不一致的定义**：通过可执行的规范跨团队标准化指标定义
 - **手动分类**：使用层级主题树分类体系组织指标
+- **临时 SQL 复杂性**：对常见指标使用语义查询（`query_metrics`）而非生成 SQL
 
 ## 工作原理
 
-数据流经两层：**历史 SQLs → 语义模型 → 业务指标**
+指标是构建在语义模型之上的业务级计算。从 0.2.4 版本开始，它们独立运行：
 
-语义模型定义表结构、维度和度量。指标是基于这些模型构建的可复用计算。
+- **指标**（本文档）：通过 MetricFlow 查询的标准化 KPI
+- **语义模型**（参见 [semantic_model.zh.md](semantic_model.zh.md)）：用于临时 SQL 生成的 schema 扩展
+
+两者都可以从历史 SQLs 生成，但指标专注于可复用的业务逻辑，而语义模型专注于 schema 理解。
+
+## 查询指标
+
+定义指标后，可使用 MetricFlow 工具直接查询：
+
+```python
+# 在 agent 对话或工作流中
+# 搜索相关指标
+search_semantic_objects(query="daily active users", kinds=["metric"])
+
+# 执行指标查询
+query_metrics(
+    metrics=["daily_active_users"],
+    group_by=["platform", "country"],
+    start_time="2024-01-01",
+    end_time="2024-01-31"
+)
+```
+
+**指标优先策略**：当用户查询涉及 KPI（例如 "按平台展示 DAU"）时，agent 将：
+1. 使用 `search_semantic_objects` 搜索匹配的指标
+2. 如果找到，通过 `query_metrics` 执行（首选）
+3. 仅当不存在指标时才回退到临时 SQL 生成
+
+这确保了组织内指标定义的一致性。
 
 ## 使用方法
 
@@ -26,15 +55,13 @@
 datus-agent bootstrap-kb \
     --namespace <your_namespace> \
     --components metrics \
-    --success_story path/to/success_story.csv \
-    --metric_meta business_meta
+    --success_story path/to/success_story.csv
 
 # 从 YAML（语义模型）
 datus-agent bootstrap-kb \
     --namespace <your_namespace> \
     --components metrics \
-    --semantic_yaml path/to/semantic_model.yaml \
-    --metric_meta business_meta
+    --semantic_yaml path/to/semantic_model.yaml
 ```
 
 ### 关键参数
@@ -45,8 +72,7 @@ datus-agent bootstrap-kb \
 | `--components` | ✅ | 要初始化的组件 | `metrics` |
 | `--success_story` | ⚠️ | 包含历史 SQLs 和问题的 CSV 文件（如果没有 `--semantic_yaml` 则必需） | `success_story.csv` |
 | `--semantic_yaml` | ⚠️ | 语义模型 YAML 文件（如果没有 `--success_story` 则必需） | `semantic_model.yaml` |
-| `--metric_meta` | ✅ | `agent.yml` 中的指标元数据配置 | `business_meta` |
-| `--kb_update_strategy` | ✅ | 更新策略 | `overwrite`/`incremental` |
+| `--kb_update_strategy` | ❌ | 更新策略 | `overwrite`/`incremental` |
 | `--subject_tree` | ❌ | 预定义分类（逗号分隔） | `Sales/Reporting/Daily,Finance/Revenue/Monthly` |
 | `--pool_size` | ❌ | 并发线程数 | `4` |
 
@@ -72,7 +98,7 @@ datus-agent bootstrap-kb \
 ```yaml
 metric:
   name: daily_revenue
-  type: measure_proxy
+  type: simple
   type_params:
     measure: revenue
   locked_metadata:
@@ -105,35 +131,34 @@ How many customers have been added per day?,"SELECT ds AS date, SUM(1) AS new_cu
 What is the total transaction amount?,SELECT SUM(transaction_amount_usd) as total_amount FROM transactions;
 ```
 
-### YAML 格式
+### YAML 格式（仅指标）
+
+从 YAML 文件导入指标时，指标定义引用已存在的语义模型：
 
 ```yaml
-data_source:
-  name: transactions
-  description: "Transaction records"
-  identifiers:
-    - name: transaction_id
-      type: primary
-  dimensions:
-    - name: transaction_date
-      type: time
-    - name: transaction_type
-      type: categorical
-  measures:
-    - name: amount
-      type: double
-      agg: sum
----
 metric:
   name: total_revenue
   description: "Total revenue from all transactions"
-  constraint: "amount > 0"
+  type: simple
+  type_params:
+    measure: amount  # 引用语义模型中的 measure
+  filter: "amount > 0"
   locked_metadata:
     tags:
       - "Finance"
       - "subject_tree: Finance/Revenue/Total"
 ```
 
+**注意**：底层的语义模型（包含 dimensions/measures 的 `data_source`）应该已经存在。参见 [semantic_model.zh.md](semantic_model.zh.md) 了解如何定义语义模型。
+
 ## 总结
 
-指标组件从历史 SQLs 建立标准化、可复用的指标定义。通过层级主题树分类法和灵活的分类模式，帮助团队维护一致、可发现的指标，用于数据驱动的决策制定。
+指标组件建立了一个**语义查询层**，将历史 SQLs 转换为标准化、可执行的指标定义。与传统的仅作为 LLM 参考的语义层不同，Datus 指标可通过 MetricFlow 直接查询，无需为常见 KPI 生成临时 SQL。
+
+主要特点：
+- **可执行指标**：通过 `query_metrics` 查询而非生成 SQL
+- **指标优先策略**：Agent 优先使用指标查询而非临时 SQL
+- **独立于语义模型**：指标作为独立的查询工具运行，而非嵌入在 schema 定义中
+- **层级组织**：主题树分类法提高可发现性
+
+这种方法确保了团队之间指标定义的一致性，同时降低了查询复杂性并提高了性能。

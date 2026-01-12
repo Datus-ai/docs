@@ -12,13 +12,13 @@ You can chat with Datus in any format — plain English, bullet points, or sketc
 
 Start a new chat session by entering `/` followed by your message:
 
-```
+```text
 / How many orders were placed last week?
 ```
 
 The agent will respond with its reasoning process and a proposed SQL query. You can then follow up naturally:
 
-```
+```text
 / Filter only for VIP customers
 ```
 

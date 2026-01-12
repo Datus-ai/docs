@@ -19,15 +19,23 @@ The Datus Agent Knowledge Base is a multi-modal intelligence system that transfo
 - **Capabilities**: Find tables by business meaning, get table structures, semantic search
 - **Use**: Automatic table selection, data discovery, schema understanding
 
-### 2. [Business Metrics](metrics.md)
+### 2. [Semantic Models](semantic_model.md)
 
-**Purpose**: Manage and discover business metrics and KPIs.
+**Purpose**: Enrich database schemas with semantic information for better SQL generation.
 
-- **Stores**: Semantic models, business metrics, hierarchical categorization
-- **Capabilities**: Find metrics by concept, get calculations, discover related metrics
-- **Use**: Standardized definitions, quick lookup, consistent reporting
+- **Stores**: Table structures, dimensions, measures, entity relationships
+- **Capabilities**: Schema linking, column usage patterns, foreign key discovery
+- **Use**: Accurate ad-hoc SQL generation, smart filtering, proper JOIN construction
 
-### 3. [Reference SQL](reference_sql.md)
+### 3. [Business Metrics](metrics.md)
+
+**Purpose**: Manage and query standardized business KPIs.
+
+- **Stores**: Metric definitions, subject tree categorization
+- **Capabilities**: Direct metric queries via MetricFlow, metrics-first strategy
+- **Use**: Consistent reporting, eliminate duplicate SQL, standardized definitions
+
+### 4. [Reference SQL](reference_sql.md)
 
 **Purpose**: Capture, analyze, and make searchable SQL expertise.
 

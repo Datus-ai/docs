@@ -211,7 +211,7 @@ Some adapters require additional system dependencies:
 
 ## Architecture
 
-```
+```text
 datus-agent (Core)
 ├── Built-in Adapters
 │   ├── SQLite Connector

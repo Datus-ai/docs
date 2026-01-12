@@ -35,7 +35,7 @@ datus-agent tutorial
 
 ### 步骤 [1/5] 验证数据和配置
 
-```
+```text
 Welcome to Datus tutorial 🎉
 Let's start learning how to prepare for benchmarking step by step using a dataset from California schools.
 
@@ -94,7 +94,7 @@ datus-agent bootstrap-kb \
 
 示例输出：
 
-```
+```text
 ⠦ Metrics initializing...
   → Processed 3 metrics
 ⚠️ The metrics has not been fully initialised successfully:
@@ -197,7 +197,7 @@ Datus-cli --namespace california_schools
 
 您现在可以：
 
-```
+```text
 /datus_schools <你的问题>
 /datus_schools_context <你的问题>
 ```

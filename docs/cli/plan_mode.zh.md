@@ -27,7 +27,7 @@
 - 展示建议的执行计划
 
 示例输出：
-```
+```text
 Plan Generated Successfully!
 Execution Plan:
   1. Query the customer database for recent orders
@@ -39,7 +39,7 @@ Execution Plan:
 ### 阶段二：选择执行模式
 
 生成计划后，系统会提示你选择执行模式：
-```
+```text
 CHOOSE EXECUTION MODE:
 
   1. Manual Confirm - Confirm each step
@@ -57,7 +57,7 @@ CHOOSE EXECUTION MODE:
   - 继续、切换自动模式、重新规划或取消的操作选项
 
 交互示例：
-```
+```text
 Plan Progress:
   ✓ 1. Query the customer database for recent orders
   ▶ 2. Calculate total revenue by product category
@@ -81,7 +81,7 @@ Your choice (1-4) [1]:
 - **提示**：随时可以中断执行
 
 交互示例：
-```
+```text
 Plan Progress:
   ✓ 1. Query the customer database for recent orders
   ▶ 2. Calculate total revenue by product category
@@ -102,7 +102,7 @@ Execute? (y/n) [y]:
   - 可多次迭代直至满意
 
 示例：
-```
+```text
 Feedback for replanning: Add data validation step before calculation
 
 Replanning with feedback: Add data validation step before calculation

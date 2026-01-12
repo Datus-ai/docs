@@ -105,7 +105,7 @@ docker exec -it datus python -m datus.main eval  \
   --benchmark spider2 \
   --output_file evaluation.json \
   --task_ids <task_id1> <task_id2> 
-````
+```
 
 === "评估全部"
 ```bash title="Run Evaluation"
@@ -113,7 +113,7 @@ docker exec -it datus python -m datus.main eval  \
   --namespace snowflake \
   --output_file evaluation.json \
   --benchmark spider2 
-````
+```
 
 #### 评估结果
 

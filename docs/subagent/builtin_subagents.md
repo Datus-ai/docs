@@ -218,7 +218,7 @@ graph LR
 
 After generating the semantic model, you'll see:
 
-```
+```text
 =============================================================
 Generated YAML: table_name.yml
 Path: /path/to/file.yml

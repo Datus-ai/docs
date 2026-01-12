@@ -17,7 +17,7 @@
 
 使用 `datus --namespace <namespace>` 启动 Datus CLI，然后使用子代理命令：
 
-```
+```text
   /gen_semantic_model generate a semantic model for table <table_name>
 ```
 
@@ -34,7 +34,7 @@
 
 ### 生成工作流
 
-```
+```text
 用户请求 → DDL 分析 → YAML 生成 → 验证 → 用户确认 → 存储
 ```
 
@@ -42,7 +42,7 @@
 
 生成语义模型后，你会看到：
 
-```
+```text
 =============================================================
 Generated YAML: table_name.yml
 Path: /path/to/file.yml

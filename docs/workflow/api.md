@@ -109,7 +109,7 @@ Execute a workflow to convert natural language to SQL.
 #### Synchronous Mode (mode: "sync")
 
 **Request Headers:**
-```
+```yaml
 Authorization: Bearer your_jwt_token
 Content-Type: application/json
 ```
@@ -158,7 +158,7 @@ Content-Type: application/json
 #### Asynchronous Mode (mode: "async")
 
 **Request Headers:**
-```
+```yaml
 Authorization: Bearer your_jwt_token
 Content-Type: application/json
 Accept: text/event-stream

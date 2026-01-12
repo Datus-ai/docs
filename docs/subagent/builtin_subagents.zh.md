@@ -218,7 +218,7 @@ graph LR
 
 生成语义模型后，你会看到：
 
-```
+```text
 =============================================================
 Generated YAML: table_name.yml
 Path: /path/to/file.yml
