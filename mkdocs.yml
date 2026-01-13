@@ -44,6 +44,7 @@ nav:
       - Nodes: configuration/nodes.md
     - Adapters:
       - Database Adapters: adapters/db_adapters.md
+      - Semantic Adapters: adapters/semantic_adapters.md
     - Benchmark:
       - Introduction: benchmark/benchmark_manual.md
     - Metricflow:
@@ -92,6 +93,7 @@ plugins:
             Configuration: 配置
             Adapters: 适配器
             Database Adapters: 数据库适配器
+            Semantic Adapters: 语义层适配器
             Benchmark: 基准测试
             Metricflow: MetricFlow
             Release Notes: 发布说明
