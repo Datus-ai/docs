@@ -40,6 +40,7 @@ datus-metricflow currently supports:
 
 - **DuckDB** - Embedded analytical database (great for demos and local development)
 - **SQLite** - Lightweight embedded database
+- **PostgreSQL** - Open-source relational database
 - **StarRocks** - High-performance analytical database
 
 ## Enhancements in datus-metricflow
@@ -47,10 +48,9 @@ datus-metricflow currently supports:
 Building on MetricFlow 0.140.0, we have made the following improvements:
 
 - **Python 3.12 Support**: Upgraded to support the latest Python version
-- **Additional Database Support**: Added SQLite and StarRocks adapters
+- **Additional Database Support**: Added SQLite, PostgreSQL and StarRocks adapters
 - **Datus Integration**: Seamlessly integrated with the Datus project for unified configuration
 - **Standalone Package**: Can be installed as a dependency and used independently
-- **MCP Server**: Enables LLM applications to query metrics through the Model Context Protocol
 
 ## Installing datus-metricflow
 

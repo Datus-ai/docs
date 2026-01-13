@@ -22,7 +22,7 @@ Subagent 是 Datus 中专注于特定任务的专用 AI 助手。与处理通用
 
 **使用场景**：将数据库表结构转换为 YAML 语义模型定义。
 
-**前置条件**：此subagent依赖 [datus-metricflow](../metricflow/introduction.md)，请先安装。
+**前置条件**：此subagent依赖 [datus-semantic-metricflow](../adapters/semantic_adapters.md)，请先运行 `pip install datus-semantic-metricflow` 安装。
 
 **启动命令**：
 ```bash
@@ -46,7 +46,7 @@ Subagent 是 Datus 中专注于特定任务的专用 AI 助手。与处理通用
 
 **使用场景**：将临时 SQL 计算转换为标准化指标。
 
-**前置条件**：此subagent依赖 [datus-metricflow](../metricflow/introduction.md)，请先安装。
+**前置条件**：此subagent依赖 [datus-semantic-metricflow](../adapters/semantic_adapters.md)，请先运行 `pip install datus-semantic-metricflow` 安装。
 
 **启动命令**：
 ```bash
@@ -179,15 +179,14 @@ agentic_nodes:
     model: claude                          # LLM 模型
     system_prompt: gen_metrics             # 提示模板名称
     prompt_version: "1.0"                  # 模板版本
-    tools: generation_tools.*, filesystem_tools.*  # 可用工具
+    tools: generation_tools.*, filesystem_tools.*, semantic_tools.*  # 可用工具
     hooks: generation_hooks                # 用户确认
-    mcp: metricflow_mcp                    # MCP 服务器
     max_turns: 40                          # 最大对话轮数
     workspace_root: /path/to/workspace     # 文件工作空间
     agent_description: "Metric generation assistant"
     rules:                                 # 自定义规则
       - Use check_metric_exists to avoid duplicates
-      - Validate with mf validate-configs
+      - Validate with validate_semantic tool
 ```
 
 ### 关键参数
@@ -197,9 +196,9 @@ agentic_nodes:
 | `model` | 是 | LLM 模型名称 | `claude`、`deepseek`、`openai` |
 | `system_prompt` | 是 | 提示模板标识符 | `gen_metrics`、`gen_semantic_model` |
 | `prompt_version` | 否 | 模板版本 | `"1.0"`、`"2.0"` |
-| `tools` | 是 | 逗号分隔的工具模式 | `db_tools.*, generation_tools.*` |
+| `tools` | 是 | 逗号分隔的工具模式 | `db_tools.*, semantic_tools.*` |
 | `hooks` | 否 | 启用确认工作流 | `generation_hooks` |
-| `mcp` | 否 | MCP 服务器名称 | `metricflow_mcp, filesystem_mcp` |
+| `mcp` | 否 | MCP 服务器名称 | `filesystem_mcp` |
 | `max_turns` | 否 | 最大对话轮数 | `30`、`40` |
 | `workspace_root` | 否 | 文件操作目录 | `/path/to/workspace` |
 | `agent_description` | 否 | 助手描述 | `"SQL analysis assistant"` |
@@ -223,6 +222,7 @@ tools: db_tools.list_tables, db_tools.get_table_ddl, generation_tools.check_metr
 - `generation_tools.*`：生成辅助工具（检查重复、上下文准备）
 - `filesystem_tools.*`：文件操作（读取、写入、编辑文件）
 - `context_search_tools.*`：知识库搜索（查找指标、语义模型）
+- `semantic_tools.*`：语义层操作（列出指标、查询指标、验证）
 - `date_parsing_tools.*`：日期/时间解析和规范化
 
 ### MCP 服务器
@@ -232,12 +232,13 @@ MCP（Model Context Protocol）服务器提供额外工具：
 **内置 MCP 服务器**：
 
 - `filesystem_mcp`：工作空间内的文件系统操作
-- `metricflow_mcp`：MetricFlow CLI 集成（验证、查询、列出）
 
 **配置**：
 ```yaml
-mcp: metricflow_mcp, filesystem_mcp
+mcp: filesystem_mcp
 ```
+
+> **注意**：MetricFlow 集成现在通过 [datus-semantic-metricflow](../adapters/semantic_adapters.md) 适配器提供的原生 `semantic_tools.*` 工具实现，不再使用 MCP 服务器。
 
 ## 总结
 

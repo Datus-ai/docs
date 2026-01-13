@@ -46,7 +46,7 @@ This ensures consistent metric definitions across the organization.
 
 ## Usage
 
-**Prerequisites**: This command relies on [datus-metricflow](../metricflow/introduction.md), install it first.
+**Prerequisites**: This command relies on [datus-semantic-metricflow](../adapters/semantic_adapters.md), install it first with `pip install datus-semantic-metricflow`.
 
 ### Basic Command
 
