@@ -543,5 +543,5 @@ Now that you're up and running with Datus, explore more advanced features:
 - **[Contextual Data Engineering](./contextual_data_engineering.md)** - Learn how to use data assets as context
 - **[Configuration Guide](../configuration/introduction.md)** - Connect to your own databases and customize settings
 - **[CLI Reference](../cli/introduction.md)** - Discover all available commands and options
-- **[MetricFlow](../metricflow/introduction.md)** - Generate and query metrics with datus-metricflow
+- **[Semantic Adapters](../adapters/semantic_adapters.md)** - Generate and query metrics with datus-semantic-metricflow
 

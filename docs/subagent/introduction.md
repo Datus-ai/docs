@@ -22,7 +22,7 @@ A **subagent** is a task-specific AI assistant with:
 
 **Use Case**: Convert a database table structure into a YAML semantic model definition.
 
-**Prerequisites**: This subagent relies on [datus-metricflow](../metricflow/introduction.md), install it first.
+**Prerequisites**: This subagent relies on [datus-semantic-metricflow](../adapters/semantic_adapters.md), install it first with `pip install datus-semantic-metricflow`.
 
 **Launch Command**:
 ```bash
@@ -46,7 +46,7 @@ A **subagent** is a task-specific AI assistant with:
 
 **Use Case**: Transform ad-hoc SQL calculations into standardized metrics.
 
-**Prerequisites**: This subagent relies on [datus-metricflow](../metricflow/introduction.md), install it first.
+**Prerequisites**: This subagent relies on [datus-semantic-metricflow](../adapters/semantic_adapters.md), install it first with `pip install datus-semantic-metricflow`.
 
 **Launch Command**:
 ```bash
@@ -180,15 +180,14 @@ agentic_nodes:
     model: claude                          # LLM model
     system_prompt: gen_metrics             # Prompt template name
     prompt_version: "1.0"                  # Template version
-    tools: generation_tools.*, filesystem_tools.*  # Available tools
+    tools: generation_tools.*, filesystem_tools.*, semantic_tools.*  # Available tools
     hooks: generation_hooks                # User confirmation
-    mcp: metricflow_mcp                    # MCP servers
     max_turns: 40                          # Max conversation turns
     workspace_root: /path/to/workspace     # File workspace
     agent_description: "Metric generation assistant"
     rules:                                 # Custom rules
       - Use check_metric_exists to avoid duplicates
-      - Validate with mf validate-configs
+      - Validate with validate_semantic tool
 ```
 
 ### Key Parameters
@@ -198,9 +197,9 @@ agentic_nodes:
 | `model` | Yes | LLM model name | `claude`, `deepseek`, `openai` |
 | `system_prompt` | Yes | Prompt template identifier | `gen_metrics`, `gen_semantic_model` |
 | `prompt_version` | No | Template version | `"1.0"`, `"2.0"` |
-| `tools` | Yes | Comma-separated tool patterns | `db_tools.*, generation_tools.*` |
+| `tools` | Yes | Comma-separated tool patterns | `db_tools.*, semantic_tools.*` |
 | `hooks` | No | Enable confirmation workflow | `generation_hooks` |
-| `mcp` | No | MCP server names | `metricflow_mcp, filesystem_mcp` |
+| `mcp` | No | MCP server names | `filesystem_mcp` |
 | `max_turns` | No | Max conversation turns | `30`, `40` |
 | `workspace_root` | No | File operation directory | `/path/to/workspace` |
 | `agent_description` | No | Assistant description | `"SQL analysis assistant"` |
@@ -224,6 +223,7 @@ tools: db_tools.list_tables, db_tools.get_table_ddl, generation_tools.check_metr
 - `generation_tools.*`: Generation helpers (check duplicates, context preparation)
 - `filesystem_tools.*`: File operations (read, write, edit files)
 - `context_search_tools.*`: Knowledge Base search (find metrics, semantic models)
+- `semantic_tools.*`: Semantic layer operations (list metrics, query metrics, validate)
 - `date_parsing_tools.*`: Date/time parsing and normalization
 
 ### MCP Servers
@@ -233,12 +233,13 @@ MCP (Model Context Protocol) servers provide additional tools:
 **Built-in MCP Servers**:
 
 - `filesystem_mcp`: File system operations within workspace
-- `metricflow_mcp`: MetricFlow CLI integration (validate, query, list)
 
 **Configuration**:
 ```yaml
-mcp: metricflow_mcp, filesystem_mcp
+mcp: filesystem_mcp
 ```
+
+> **Note**: MetricFlow integration is now provided through native `semantic_tools.*` via the [datus-semantic-metricflow](../adapters/semantic_adapters.md) adapter, not through MCP servers.
 
 ## Summary
 

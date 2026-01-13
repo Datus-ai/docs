@@ -543,7 +543,7 @@ Datus 会自动分析该表，并将元数据加入上下文。
 - **[上下文数据工程](./contextual_data_engineering.md)** —— 学习如何将数据资产用作上下文
 - **[配置指南](../configuration/introduction.md)** —— 连接自有数据库并自定义设置
 - **[CLI 参考手册](../cli/introduction.md)** —— 掌握全部命令与选项
-- **[MetricFlow](../metricflow/introduction.md)** —— 使用 datus-metricflow 构建与查询指标
+- **[语义层适配器](../adapters/semantic_adapters.md)** —— 使用 datus-semantic-metricflow 构建与查询指标
 
 
 

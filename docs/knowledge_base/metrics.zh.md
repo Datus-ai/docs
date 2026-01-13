@@ -46,7 +46,7 @@ query_metrics(
 
 ## 使用方法
 
-**前置条件**：此命令依赖 [datus-metricflow](../metricflow/introduction.md)，请先安装。
+**前置条件**：此命令依赖 [datus-semantic-metricflow](../adapters/semantic_adapters.md)，请先运行 `pip install datus-semantic-metricflow` 安装。
 
 ### 基本命令
 

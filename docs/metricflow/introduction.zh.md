@@ -39,16 +39,16 @@ MetricFlow 是一层语义层，用于以代码方式组织与管理“业务指
 
 - **DuckDB** — 嵌入式分析数据库（适合本地与 Demo）
 - **SQLite** — 轻量级嵌入式数据库
+- **PostgreSQL** — 开源关系型数据库
 - **StarRocks** — 高性能分析型数据库
 
 ## datus-metricflow 的增强
 在 0.140.0 的基础上，我们提供了：
 
 - **Python 3.12 支持**
-- **新增数据库适配**：SQLite、StarRocks
+- **新增数据库适配**：SQLite、PostgreSQL、StarRocks
 - **与 Datus 集成**：统一配置、无缝协作
 - **独立安装包**：可作为依赖单独使用
-- **MCP 服务器**：通过 Model Context Protocol 让 LLM 应用查询指标
 
 ## 安装
 确保系统已安装 Python 3.12，然后执行：
