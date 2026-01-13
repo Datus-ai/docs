@@ -86,7 +86,32 @@ Subagent 是 Datus 中专注于特定任务的专用 AI 助手。与处理通用
 
 ---
 
-### 4. 自定义subagent
+### 4. `gen_ext_knowledge`
+
+**用途**：生成和管理业务概念及领域特定定义。
+
+**使用场景**：记录数据库 schema 中未存储的业务知识，例如业务规则、计算逻辑和领域特定概念。
+
+**启动命令**：
+```bash
+/gen_ext_knowledge Extract knowledge from this sql
+Question: What is the highest eligible free rate for K-12 students?
+SQL: SELECT `Free Meal Count (K-12)` / `Enrollment (K-12)` FROM frpm WHERE `County Name` = 'Alameda'
+```
+
+**核心特性**：
+
+- **知识差距发现**：Agent 首先尝试独立解决问题，然后与参考 SQL 对比，识别隐含的业务知识
+- 生成带有唯一 ID 的结构化 YAML
+- 支持主题路径分类（例如 `education/schools/data_integration`）
+- 创建新条目前检查重复项
+- 同步到知识库以供语义搜索
+
+**参考**：[外部知识生成指南](./builtin_subagents.zh.md#gen_ext_knowledge)
+
+---
+
+### 5. 自定义subagent
 
 你可以在 `agent.yml` 中定义自定义subagent，用于组织特定的工作流。
 

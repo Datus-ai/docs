@@ -86,7 +86,32 @@ A **subagent** is a task-specific AI assistant with:
 
 ---
 
-### 4. Custom Subagents
+### 4. `gen_ext_knowledge`
+
+**Purpose**: Generate and manage business concepts and domain-specific definitions.
+
+**Use Case**: Document business knowledge that isn't stored in database schemas, such as business rules, calculation logic, and domain-specific concepts.
+
+**Launch Command**:
+```bash
+/gen_ext_knowledge Extract knowledge from this sql
+Question: What is the highest eligible free rate for K-12 students?
+SQL: SELECT `Free Meal Count (K-12)` / `Enrollment (K-12)` FROM frpm WHERE `County Name` = 'Alameda'
+```
+
+**Key Features**:
+
+- **Knowledge Gap Discovery**: Agent attempts to solve the problem first, then compares with reference SQL to identify implicit business knowledge
+- Generates structured YAML with unique IDs
+- Supports subject path categorization (e.g., `education/schools/data_integration`)
+- Checks for duplicates before creating new entries
+- Syncs to Knowledge Base for semantic search
+
+**See Also**: [External Knowledge Generation Guide](./builtin_subagents.md#gen_ext_knowledge)
+
+---
+
+### 5. Custom Subagents
 
 You can define custom subagents in `agent.yml` for organization-specific workflows.
 
