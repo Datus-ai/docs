@@ -680,24 +680,24 @@ subject_path: education/schools/data_integration
 
 #### Field Descriptions
 
-| Field | Required | Description | Example |
-|-------|----------|-------------|---------|
-| `id` | Yes | Unique hash (auto-generated via `generate_ext_knowledge_id()`) | `abc123def456...` |
-| `name` | Yes | Short identifier name (max 30 chars) | `Free Meal Rate`, `GMV` |
-| `search_text` | Yes | Search keywords for retrieval (vector/inverted index) | `eligible free rate K-12` |
+| Field | Required | Description                                                         | Example |
+|-------|----------|---------------------------------------------------------------------|---------|
+| `id` | Yes | Unique ID `generate_ext_knowledge_id()`)                            | `education/schools/data_integration/CDS code school identifier California Department of Education join tables` |
+| `name` | Yes | Short identifier name (max 30 chars)                                | `Free Meal Rate`, `GMV` |
+| `search_text` | Yes | Search keywords for retrieval (vector/inverted index)               | `eligible free rate K-12` |
 | `explanation` | Yes | Concise explanation (2-4 sentences): what it is + when/how to apply | Business rule, calculation logic |
-| `subject_path` | Yes | Hierarchical classification (slash-separated) | `Education/School Metrics/FRPM` |
+| `subject_path` | Yes | Hierarchical classification (slash-separated)                       | `Education/School Metrics/FRPM` |
 
 ---
 
 ## Summary
 
-| Subagent | Purpose | Output | Stored In | Key Features |
-|----------|---------|--------|-----------|--------------|
+| Subagent | Purpose | Output | Stored In | Key Features                                        |
+|----------|---------|--------|-----------|-----------------------------------------------------|
 | `gen_sql_summary` | Summarize and classify SQL queries | YAML (SQL summary) | `/data/reference_sql` | Subject tree categorization, auto context retrieval |
-| `gen_semantic_model` | Generate semantic model from tables | YAML (semantic model) | `/data/semantic_models` | DDL → MetricFlow model, built-in validation |
-| `gen_metrics` | Generate metrics from SQL | YAML (metric) | `/data/semantic_models` | SQL → MetricFlow metric, subject tree support |
-| `gen_ext_knowledge` | Generate business concepts | YAML (external knowledge) | `/data/ext_knowledge` | Subject path organization, semantic search, batch import |
+| `gen_semantic_model` | Generate semantic model from tables | YAML (semantic model) | `/data/semantic_models` | DDL → MetricFlow model, built-in validation         |
+| `gen_metrics` | Generate metrics from SQL | YAML (metric) | `/data/semantic_models` | SQL → MetricFlow metric, subject tree support       |
+| `gen_ext_knowledge` | Generate business concepts | YAML (external knowledge) | `/data/ext_knowledge` | Question&SQL → knowledge, subject tree support      |
 
 **Built-in Features Across All Subagents:**
 - Minimal configuration required (only `model` and `max_turns` optional)

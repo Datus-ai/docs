@@ -678,24 +678,24 @@ subject_path: education/schools/data_integration
 
 #### 字段说明
 
-| 字段 | 必需 | 描述 | 示例 |
-|-------|----------|-------------|---------|
-| `id` | 是 | 唯一哈希（通过 `generate_ext_knowledge_id()` 自动生成） | `abc123def456...` |
-| `name` | 是 | 简短标识名称（最多 30 个字符） | `Free Meal Rate`、`GMV` |
-| `search_text` | 是 | 检索用的搜索关键词（向量/倒排索引） | `eligible free rate K-12` |
-| `explanation` | 是 | 简洁说明（2-4 句）：是什么 + 何时/如何应用 | 业务规则、计算逻辑 |
-| `subject_path` | 是 | 层次化分类（斜杠分隔） | `Education/School Metrics/FRPM` |
+| 字段 | 必需 | 描述                                          | 示例 |
+|-------|----------|---------------------------------------------|---------|
+| `id` | 是 | 唯一ID（通过 `generate_ext_knowledge_id()` 自动生成） | `education/schools/data_integration/CDS code school identifier California Department of Education join tables` |
+| `name` | 是 | 简短标识名称（最多 30 个字符）                           | `Free Meal Rate`、`GMV` |
+| `search_text` | 是 | 检索用的搜索关键词（向量/倒排索引）                          | `eligible free rate K-12` |
+| `explanation` | 是 | 简洁说明（2-4 句）：是什么 + 何时/如何应用                   | 业务规则、计算逻辑 |
+| `subject_path` | 是 | 层次化分类（斜杠分隔）                                 | `Education/School Metrics/FRPM` |
 
 ---
 
 ## 总结
 
-| subagent | 用途 | 输出 | 存储位置 | 关键特性 |
-|----------|---------|--------|-----------|--------------|
-| `gen_sql_summary` | 总结和分类 SQL 查询 | YAML（SQL 摘要） | `/data/reference_sql` | 主题树分类、自动上下文检索 |
-| `gen_semantic_model` | 从表生成语义模型 | YAML（语义模型） | `/data/semantic_models` | DDL → MetricFlow 模型、内置验证 |
+| subagent | 用途 | 输出 | 存储位置 | 关键特性                      |
+|----------|---------|--------|-----------|---------------------------|
+| `gen_sql_summary` | 总结和分类 SQL 查询 | YAML（SQL 摘要） | `/data/reference_sql` | 主题树分类、自动上下文检索             |
+| `gen_semantic_model` | 从表生成语义模型 | YAML（语义模型） | `/data/semantic_models` | DDL → MetricFlow 模型、内置验证  |
 | `gen_metrics` | 从 SQL 生成指标 | YAML（指标） | `/data/semantic_models` | SQL → MetricFlow 指标、主题树支持 |
-| `gen_ext_knowledge` | 生成业务概念 | YAML（外部知识） | `/data/ext_knowledge` | 主题路径组织、语义搜索、批量导入 |
+| `gen_ext_knowledge` | 生成业务概念 | YAML（外部知识） | `/data/ext_knowledge` | 问题&SQL → 知识、主题树支持        |
 
 **所有 subagent 的内置特性：**
 - 最小化配置（仅 `model` 和 `max_turns` 可选）
