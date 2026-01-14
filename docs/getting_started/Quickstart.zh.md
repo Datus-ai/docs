@@ -75,6 +75,9 @@ datus-agent init
 
 **4. 知识库（可选）** —— 初始化向量数据库，用于存储元数据和Reference SQL
 
+> **注意**
+> 如果在此步骤卡住或失败，可能是国内访问 HuggingFace 官方源的问题，建议配置国内镜像地址 `export HF_ENDPOINT=https://hf-mirror.com`。
+
 完成设置后，你就可以启动 Datus 了！
 
 ## 步骤 2：启动 Datus CLI
