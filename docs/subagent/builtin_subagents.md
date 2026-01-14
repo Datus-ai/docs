@@ -4,11 +4,12 @@
 
 The **Builtin Subagent** are specialized AI assistants integrated within the Datus Agent system. Each subagent focuses on a specific aspect of data engineering automation — analyzing SQL, generating semantic models, and converting queries into reusable metrics — together forming a closed-loop workflow from raw SQL to knowledge-aware data products.
 
-This document covers three core subagents:
+This document covers four core subagents:
 
 1. **[gen_sql_summary](#gen_sql_summary)** — Summarizes and classifies SQL queries
 2. **[gen_semantic_model](#gen_semantic_model)** — Generates MetricFlow semantic models
 3. **[gen_metrics](#gen_metrics)** — Generates MetricFlow metric definitions
+4. **[gen_ext_knowledge](#gen_ext_knowledge)** — Generates business concept definitions
 
 ## Configuration
 
@@ -27,6 +28,10 @@ agent:
 
     gen_sql_summary:
       model: deepseek   # Optional: defaults to configured model
+      max_turns: 30     # Optional: defaults to 30
+
+    gen_ext_knowledge:
+      model: claude     # Optional: defaults to configured model
       max_turns: 30     # Optional: defaults to 30
 ```
 
@@ -550,13 +555,149 @@ The metrics generation feature provides:
 
 ---
 
+## gen_ext_knowledge
+
+### Overview
+
+The external knowledge generation feature helps you create and manage business concepts and domain-specific definitions. Using an AI assistant, you can document business knowledge in a structured format that becomes searchable in the Knowledge Base, enabling better context retrieval for SQL generation and data analysis tasks.
+
+### What is External Knowledge?
+
+**External knowledge** captures business-specific information that isn't directly stored in database schemas:
+
+- **Business Rules**: Calculation logic and business constraints
+- **Domain Concepts**: Industry or company-specific knowledge
+- **Data Interpretations**: How to understand specific data fields or values
+
+This knowledge helps the AI agent understand your business context when generating SQL queries or analyzing data.
+
+### Quick Start
+
+Launch the external knowledge generation subagent:
+
+
+```bash
+/gen_ext_knowledge Extract knowledge from this sql
+-- Question: What is the highest eligible free rate for K-12 students in the schools in Alameda County?
+-- SQL: 
+SELECT 
+  `Free Meal Count (K-12)` / `Enrollment (K-12)` 
+FROM 
+  frpm 
+WHERE 
+  `County Name` = 'Alameda' 
+ORDER BY 
+  (
+    CAST(`Free Meal Count (K-12)` AS REAL) / `Enrollment (K-12)`
+  ) DESC 
+LIMIT 1
+```
+
+### Generation Workflow
+
+The workflow follows a **knowledge gap discovery** approach: the agent first attempts to solve the problem independently, then compares with the reference SQL to identify implicit business knowledge.
+
+```mermaid
+graph LR
+    A[User provides Question + SQL] --> B[Agent attempts to solve]
+    B --> C[Compare with reference SQL]
+    C --> D[Identify knowledge gaps]
+    D --> E[Check for duplicates]
+    E --> F[Generate YAML]
+    F --> G[Save file]
+    G --> H[User confirms]
+    H --> I[Sync to Knowledge Base]
+```
+
+**Detailed Steps:**
+
+1. **Understand the Problem**: Read the question from SQL comments and understand the goal
+2. **Attempt to Solve**: The agent uses available tools to try solving the problem
+3. **Compare with Reference SQL**: Find gaps between attempt and reference sql
+4. **Extract Knowledge from Gaps**: Discovering hidden business concepts in gaps
+5. **Check for Duplicates**: Use `search_knowledge` to verify extracted knowledge doesn't already exist
+6. **Generate YAML**: Create structured knowledge entries with unique IDs via `generate_ext_knowledge_id()`
+7. **Save File**: Write YAML using `write_file(path, content, file_type="ext_knowledge")`
+8. **User Confirmation**: Review generated YAML and approve
+9. **Sync to Knowledge Base**: Store in vector database for semantic search
+
+> **Important**: If no knowledge gaps are found (agent's attempt matches reference SQL), no knowledge file is generated.
+
+### Interactive Confirmation
+
+After generation, you'll see:
+
+```
+============================================================
+Generated External Knowledge YAML
+File: /Users/liuyufei/DatusProject/bird/datus/ext_knowledge/bird_sqlite_with_knowledge/sat_school_administration_knowledge.yaml
+============================================================
+                                                                                                                         
+
+  SYNC TO KNOWLEDGE BASE?
+
+  1. Yes - Save to Knowledge Base
+  2. No - Keep file only
+
+Please enter your choice: [1/2] 1
+✓ Syncing to Knowledge Base...
+✓ Successfully synced external knowledge to Knowledge Base
+```
+
+### Subject Path Categorization
+
+Subject path allows organizing external knowledge hierarchically. In CLI mode, include it in your question:
+
+**Example with subject_path:**
+```bash
+/gen_ext_knowledge Extract knowledge from this sql
+Question: What is the highest eligible free rate for K-12 students in the schools in Alameda County?
+subject_tree: education/schools/data_integration
+SQL: ***
+```
+
+**Example without subject_path:**
+```bash
+/gen_ext_knowledge Extract knowledge from this sql
+Question: What is the highest eligible free rate for K-12 students in the schools in Alameda County?
+SQL: ***
+```
+
+When not provided, the agent operates in learning mode and suggests categories based on existing subject trees in the Knowledge Base.
+
+### YAML Structure
+
+The generated external knowledge follows this structure:
+
+```yaml
+id: education/schools/data_integration/CDS code school identifier California Department of Education join tables                                                                
+name: CDS Code as School Identifier                                                                                                                                             
+search_text: CDS code school identifier California Department of Education join tables                                                                                          
+explanation: |                                                                                                                                                                  
+  The CDS (California Department of Education) code serves as the primary identifier for linking educational datasets in California. Use `cds` field in SAT scores table to join
+subject_path: education/schools/data_integration       
+```
+
+#### Field Descriptions
+
+| Field | Required | Description                                                         | Example |
+|-------|----------|---------------------------------------------------------------------|---------|
+| `id` | Yes | Unique ID `generate_ext_knowledge_id()`)                            | `education/schools/data_integration/CDS code school identifier California Department of Education join tables` |
+| `name` | Yes | Short identifier name (max 30 chars)                                | `Free Meal Rate`, `GMV` |
+| `search_text` | Yes | Search keywords for retrieval (vector/inverted index)               | `eligible free rate K-12` |
+| `explanation` | Yes | Concise explanation (2-4 sentences): what it is + when/how to apply | Business rule, calculation logic |
+| `subject_path` | Yes | Hierarchical classification (slash-separated)                       | `Education/School Metrics/FRPM` |
+
+---
+
 ## Summary
 
-| Subagent | Purpose | Output | Stored In | Key Features |
-|----------|---------|--------|-----------|--------------|
+| Subagent | Purpose | Output | Stored In | Key Features                                        |
+|----------|---------|--------|-----------|-----------------------------------------------------|
 | `gen_sql_summary` | Summarize and classify SQL queries | YAML (SQL summary) | `/data/reference_sql` | Subject tree categorization, auto context retrieval |
-| `gen_semantic_model` | Generate semantic model from tables | YAML (semantic model) | `/data/semantic_models` | DDL → MetricFlow model, built-in validation |
-| `gen_metrics` | Generate metrics from SQL | YAML (metric) | `/data/semantic_models` | SQL → MetricFlow metric, subject tree support |
+| `gen_semantic_model` | Generate semantic model from tables | YAML (semantic model) | `/data/semantic_models` | DDL → MetricFlow model, built-in validation         |
+| `gen_metrics` | Generate metrics from SQL | YAML (metric) | `/data/semantic_models` | SQL → MetricFlow metric, subject tree support       |
+| `gen_ext_knowledge` | Generate business concepts | YAML (external knowledge) | `/data/ext_knowledge` | Question&SQL → knowledge, subject tree support      |
 
 **Built-in Features Across All Subagents:**
 - Minimal configuration required (only `model` and `max_turns` optional)
@@ -566,4 +707,4 @@ The metrics generation feature provides:
 - Knowledge Base integration for semantic search
 - Automatic workspace management
 
-Together, these subagents automate the **data engineering knowledge pipeline** — from **query understanding → model definition → metric generation → searchable Knowledge Base**.
+Together, these subagents automate the **data engineering knowledge pipeline** — from **query understanding → model definition → metric generation → business knowledge capture → searchable Knowledge Base**.
