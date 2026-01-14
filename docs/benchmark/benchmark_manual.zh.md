@@ -316,7 +316,6 @@ datus-agent eval --namespace california_schools --benchmark california_schools -
 > 若希望基于自定义数据集进行测试，请参考以下配置示例。
 
 ### 添加 Benchmark 配置
-
 ```yaml
 agent:
   namespace:
