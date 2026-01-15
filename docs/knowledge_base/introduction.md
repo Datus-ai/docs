@@ -43,7 +43,7 @@ The Datus Agent Knowledge Base is a multi-modal intelligence system that transfo
 - **Capabilities**: Find queries by intent, get similar queries, learn patterns
 - **Use**: Knowledge sharing, optimization through examples, team onboarding
 
-### 4. [External Knowledge](ext_knowledge.md)
+### 5. [External Knowledge](ext_knowledge.md)
 
 **Purpose**: Process and index domain-specific business knowledge for intelligent search.
 

@@ -25,6 +25,7 @@ nav:
     - Chatbot: web_chatbot/introduction.md
     - Knowledge Base:
       - Introduction: knowledge_base/introduction.md
+      - External Knowledge: knowledge_base/ext_knowledge.md
       - Metadata: knowledge_base/metadata.md
       - Semantic Models: knowledge_base/semantic_model.md
       - Metrics: knowledge_base/metrics.md
@@ -82,6 +83,7 @@ plugins:
             Customized subagents: 自定义 subagent
             Chatbot: chatbot
             Knowledge Base: 知识库
+            External Knowledge: 外部知识
             Metadata: 元数据
             Semantic Models: 语义模型
             Metrics: 指标
