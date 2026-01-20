@@ -1,19 +1,18 @@
-# BI Dashboard → Subagent 使用指南
+# 使用商业智能仪表板（BI Dashboard）生成Subagent
 
-*将 BI Dashboard 转换为可复用的 gen_sql / gen_report 类型的Subagent*
+*将转换为可复用的 `gen_sql`和`gen_report`类型的子代理*
 
 本指南介绍如何使用 Datus bi_dashboard 功能，将已有 BI 平台中的 Dashboard 资产，自动转换为可调用的 Subagent，用于生成SQL与分析报告。
 
 通过本指南，你将学会：
-1.	bi_dashboard 能解决什么问题
-2.	bi_dashboard 会生成哪些 Subagent
+1.	`bootstrap-bi` 能解决什么问题
+2.	`bootstrap-bi` 会生成哪些 Subagent
 3.	两种使用入口（CLI 交互 / 命令行工具）
 4.	生成后的 Subagent 如何使用
-5.	bi_dashboard 的实现位置（便于开发者理解）
 
 
 ## 1. 基础说明
-### 1.1 bi_dashboard 是什么？
+### 1.1 `bootstrap-bi` 是什么？
 
 在真实业务中，BI Dashboard 往往已经沉淀了大量 被验证过的知识：
 •	稳定可用的 SQL
@@ -21,7 +20,7 @@
 •	统一的业务口径
 •	清晰的分析主题（Subject / Domain）
 
-bi_dashboard 的目标是：
+`bootstrap-bi` 的目标是：
 
 将这些 BI 资产，转换为大模型可以“安全、稳定、可复用”使用的 Subagent。
 
@@ -95,9 +94,9 @@ bi_dashboard 的目标是：
       3. 使用Winget `winget install Helm.Helm`
    > Linux和Mac系统也可以使用脚本安装： 
     ```bash
-    $ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
-    $ chmod 700 get_helm.sh
-    $ ./get_helm.sh
+    curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
+    chmod 700 get_helm.sh
+    ./get_helm.sh
     ```
 4. 进入python的数据目录（可通过 `python -c "import datus; print(datus.__file__)"` 查找），执行`sh /usr/local/python3.12/datus/sample_data/superset/start_superset.sh`
 5. 安装Datus的扩展包
@@ -148,19 +147,19 @@ datus-agent bootstrap-bi --namespace superset
 
 执行命令后，CLI 会引导你完成以下步骤：
 1. 选择 BI 平台
-  * 例如：Superset / Metabase（取决于已配置的 adaptor，当前只有Superset的实现）
+   * 例如：Superset / Metabase（取决于已配置的 adaptor，当前只有Superset的实现）
 2. 输入 Dashboard URL
-  * CLI 会自动解析 Dashboard ID 
+   * CLI 会自动解析 Dashboard ID 
 3. 确认 Dashboard 信息
 4. 选择用于初始化的 Charts和表
-  * 用于 Reference SQL
-  * 用于 Metrics / Semantic Model
+   * 用于 Reference SQL
+   * 用于 Metrics / Semantic Model
 5. 自动构建 Subagent
-  * 构建 `Metadata`
-  * 抽取 `Reference SQL`
-  * 生成 `Semantic Model`
-  * 初始化 `Metrics`
-  * 创建并保存 `Subagent`
+   * 构建 `Metadata`
+   * 抽取 `Reference SQL`
+   * 生成 `Semantic Model`
+   * 初始化 `Metrics`
+   * 创建并保存 `Subagent`
 
 ### 3.3 执行完成后的结果
 
@@ -177,7 +176,7 @@ Attribution Sub-Agent `superset_sales_dashboard_attribution` bootstrapped.
 
 ## 4. 生成后的 Subagent 如何使用？
 
-生成完成后，你可以直接在 CLI 中通过 `/superset_sales_dashboard` 和 `superset_sales_dashboard_attribution` 调用。具体可参考[子代理介绍](../subagent/introduction.zh.md)
+生成完成后，你可以直接在 CLI 中通过 `/superset_sales_dashboard` 和 `/superset_sales_dashboard_attribution` 调用。具体可参考[子代理介绍](../subagent/introduction.zh.md)
 
 
 ## 5. 什么时候应该使用 bi_dashboard？
