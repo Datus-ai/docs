@@ -17,6 +17,12 @@
 datus-agent init
 ```
 
+由于本教程涉及指标生成，还需要安装语义层适配器：
+
+```bash
+pip install datus-semantic-metricflow
+```
+
 详细的设置说明请参见[快速开始指南](quickstart.zh.md)。
 
 
