@@ -18,6 +18,12 @@ Before running the tutorial, initialize your Datus agent:
 datus-agent init
 ```
 
+Since this tutorial involves metric generation, you also need to install the semantic layer adapter:
+
+```bash
+pip install datus-semantic-metricflow
+```
+
 For detailed setup instructions, see the [Quick Start Guide](quickstart.md).
 
 
