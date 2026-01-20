@@ -56,12 +56,58 @@ bi_dashboard 的目标是：
 
 ## 2. 前置操作
 
-### 2。1 部署Superset
-1. 安装 docker 
-2. 安装 kubernetes
-3. 安装 helm
-4. 进入python的数据目录（一般在python安装目录下，比如 /usr/local/python3.12/），执行`sh datus/sample_data/superset/start_superset.sh`
+### 2.1 部署Superset
+1. 安装 [docker](https://www.docker.com/get-started/) 
+   1. MacOS/Windows: 下载安装
+   2. Linux:
+      1. Debian/Ubuntu: 
+      ```shell
+      sudo apt install gnome-terminal
+      sudo apt-get update
+      sudo apt-get install ./docker-desktop-amd64.deb
+      ```
+2. 安装 [kubernetes](https://kubernetes.io/zh-cn/docs/tasks/tools/)
+    1. MacOS:
+       1. 因特尔芯片： `curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/amd64/kubectl"`
+       2. M芯片： `curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/arm64/kubectl"`
+    2. Linux:
+    3. Windows:
+       1. curl: `curl.exe -LO "https://dl.k8s.io/release/v1.35.0/bin/windows/amd64/kubectl.exe"`
+       2. 使用Chocolatey `choco install kubernetes-cli`
+       3. 使用Scoop `scoop install kubectl`
+       4. 使用Winget `winget install -e --id Kubernetes.kubectl`
+3. 安装 [helm](https://helm.sh/docs/intro/install/):
+   1. MacOS `brew install helm`
+   2. Linux
+      1. Debian/Ubuntu: 
+      ```sudo apt-get install curl gpg apt-transport-https --yes
+      curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+      echo "deb [signed-by=/usr/share/keyrings/helm.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+      sudo apt-get update
+      sudo apt-get install helm
+      ```
+      2. fedora: `sudo dnf install helm`
+      3. Snap: `sudo snap install helm --classic`
+      4. FreeBSD: `pkg install helm`
+   3. windows
+      1. 使用Chocolatey `choco install kubernetes-helm` 
+      2. 使用Scoop `scoop install helm`
+      3. 使用Winget `winget install Helm.Helm`
+   > Linux和Mac系统也可以使用脚本安装： 
+    ```bash
+    $ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
+    $ chmod 700 get_helm.sh
+    $ ./get_helm.sh
+    ```
+4. 进入python的数据目录（可通过 `python -c "import datus; print(datus.__file__)"` 查找），执行`sh /usr/local/python3.12/datus/sample_data/superset/start_superset.sh`
+5. 安装Datus的扩展包
+```shell
+# postgresql
+pip install datus-postgresql
 
+# generate semantic models and metrics
+pip install datus-semantic-metricflow
+```
 
 ### 2.2 在agent.yml中增加配置
 ```yaml
@@ -82,16 +128,6 @@ agent:
         provider: db
 ```
 
-
-### 2.3 
-
-初始化数据库metadata
-
-```shell
-datus-agent bootstrap-kb --namespace superset --kb_update_strategy overwrite
-```
-
-
 ## 3. 开始 BI Dashboard → Subagent
 
 ### 3.1 入口命令
@@ -105,7 +141,7 @@ datus-agent bootstrap-bi --namespace superset
 
 #### 3.1.2 在 Datus CLI 中输入：
 
-.bootstrap-bi
+`.bootstrap-bi`
 
 
 ### 3.2 交互流程说明
@@ -116,14 +152,15 @@ datus-agent bootstrap-bi --namespace superset
 2. 输入 Dashboard URL
   * CLI 会自动解析 Dashboard ID 
 3. 确认 Dashboard 信息
-4. 选择用于初始化的 Charts
+4. 选择用于初始化的 Charts和表
   * 用于 Reference SQL
   * 用于 Metrics / Semantic Model
 5. 自动构建 Subagent
-  * 抽取 SQL
-  * 生成 Semantic Model
-  * 初始化 Metrics
-  * 创建并保存 Subagent
+  * 构建 `Metadata`
+  * 抽取 `Reference SQL`
+  * 生成 `Semantic Model`
+  * 初始化 `Metrics`
+  * 创建并保存 `Subagent`
 
 ### 3.3 执行完成后的结果
 
@@ -140,8 +177,7 @@ Attribution Sub-Agent `superset_sales_dashboard_attribution` bootstrapped.
 
 ## 4. 生成后的 Subagent 如何使用？
 
-生成完成后，你可以直接在 CLI 中通过 /subagent_name 调用。
-
+生成完成后，你可以直接在 CLI 中通过 `/superset_sales_dashboard` 和 `superset_sales_dashboard_attribution` 调用。具体可参考[子代理介绍](../subagent/introduction.zh.md)
 
 
 ## 5. 什么时候应该使用 bi_dashboard？
