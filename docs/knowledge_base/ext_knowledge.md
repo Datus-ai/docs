@@ -26,14 +26,14 @@ Bootstrap-KB External Knowledge is a component that processes, stores, and index
 
 ```bash
 # From CSV (direct import)
-datus bootstrap-kb \
+datus-agent bootstrap-kb \
     --namespace <your_namespace> \
     --components ext_knowledge \
     --ext_knowledge /path/to/knowledge.csv \
     --kb_update_strategy overwrite
 
 # From success story (AI generation)
-datus bootstrap-kb \
+datus-agent bootstrap-kb \
     --namespace <your_namespace> \
     --components ext_knowledge \
     --success_story /path/to/success_story.csv \
@@ -113,7 +113,7 @@ The success story mode uses GenExtKnowledgeAgenticNode to:
 Clears existing knowledge and loads fresh data:
 
 ```bash
-datus bootstrap-kb \
+datus-agent bootstrap-kb \
     --namespace analytics_db \
     --components ext_knowledge \
     --ext_knowledge /path/to/knowledge.csv \
@@ -125,7 +125,7 @@ datus bootstrap-kb \
 Adds new knowledge entries while preserving existing ones (duplicates are skipped):
 
 ```bash
-datus bootstrap-kb \
+datus-agent bootstrap-kb \
     --namespace analytics_db \
     --components ext_knowledge \
     --success_story /path/to/success_story.csv \
@@ -139,7 +139,7 @@ Subject tree provides a hierarchical taxonomy for organizing knowledge entries.
 ### 1. Predefined Mode
 
 ```bash
-datus bootstrap-kb \
+datus-agent bootstrap-kb \
     --namespace analytics_db \
     --components ext_knowledge \
     --success_story /path/to/success_story.csv \

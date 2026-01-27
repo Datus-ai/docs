@@ -26,14 +26,14 @@ Bootstrap-KB 外部知识是一个处理、存储和索引领域特定业务知�
 
 ```bash
 # 从 CSV（直接导入）
-datus bootstrap-kb \
+datus-agent bootstrap-kb \
     --namespace <your_namespace> \
     --components ext_knowledge \
     --ext_knowledge /path/to/knowledge.csv \
     --kb_update_strategy overwrite
 
 # 从 success story（AI 生成）
-datus bootstrap-kb \
+datus-agent bootstrap-kb \
     --namespace <your_namespace> \
     --components ext_knowledge \
     --success_story /path/to/success_story.csv \
@@ -113,7 +113,7 @@ success story 模式使用 GenExtKnowledgeAgenticNode 来：
 清除现有知识并加载新数据：
 
 ```bash
-datus bootstrap-kb \
+datus-agent bootstrap-kb \
     --namespace analytics_db \
     --components ext_knowledge \
     --ext_knowledge /path/to/knowledge.csv \
@@ -125,7 +125,7 @@ datus bootstrap-kb \
 添加新知识条目同时保留现有条目（重复项会被跳过）：
 
 ```bash
-datus bootstrap-kb \
+datus-agent bootstrap-kb \
     --namespace analytics_db \
     --components ext_knowledge \
     --success_story /path/to/success_story.csv \
@@ -139,7 +139,7 @@ datus bootstrap-kb \
 ### 1. 预定义模式
 
 ```bash
-datus bootstrap-kb \
+datus-agent bootstrap-kb \
     --namespace analytics_db \
     --components ext_knowledge \
     --success_story /path/to/success_story.csv \
