@@ -13,7 +13,7 @@ Traditional BI dashboards are static - they show predefined charts and metrics, 
 
 With one command, Datus extracts all the context from your existing dashboard - the SQL queries, table relationships, metrics definitions, and business logic - and creates AI subagents that understand your data as well as your dashboard does.
 
-## Architecture Overview
+The bootstrap process automatically generates two specialized subagents: a **GenSQL subagent** that enables self-service data retrieval through SQL tools, and a **GenReport subagent** that provides analysis, drill-down, and attribution reports through metric tools.
 
 ![Dashboard to Agent Architecture](../assets/dashboard_to_agent.png)
 
