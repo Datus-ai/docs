@@ -11,42 +11,77 @@ Datus Agent benchmark mode enables you to:
 - **Compare Results**: Validate generated queries against expected outputs
 - **Identify Improvements**: Discover areas for optimization and refinement
 
-## Quick Start with Docker
+## Quick Start
 
-Get started quickly with pre-configured Docker containers that include benchmark datasets.
+Get started quickly with the built-in benchmark datasets.
 
-### Step 1: Pull the Docker Image
+### Step 1: Install Datus Agent
 
 !!! tip
-    Ensure Docker is installed and running on your system before proceeding.
+    See the [Quick Start Guide](../getting_started/quickstart.md) for detailed installation and setup instructions.
 
 ```bash title="Terminal"
-docker pull datusai/datus-agent:0.2.2
+pip install datus-agent
+datus-agent init
 ```
 
-### Step 2: Launch the Docker Container
+### Step 2: Configure Environment
 
-!!! tip
-    Demo datasets are preloaded, allowing you to quickly explore Datus capabilities without additional setup.
+Set the required environment variables for your benchmark:
 
 === "BIRD"
     ```bash title="Terminal"
-    docker run --name datus \
-    --env DEEPSEEK_API_KEY=<your_api_key>  \
-    -d datusai/datus-agent:0.2.2
+    export DEEPSEEK_API_KEY=<your_api_key>
     ```
 
 === "Spider 2.0-Snow"
     ```bash title="Terminal"
-    docker run --name datus \
-    --env DEEPSEEK_API_KEY=<your_api_key>  \
-    --env SNOWFLAKE_ACCOUNT=<your_snowflake_account>  \
-    --env SNOWFLAKE_USERNAME=<your_snowflake_username>  \
-    --env SNOWFLAKE_PASSWORD=<your_snowflake_password>  \
-    -d datusai/datus-agent:0.2.2
+    export DEEPSEEK_API_KEY=<your_api_key>
+    export SNOWFLAKE_ACCOUNT=<your_snowflake_account>
+    export SNOWFLAKE_USERNAME=<your_snowflake_username>
+    export SNOWFLAKE_PASSWORD=<your_snowflake_password>
     ```
 
-### Step 3: Run Benchmark Tests
+### Step 3: Download and Prepare the BIRD Dataset
+
+!!! note
+    This step is only required for the BIRD benchmark. If you are running Spider 2.0-Snow, skip to [Step 4](#step-4-run-benchmark-tests).
+
+Download and extract the BIRD dev dataset into the Datus home directory (`~/.datus` by default):
+
+```bash title="Terminal"
+cd ~/.datus
+wget https://bird-bench.oss-cn-beijing.aliyuncs.com/dev.zip
+unzip dev.zip
+mkdir -p benchmark/bird
+mv dev_20240627 benchmark/bird
+cd benchmark/bird/dev_20240627
+unzip dev_databases
+cd ~
+```
+
+After extraction, the directory structure should look like:
+
+```text
+~/.datus/
+└── benchmark/
+    └── bird/
+        └── dev_20240627/
+            ├── dev_databases/
+            │   ├── california_schools/
+            │   │   └── california_schools.sqlite
+            │   ├── ...
+            │   └── <other_databases>/
+            └── ...
+```
+
+Then bootstrap the knowledge base for the BIRD dataset:
+
+```bash title="Terminal"
+datus-agent bootstrap-kb --namespace bird_sqlite --benchmark bird_dev
+```
+
+### Step 4: Run Benchmark Tests
 
 !!! warning
     Each task may take several minutes to complete. Running all tasks may require hours or days depending on your system configuration.
@@ -58,7 +93,7 @@ docker pull datusai/datus-agent:0.2.2
 
 === "Run by Task ID"
     ```bash title="Terminal"
-    docker exec -it datus python -m datus.main benchmark  \
+    datus-agent benchmark \
     --namespace bird_sqlite \
     --benchmark bird_dev \
     --benchmark_task_ids <task_id1> <task_id2>
@@ -66,7 +101,7 @@ docker pull datusai/datus-agent:0.2.2
 
 === "Run All Tasks"
     ```bash title="Terminal"
-    docker exec -it datus python -m datus.main benchmark  \
+    datus-agent benchmark \
     --namespace bird_sqlite \
     --benchmark bird_dev
     ```
@@ -77,11 +112,11 @@ docker pull datusai/datus-agent:0.2.2
     You can find the task ID (instance ID) in the [spider2-snow.jsonl](https://github.com/xlang-ai/Spider2/blob/main/spider2-snow/spider2-snow.jsonl) file.
 
 !!! note
-    Ensure you start the Docker container with Snowflake environment parameters configured.
+    Ensure you have configured the Snowflake environment variables before running Spider 2.0-Snow benchmarks.
 
 === "Run by Task ID"
     ```bash title="Terminal"
-    docker exec -it datus python -m datus.main benchmark  \
+    datus-agent benchmark \
     --namespace snowflake \
     --benchmark spider2 \
     --benchmark_task_ids <task_id1> <task_id2>
@@ -89,17 +124,17 @@ docker pull datusai/datus-agent:0.2.2
 
 === "Run All Tasks"
     ```bash title="Terminal"
-    docker exec -it datus python -m datus.main benchmark  \
+    datus-agent benchmark \
     --namespace snowflake \
     --benchmark spider2
     ```
 
-### Step 4: Evaluate Results
+### Step 5: Evaluate Results
 
 #### Run Evaluation
 === "Evaluate by Task IDs"
 ```bash title="Run Evaluation"
-docker exec -it datus python -m datus.main eval  \
+datus-agent eval \
   --namespace snowflake \
   --benchmark spider2 \
   --output_file evaluation.json \
@@ -107,7 +142,7 @@ docker exec -it datus python -m datus.main eval  \
 ```
 === "Evaluate All"
 ```bash title="Run Evaluation"
-docker exec -it datus python -m datus.main eval  \
+datus-agent eval \
   --namespace snowflake \
   --output_file evaluation.json \
   --benchmark spider2
@@ -190,8 +225,8 @@ docker exec -it datus python -m datus.main eval  \
           "task_id": "0",
           "actual_file_exists": true,
           "gold_file_exists": true,
-          "actual_path": "/Users/lyf/.datus/save/bird_school/0.csv",
-          "gold_path": "/Users/lyf/.datus/benchmark/california_schools/california_schools.csv",
+          "actual_path": "<USER_HOME>/.datus/save/bird_school/0.csv",
+          "gold_path": "<USER_HOME>/.datus/benchmark/california_schools/california_schools.csv",
           "comparison": {
             "match_rate": 1.0,
             "matched_columns": [
@@ -255,9 +290,11 @@ docker exec -it datus python -m datus.main eval  \
         - `matched_tables`: Intersected tables
 - **tool_calls**: Count of each tool invocation
 
-## Use built-in datasets for benchmarking and evaluation
+## Built-in Dataset Quick Trial
 
-### Step 1: Initialize the dataset
+Try out benchmarking and evaluation with the pre-packaged California Schools dataset — no extra downloads needed.
+
+### Step 1: Initialize the Dataset
 ```bash
 datus-agent tutorial
 ```
@@ -265,21 +302,22 @@ datus-agent tutorial
 ![tutorial](../assets/tutorial.png)
 
 This step does the following:
-1. Added database configuration and benchmark configuration for California School to agent.yml
-2. Initialize the metadata information of the table for California School
+
+1. Add database configuration and benchmark configuration for California Schools to agent.yml
+2. Initialize the metadata information of the tables for California Schools
 3. Use `benchmark/california_schools/success_story.csv` to build metric information
-4. Build reference SQL using the sql file of `benchmark/california_schools/reference_sql`
+4. Build reference SQL using the SQL files in `benchmark/california_schools/reference_sql`
 
 ### Benchmarking and evaluation
 ```bash
 datus-agent benchmark --namespace california_schools --benchmark california_schools --benchmark_task_ids 0 1 2 --workflow <your workflow>
 ```
-👉 See [Step 3: Run Benchmark Tests](#step-3-run-benchmark-tests)
+👉 See [Step 4: Run Benchmark Tests](#step-4-run-benchmark-tests)
 
 ```bash
 datus-agent eval --namespace california_schools --benchmark california_schools --task_ids 0 1 2 
 ```
-👉 See [Step 4: Evaluate Results](#step-4-evaluate-results)
+👉 See [Step 5: Evaluate Results](#step-5-evaluate-results)
 
 ## Custom Benchmark
 
@@ -330,8 +368,130 @@ Construct the metadata, metrics, and reference SQL knowledge bases according to 
 
 ### Run Benchmark
 
-👉 See [Step 3: Run Benchmark Tests](#step-3-run-benchmark-tests)
+👉 See [Step 4: Run Benchmark Tests](#step-4-run-benchmark-tests)
 
 ### Evaluate Results
 
-👉 See [Step 4: Evaluate Results](#step-4-evaluate-results)
+👉 See [Step 5: Evaluate Results](#step-5-evaluate-results)
+
+
+## Multi-round Benchmark and Evaluation
+
+Execute repeated benchmark + evaluation cycles (as described in [Step 4](#step-4-run-benchmark-tests) and [Step 5](#step-5-evaluate-results)) and compare the outcomes across rounds. This is useful for measuring the stability and consistency of agent performance.
+
+### Usage
+
+=== "datus-agent subcommand"
+    ```bash title="Terminal"
+    datus-agent multi-round-benchmark \
+      --namespace bird_sqlite \
+      --benchmark bird_dev \
+      --workflow chat_agentic \
+      --round 4 \
+      --workers 2
+    ```
+
+=== "Standalone CLI"
+    ```bash title="Terminal"
+    datus-multi-benchmark \
+      --namespace bird_sqlite \
+      --benchmark bird_dev \
+      --workflow chat_agentic \
+      --round 4 \
+      --workers 2
+    ```
+
+=== "Python module"
+    ```bash title="Terminal"
+    python -m datus.multi_round_benchmark \
+      --namespace bird_sqlite \
+      --benchmark bird_dev \
+      --workflow chat_agentic \
+      --round 4 \
+      --workers 2
+    ```
+
+### Options
+
+| Option                  | Required | Default                                       | Description                                                          |
+|-------------------------|----------|-----------------------------------------------|----------------------------------------------------------------------|
+| `--namespace`           | Yes      | —                                             | Namespace to benchmark, e.g. `bird_sqlite`                           |
+| `--benchmark`           | Yes      | —                                             | Benchmark name, e.g. `bird_dev`                                      |
+| `--workflow`            | No       | `reflection`                                  | Workflow plan to execute                                             |
+| `--round`               | No       | `4`                                           | Number of benchmark iterations to run                                |
+| `--max_steps`           | No       | `30`                                          | Maximum steps per workflow execution                                 |
+| `--workers`             | No       | `1`                                           | Number of parallel workers for task execution                        |
+| `--task_ids`            | No       | all tasks                                     | Explicit task IDs to benchmark (space or comma separated)            |
+| `--group_name`          | No       | workflow name                                 | Name of the integration test group, used for output directory naming |
+| `--delete_history`      | No       | `false`                                       | Delete existing round output directory before each round starts      |
+| `--summary_report_file` | No       | —                                             | Path to summary report file. Reports will be appended for each round |
+| `--debug`               | No       | `false`                                       | Enable debug level logging                                           |
+| `--config`              | No       | `~/.datus/conf/agent.yml` or `conf/agent.yml` | Path to agent config file                                            |
+
+> **Note:** `--round`, `--max_steps`, `--workers`, `--task_ids`, `--group_name`, `--delete_history`, and
+> `--summary_report_file` also accept kebab-case (e.g. `--max-steps`) and legacy names
+> (e.g. `--max_round`, `--max_workers`) for backward compatibility.
+
+### Output Structure
+
+`{timestamp}` is the time when the multi-round benchmark starts, formatted as `YYYYMMDD_HHmm` (e.g. `20260129_1530`). `{ts}` is a Unix epoch timestamp in seconds (e.g. `1769611836`).
+
+For each round the tool creates an isolated output directory under `{agent.home}/integration/`. After all rounds finish, a summary Excel file is also exported:
+
+```text
+{agent.home}/integration/
+├── {group_name}_0/
+│   ├── save/{namespace}/{timestamp}/
+│   │   ├── 0.json                                     # Task metadata
+│   │   ├── 0.sql                                      # Generated SQL
+│   │   ├── 0.csv                                      # Query execution result
+│   │   ├── 1.json
+│   │   ├── 1.sql
+│   │   ├── 1.csv
+│   │   └── ...
+│   ├── trajectory/{namespace}/{timestamp}/
+│   │   ├── 0_{ts}.yaml                                # Workflow trace (e.g. 0_1769611836.yaml)
+│   │   ├── 1_{ts}.yaml
+│   │   └── ...
+│   └── evaluation_round_{timestamp}_0.json            # Evaluation report for round 0
+├── {group_name}_1/
+│   ├── save/{namespace}/{timestamp}/
+│   │   ├── 0.json
+│   │   ├── 0.sql
+│   │   ├── 0.csv
+│   │   ├── 1.json
+│   │   ├── 1.sql
+│   │   ├── 1.csv
+│   │   └── ...
+│   ├── trajectory/{namespace}/{timestamp}/
+│   │   ├── 0_{ts}.yaml
+│   │   ├── 1_{ts}.yaml
+│   │   └── ...
+│   └── evaluation_round_{timestamp}_1.json
+├── ...
+└── {group_name}_summary_{timestamp}.xlsx              # Summary report across all rounds
+```
+
+The summary Excel file contains a cross-round comparison table:
+
+| task_id                  | round_0         | round_1         | ... | Matching Rate |
+|--------------------------|-----------------|-----------------|-----|---------------|
+| 0                        | Matched         | Result Mismatch | ... | 50.00%        |
+| 1                        | Column Mismatch | Matched         | ... | 50.00%        |
+| Summary of Matching Rate | 50.00%          | 50.00%          | ... | 50.00%        |
+| Round Duration           | 5m 30s          | 5m 12s          | ... |               |
+
+### Task Status Definitions
+
+Each task in each round is classified into one of the following statuses, listed from highest to lowest evaluation priority (the first matching status is assigned):
+
+| Status            | Description                                                                |
+|-------------------|----------------------------------------------------------------------------|
+| `Not Executed`    | Benchmark or evaluation encountered an anomaly; the task was not processed |
+| `Matched`         | Generated SQL results match the gold standard answers                      |
+| `Gen SQL Failed`  | The SQL generated by the agent fails to execute in the database            |
+| `Gold SQL Failed` | Gold SQL execution failed — check configuration or gold SQL correctness    |
+| `Match Failed`    | Evaluation result was not obtained, possibly due to an uncaught exception  |
+| `Table Mismatch`  | The tables located by the agent are inaccurate (incorrect or missing)      |
+| `Result Mismatch` | Tables matched, but row or column values differ from the expected output   |
+| `Column Mismatch` | Tables and rows matched, but some columns differ or are missing            |
