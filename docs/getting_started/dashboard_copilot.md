@@ -86,6 +86,8 @@ helm repo update
 helm upgrade --install superset superset/superset -n default -f ./examples-values.yaml
 ```
 
+[Download examples-values.yaml](../assets/examples-values.yaml){ .md-button }
+
 !!! tip "Custom Values"
     You can customize the deployment by modifying `examples-values.yaml`. See the [Superset Helm Chart documentation](https://github.com/apache/superset/tree/master/helm/superset) for available options.
 
