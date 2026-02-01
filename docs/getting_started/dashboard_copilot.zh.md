@@ -85,6 +85,7 @@ helm repo update
 # 使用示例配置部署 Superset
 helm upgrade --install superset superset/superset -n default -f ./examples-values.yaml
 ```
+[下载 examples-values.yaml](../assets/examples-values.yaml){ .md-button }
 
 !!! tip "自定义配置"
     您可以通过修改 `examples-values.yaml` 来自定义部署。有关可用选项，请参阅 [Superset Helm Chart 文档](https://github.com/apache/superset/tree/master/helm/superset)。
