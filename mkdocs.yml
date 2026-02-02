@@ -50,8 +50,8 @@ nav:
       - Introduction: benchmark/benchmark_manual.md
     - Metricflow:
       - Introduction: metricflow/introduction.md
-    - MCP Server:
-      - Introduction: mcp/introduction.md
+    - Integration:
+      - MCP: integration/mcp.md
 
   - Release Notes: release_notes.md
 
@@ -100,7 +100,7 @@ plugins:
             Semantic Adapters: 语义层适配器
             Benchmark: 基准测试
             Metricflow: MetricFlow
-            MCP Server: MCP 服务
+            Integration:  集成
             Release Notes: 发布说明
 
 theme:

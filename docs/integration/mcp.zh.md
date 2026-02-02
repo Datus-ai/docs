@@ -27,19 +27,87 @@ pip install datus-agent
 ```bash
 # 静态模式：单命名空间
 uvx --from datus-agent datus-mcp --namespace bird_sqlite
-uvx --from datus-agent datus-mcp --namespace bird_sqlite --transport http --host 127.0.0.1 --port 8888
+uvx --from datus-agent datus-mcp --namespace bird_sqlite --transport http --host 127.0.0.1 --port 8000
 # 动态模式：多命名空间 HTTP/SSE 服务
-uvx --from datus-agent datus-mcp --dynamic --transport http --host 127.0.0.1 --port 8888
-uvx --from datus-agent datus-mcp --dynamic --transport sse --host 127.0.0.1 --port 8888
+uvx --from datus-agent datus-mcp --dynamic --transport http --host 127.0.0.1 --port 8000
+uvx --from datus-agent datus-mcp --dynamic --transport sse --host 127.0.0.1 --port 8000
 
 # 或者直接使用 python 运行
 python -m datus.mcp_server --namespace bird_sqlite
 # 动态模式：多命名空间 HTTP/SSE 服务
-python -m datus.mcp_server --dynamic --transport http --host 127.0.0.1 --port 8888
-python -m datus.mcp_server --dynamic --transport sse --host 127.0.0.1 --port 8888
+python -m datus.mcp_server --dynamic --transport http --host 127.0.0.1 --port 8000
+python -m datus.mcp_server --dynamic --transport sse --host 127.0.0.1 --port 8000
 ```
 
-## 配置
+## 客户端集成
+
+### Claude Code
+
+启动 Datus MCP 服务后，将其添加到 Claude Code：
+
+```bash
+# 启动服务（SSE 模式）
+python -m datus.mcp_server --dynamic --transport sse --port 8000
+
+# 添加到 Claude Code
+claude mcp add --transport sse datus http://127.0.0.1:8000/sse/bird_sqlite
+```
+
+### Claude Desktop
+
+Claude Desktop 需要通过 [mcp-remote](https://www.npmjs.com/package/mcp-remote) 连接远程 MCP 服务。
+
+启动 Datus MCP 服务后，使用以下脚本配置 Claude Desktop：
+
+```bash
+# Claude Desktop 可能无法直接找到 npx，因此需要解析完整路径
+NODE_BIN_DIR=$(dirname $(which node))
+NPX_PATH=$(which npx)
+
+cat > ~/Library/Application\ Support/Claude/claude_desktop_config.json << EOF
+{
+  "mcpServers": {
+    "datus-agent": {
+      "command": "$NPX_PATH",
+      "args": [
+        "mcp-remote@latest",
+        "http://127.0.0.1:8000/sse/bird_sqlite",
+        "--transport",
+        "sse-only"
+      ],
+      "env": {
+        "PATH": "$NODE_BIN_DIR:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin"
+      }
+    }
+  }
+}
+EOF
+```
+
+或者手动将以下内容添加到 `claude_desktop_config.json`：
+
+```json
+{
+  "mcpServers": {
+    "datus-agent": {
+      "command": "npx",
+      "args": [
+        "mcp-remote@latest",
+        "http://127.0.0.1:8000/sse/bird_sqlite",
+        "--transport",
+        "sse-only"
+      ]
+    }
+  }
+}
+```
+
+!!! tip
+    Claude Desktop 也支持 stdio 直连方式，参见[其他 MCP 客户端](#其他-mcp-客户端)章节。
+
+### 其他 MCP 客户端
+
+支持 stdio 传输的 MCP 客户端：
 
 - **使用 uvx：**
 
@@ -82,23 +150,26 @@ python -m datus.mcp_server --dynamic --transport sse --host 127.0.0.1 --port 888
 }
 ```
 
-- **使用 HTTP/SSE 模式：**
+支持 HTTP/SSE 传输的 MCP 客户端：
+
+- **SSE：**
 ```json
 {
   "mcpServers": {
     "DatusServer": {
-      "url": "http://127.0.0.1:8888/sse/bird_sqlite",
+      "url": "http://127.0.0.1:8000/sse/bird_sqlite",
       "transport": "sse"
     }
   }
 }
 ```
 
+- **Streamable HTTP：**
 ```json
 {
   "mcpServers": {
     "DatusServer": {
-      "url": "http://127.0.0.1:8888/mcp/bird_sqlite",
+      "url": "http://127.0.0.1:8000/mcp/bird_sqlite",
       "transport": "http"
     }
   }
@@ -132,7 +203,6 @@ datus-mcp --dynamic --host 0.0.0.0 --port 8000 --transport sse
 
 # 以 HTTP Stream 模式启动动态服务
 datus-mcp --dynamic --host 0.0.0.0 --port 8000 --transport http
-
 ```
 
 连接指定命名空间：
@@ -152,7 +222,7 @@ datus-mcp --dynamic --host 0.0.0.0 --port 8000 --transport http
 - `http://localhost:8000/` - 服务信息及可用命名空间
 - `http://localhost:8000/health` - 健康检查
 
-### 可用工具
+## 可用工具
 
 MCP 服务暴露以下工具：
 
@@ -161,7 +231,7 @@ MCP 服务暴露以下工具：
 | **数据库**     | `list_databases`, `list_schemas`, `list_tables`, `search_table`, `describe_table`, `get_table_ddl`, `read_query`                                                  |
 | **上下文搜索** | `list_subject_tree`, `search_metrics`, `get_metrics`, `search_reference_sql`, `get_reference_sql`, `search_semantic_objects`, `search_knowledge`, `get_knowledge` |
 
-### 命令行参数
+## 命令行参数
 
 ```bash
 datus-mcp --help

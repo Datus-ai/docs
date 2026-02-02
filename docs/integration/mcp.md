@@ -22,24 +22,92 @@ Claude Desktop, Claude Code, and other MCP-compatible clients.
 pip install datus-agent
 ```
 
-- Run the MCP server:
+- Start the MCP server:
 
 ```bash
 # Static Mode: Single namespace
 uvx --from datus-agent datus-mcp --namespace bird_sqlite
-uvx --from datus-agent datus-mcp --namespace bird_sqlite --transport http --host 127.0.0.1 --port 8888
+uvx --from datus-agent datus-mcp --namespace bird_sqlite --transport http --host 127.0.0.1 --port 8000
 # Dynamic Mode: Multi-namespace HTTP/SSE server
-uvx --from datus-agent datus-mcp --dynamic --transport http --host 127.0.0.1 --port 8888
-uvx --from datus-agent datus-mcp --dynamic --transport sse --host 127.0.0.1 --port 8888
+uvx --from datus-agent datus-mcp --dynamic --transport http --host 127.0.0.1 --port 8000
+uvx --from datus-agent datus-mcp --dynamic --transport sse --host 127.0.0.1 --port 8000
 
 # Or run with python directly
 python -m datus.mcp_server --namespace bird_sqlite
 # Dynamic Mode: Multi-namespace HTTP/SSE server
-python -m datus.mcp_server --dynamic --transport http --host 127.0.0.1 --port 8888
-python -m datus.mcp_server --dynamic --transport sse --host 127.0.0.1 --port 8888
+python -m datus.mcp_server --dynamic --transport http --host 127.0.0.1 --port 8000
+python -m datus.mcp_server --dynamic --transport sse --host 127.0.0.1 --port 8000
 ```
 
-## Configuration
+## Client Integration
+
+### Claude Code
+
+Start the Datus MCP server, then add it to Claude Code:
+
+```bash
+# Start server (SSE mode)
+python -m datus.mcp_server --dynamic --transport sse --port 8000
+
+# Add to Claude Code
+claude mcp add --transport sse datus http://127.0.0.1:8000/sse/bird_sqlite
+```
+
+### Claude Desktop
+
+Claude Desktop requires [mcp-remote](https://www.npmjs.com/package/mcp-remote) to connect to a remote MCP server.
+
+Start the Datus MCP server, then configure Claude Desktop using the following script:
+
+```bash
+# npx may not be found directly by Claude Desktop, so we resolve the full paths
+NODE_BIN_DIR=$(dirname $(which node))
+NPX_PATH=$(which npx)
+
+cat > ~/Library/Application\ Support/Claude/claude_desktop_config.json << EOF
+{
+  "mcpServers": {
+    "datus-agent": {
+      "command": "$NPX_PATH",
+      "args": [
+        "mcp-remote@latest",
+        "http://127.0.0.1:8000/sse/bird_sqlite",
+        "--transport",
+        "sse-only"
+      ],
+      "env": {
+        "PATH": "$NODE_BIN_DIR:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin"
+      }
+    }
+  }
+}
+EOF
+```
+
+Or manually add the following to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "datus-agent": {
+      "command": "npx",
+      "args": [
+        "mcp-remote@latest",
+        "http://127.0.0.1:8000/sse/bird_sqlite",
+        "--transport",
+        "sse-only"
+      ]
+    }
+  }
+}
+```
+
+!!! tip
+    Claude Desktop also supports stdio transport directly. See the [Other MCP Clients](#other-mcp-clients) section for stdio configuration.
+
+### Other MCP Clients
+
+For MCP clients that support stdio transport:
 
 - **Using uvx:**
 
@@ -82,23 +150,26 @@ python -m datus.mcp_server --dynamic --transport sse --host 127.0.0.1 --port 888
 }
 ```
 
-- **Using HTTP/SSE mode:**
+For MCP clients that support HTTP/SSE transport:
+
+- **SSE:**
 ```json
 {
   "mcpServers": {
     "DatusServer": {
-      "url": "http://127.0.0.1:8888/sse/bird_sqlite",
+      "url": "http://127.0.0.1:8000/sse/bird_sqlite",
       "transport": "sse"
     }
   }
 }
 ```
 
+- **Streamable HTTP:**
 ```json
 {
   "mcpServers": {
     "DatusServer": {
-      "url": "http://127.0.0.1:8888/mcp/bird_sqlite",
+      "url": "http://127.0.0.1:8000/mcp/bird_sqlite",
       "transport": "http"
     }
   }
@@ -130,9 +201,8 @@ Run a single server that supports all configured namespaces via URL path:
 # Start dynamic server with sse mode
 datus-mcp --dynamic --host 0.0.0.0 --port 8000 --transport sse
 
-# Start dynamic server with http-stream mode
+# Start dynamic server with streamable HTTP mode
 datus-mcp --dynamic --host 0.0.0.0 --port 8000 --transport http
-
 ```
 
 Connect to specific namespace:
@@ -152,7 +222,7 @@ Info endpoints:
 - `http://localhost:8000/` - Server info and available namespaces
 - `http://localhost:8000/health` - Health check
 
-### Available Tools
+## Available Tools
 
 The MCP server exposes the following tools:
 
@@ -161,7 +231,7 @@ The MCP server exposes the following tools:
 | **Database**       | `list_databases`, `list_schemas`, `list_tables`, `search_table`, `describe_table`, `get_table_ddl`, `read_query`                                                  |
 | **Context Search** | `list_subject_tree`, `search_metrics`, `get_metrics`, `search_reference_sql`, `get_reference_sql`, `search_semantic_objects`, `search_knowledge`, `get_knowledge` |
 
-### Command Line Options
+## Command Line Options
 
 ```bash
 datus-mcp --help
