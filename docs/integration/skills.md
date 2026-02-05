@@ -68,10 +68,18 @@ skills:
 permissions:
   default: allow
   rules:
+    # Require confirmation for skill loading
     - tool: skills
       pattern: "*"
-      permission: allow
+      permission: ask
+    # Require confirmation for skill script execution
+    - tool: skill_bash
+      pattern: "*"
+      permission: ask
 ```
+
+!!! tip
+    Using `ask` permission for skills and skill_bash requires manual confirmation before execution, which helps prevent accidental or dangerous operations.
 
 ### Step 3: Use the Skill in a Chat Session
 
@@ -97,14 +105,14 @@ The agent will:
     )
     ```
 
-![Chat session showing skill loading and report generation](assets/skills1.png)
-![Chat session showing skill loading and report generation](assets/skills3.png)
+![Chat session showing skill loading and report generation](../assets/skills1.png)
+![Chat session showing skill loading and report generation](../assets/skills3.png)
 
 ### Step 4: View the Generated Report
 
 The report will be generated in the skill's working directory:
 
-![Generated markdown report showing the analysis results](assets/skill5final.png)
+![Generated markdown report showing the analysis results](../assets/skill5final.png)
 
 ## Permission System
 
