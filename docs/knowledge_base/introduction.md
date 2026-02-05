@@ -51,6 +51,14 @@ The Datus Agent Knowledge Base is a multi-modal intelligence system that transfo
 - **Capabilities**: Semantic search for business terms, context enrichment, term resolution
 - **Use**: Agent context enhancement, terminology standardization, knowledge onboarding
 
+### 6. [Platform Documentation](platform_doc.md)
+
+**Purpose**: Provide authoritative platform documentation for SQL generation and validation.
+
+- **Stores**: Official documentation chunks per platform and version
+- **Capabilities**: Navigation browsing, document retrieval, semantic search
+- **Use**: Verify platform-specific syntax and features before writing SQL
+
 
 ## Key Features
 
