@@ -68,10 +68,18 @@ skills:
 permissions:
   default: allow
   rules:
+    # 技能加载需要确认
     - tool: skills
       pattern: "*"
-      permission: allow
+      permission: ask
+    # 技能脚本执行需要确认
+    - tool: skill_bash
+      pattern: "*"
+      permission: ask
 ```
+
+!!! tip
+    为 skills 和 skill_bash 使用 `ask` 权限，在执行前需要手动确认，有助于防止意外或危险操作。
 
 ### 步骤 3：在聊天会话中使用技能
 
@@ -97,14 +105,14 @@ Agent 将执行以下操作：
     )
     ```
 
-![聊天会话展示技能加载和报告生成](assets/skills1.png)
-![聊天会话展示技能加载和报告生成](assets/skills3.png)
+![聊天会话展示技能加载和报告生成](../assets/skills1.png)
+![聊天会话展示技能加载和报告生成](../assets/skills3.png)
 
 ### 步骤 4：查看生成的报告
 
 报告将在技能的工作目录中生成：
 
-![生成的 Markdown 报告展示分析结果](assets/skill5final.png)
+![生成的 Markdown 报告展示分析结果](../assets/skill5final.png)
 
 ## 权限系统
 

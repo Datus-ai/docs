@@ -105,7 +105,7 @@ plugins:
             Metricflow: MetricFlow
             Integration: 集成
             MCP: MCP
-            Skills: 技能
+            Skills: Skills
             Release Notes: 发布说明
 
 theme:
