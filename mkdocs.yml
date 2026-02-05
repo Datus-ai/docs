@@ -53,6 +53,7 @@ nav:
       - Introduction: metricflow/introduction.md
     - Integration:
       - MCP: integration/mcp.md
+      - Skills: integration/skills.md
 
   - Release Notes: release_notes.md
 
@@ -102,7 +103,9 @@ plugins:
             Semantic Adapters: 语义层适配器
             Benchmark: 基准测试
             Metricflow: MetricFlow
-            Integration:  集成
+            Integration: 集成
+            MCP: MCP
+            Skills: 技能
             Release Notes: 发布说明
 
 theme:
