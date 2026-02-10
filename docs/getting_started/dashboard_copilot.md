@@ -83,7 +83,7 @@ helm repo add superset https://apache.github.io/superset
 helm repo update
 
 # Deploy Superset with example configuration
-helm upgrade --install superset superset/superset -n default -f ./examples-values.yaml
+helm upgrade --install superset superset/superset -n default -f ./examples-values.yaml --wait --timeout 30m
 ```
 
 [Download examples-values.yaml](../assets/examples-values.yaml){ .md-button }
@@ -107,10 +107,10 @@ Expose Superset and PostgreSQL services locally:
 
 ```bash
 # Forward Superset UI (port 8088)
-kubectl port-forward -n default service/superset 8088:8088 &
+kubectl port-forward -n default service/superset 8088:8088 > /dev/null 2>&1 &
 
 # Forward PostgreSQL (port 15432)
-kubectl port-forward -n default svc/superset-postgresql 15432:5432 &
+kubectl port-forward -n default svc/superset-postgresql 15432:5432 > /dev/null 2>&1 &
 ```
 
 You can now access Superset at [http://localhost:8088](http://localhost:8088) with default credentials `admin/admin`.
@@ -158,7 +158,7 @@ Now use the `bootstrap-bi` command to automatically generate context and subagen
 ### Run Bootstrap Command
 
 ```bash
-datus-agent bootstrap-bi --namespace demo
+datus-agent bootstrap-bi --namespace superset
 ```
 
 ### Interactive Flow

@@ -83,7 +83,7 @@ helm repo add superset https://apache.github.io/superset
 helm repo update
 
 # 使用示例配置部署 Superset
-helm upgrade --install superset superset/superset -n default -f ./examples-values.yaml
+helm upgrade --install superset superset/superset -n default -f ./examples-values.yaml --wait --timeout 30m
 ```
 [下载 examples-values.yaml](../assets/examples-values.yaml){ .md-button }
 
@@ -106,10 +106,10 @@ kubectl get pods -n default -w
 
 ```bash
 # 转发 Superset UI（端口 8088）
-kubectl port-forward -n default service/superset 8088:8088 &
+kubectl port-forward -n default service/superset 8088:8088 > /dev/null 2>&1 &
 
 # 转发 PostgreSQL（端口 15432）
-kubectl port-forward -n default svc/superset-postgresql 15432:5432 &
+kubectl port-forward -n default svc/superset-postgresql 15432:5432 > /dev/null 2>&1 &
 ```
 
 现在您可以通过 [http://localhost:8088](http://localhost:8088) 访问 Superset，默认凭据为 `admin/admin`。
@@ -157,7 +157,7 @@ agent:
 ### 运行 Bootstrap 命令
 
 ```bash
-datus-agent bootstrap-bi --namespace demo
+datus-agent bootstrap-bi --namespace superset
 ```
 
 ### 交互流程
