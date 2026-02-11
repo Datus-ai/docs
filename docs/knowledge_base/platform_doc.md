@@ -27,6 +27,7 @@ datus-agent platform-doc \
   --platform <platform_name> \
   --source <source> \
   --source-type <github|website|local> \
+  --update-strategy <check|overwrite> \
   [options]
 ```
 
@@ -42,20 +43,36 @@ datus-agent platform-doc \
 | `--paths` | `docs README.md` | Paths to fetch for GitHub sources only. |
 | `--include-patterns` | - | Include patterns (glob for local, regex for website). |
 | `--exclude-patterns` | - | Exclude patterns (glob for local, regex for website). |
-| `--chunk-size` | `1024` | Target chunk size in characters. |
+| `--chunk-size` | `1024` | Target chunk size in characters (see details below). |
 | `--max-depth` | `2` | Maximum crawl depth for website sources. |
 | `--pool-size` | `4` | Worker threads for processing. |
 | `--update-strategy` | `check` | `check` (status-only) or `overwrite` (rebuild). |
 
+#### `--chunk-size` Details
+
+`--chunk-size` is a **soft limit**: to preserve semantic integrity, individual paragraphs and code blocks may exceed the target size (up to a hard maximum of **2048** characters). Chunks smaller than **256** characters are automatically merged with their neighbors.
+
+- **Default**: 1024 characters
+- **Recommended range**: 512–2048
+- **Tuning**: larger values produce fewer, coarser chunks; smaller values produce more, finer-grained chunks
+
+#### Supported File Types
+
+- **local / github**: `.md`, `.markdown`, `.html`, `.htm`, `.rst`, `.txt`
+
 ### Examples
 
 **1) GitHub (default branch)**
+
+!!! tip
+    Set `GITHUB_TOKEN` environment variable or configure `github_token` in `agent.yml` to avoid GitHub API rate limiting.
 
 ```bash
 datus-agent platform-doc \
   --platform starrocks \
   --source StarRocks/starrocks \
   --source-type github \
+  --update-strategy overwrite \
   --paths docs/en
 ```
 
@@ -68,10 +85,23 @@ datus-agent platform-doc \
   --source-type github \
   --version 4.0.5 \
   --github-ref 4.0.5 \
+  --update-strategy overwrite \
   --paths docs/en
 ```
 
-**3) Website crawl**
+**3) GitHub (versioned docs branch)**
+
+```bash
+datus-agent platform-doc \
+  --platform polaris \
+  --source apache/polaris \
+  --source-type github \
+  --github-ref versioned-docs \
+  --update-strategy overwrite \
+  --paths 1.2.0 1.3.0
+```
+
+**4) Website crawl**
 
 ```bash
 datus-agent platform-doc \
@@ -79,17 +109,19 @@ datus-agent platform-doc \
   --source https://docs.snowflake.com/en/sql-reference \
   --source-type website \
   --version latest \
+  --update-strategy overwrite \
   --max-depth 2
 ```
 
-**4) Local directory**
+**5) Local directory**
 
 ```bash
 datus-agent platform-doc \
   --platform duckdb \
   --source /path/to/duckdb-docs \
   --source-type local \
-  --version v1.0.0
+  --version v1.0.0 \
+  --update-strategy overwrite
 ```
 
 ## Configure in `agent.yml` (Optional)

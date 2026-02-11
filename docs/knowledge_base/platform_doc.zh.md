@@ -27,6 +27,7 @@ datus-agent platform-doc \
   --platform <platform_name> \
   --source <source> \
   --source-type <github|website|local> \
+  --update-strategy <check|overwrite> \
   [可选参数]
 ```
 
@@ -42,20 +43,36 @@ datus-agent platform-doc \
 | `--paths`            | `docs README.md` | GitHub 专用：仓库内需要抓取的路径列表。                                     |
 | `--include-patterns` | -                | 包含规则（本地为 glob，网站为正则）。                                       |
 | `--exclude-patterns` | -                | 排除规则（本地为 glob，网站为正则）。                                       |
-| `--chunk-size`       | `1024`           | 分块目标大小（字符数）。                                                |
+| `--chunk-size`       | `1024`           | 分块目标大小，字符数（详见下方说明）。                                                |
 | `--max-depth`        | `2`              | Website 专用：最大爬取深度。                                          |
 | `--pool-size`        | `4`              | 并行处理线程数。                                                    |
 | `--update-strategy`  | `check`          | `check`（仅检查）或 `overwrite`（重建）。                              |
 
+#### `--chunk-size` 说明
+
+`--chunk-size` 是一个**软限制**：为保留段落和代码块的语义完整性，单个 chunk 可能超过目标大小（硬上限为 **2048** 字符）。小于 **256** 字符的 chunk 会自动与相邻 chunk 合并。
+
+- **默认值**：1024 字符
+- **推荐范围**：512–2048
+- **调优方向**：值越大，chunk 越少越粗；值越小，chunk 越多越细
+
+#### 支持的文档类型
+
+- **local / github**：`.md`、`.markdown`、`.html`、`.htm`、`.rst`、`.txt`
+
 ### 使用示例
 
 **1）GitHub（默认分支）**
+
+!!! tip
+    建议设置 `GITHUB_TOKEN` 环境变量或在 `agent.yml` 中配置 `github_token`，以避免 GitHub API 速率限制。
 
 ```bash
 datus-agent platform-doc \
   --platform starrocks \
   --source StarRocks/starrocks \
   --source-type github \
+  --update-strategy overwrite \
   --paths docs/en
 ```
 
@@ -68,10 +85,23 @@ datus-agent platform-doc \
   --source-type github \
   --version 4.0.5 \
   --github-ref 4.0.5 \
+  --update-strategy overwrite \
   --paths docs/en
 ```
 
-**3）官方网站抓取**
+**3）GitHub（版本化文档分支）**
+
+```bash
+datus-agent platform-doc \
+  --platform polaris \
+  --source apache/polaris \
+  --source-type github \
+  --github-ref versioned-docs \
+  --update-strategy overwrite \
+  --paths 1.2.0 1.3.0
+```
+
+**4）官方网站抓取**
 
 ```bash
 datus-agent platform-doc \
@@ -79,17 +109,19 @@ datus-agent platform-doc \
   --source https://docs.snowflake.com/en/sql-reference \
   --source-type website \
   --version latest \
+  --update-strategy overwrite \
   --max-depth 2
 ```
 
-**4）本地目录**
+**5）本地目录**
 
 ```bash
 datus-agent platform-doc \
   --platform duckdb \
   --source /path/to/duckdb-docs \
   --source-type local \
-  --version v1.0.0
+  --version v1.0.0 \
+  --update-strategy overwrite
 ```
 
 ## 在 `agent.yml` 中配置（可选）
