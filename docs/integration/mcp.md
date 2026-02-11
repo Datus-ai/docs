@@ -26,17 +26,17 @@ pip install datus-agent
 
 ```bash
 # Static Mode: Single namespace
-uvx --from datus-agent datus-mcp --namespace bird_sqlite
-uvx --from datus-agent datus-mcp --namespace bird_sqlite --transport http --host 127.0.0.1 --port 8000
+uvx --from datus-agent datus-mcp --namespace <your namespace>
+uvx --from datus-agent datus-mcp --namespace <your namespace> --transport http --host 127.0.0.1 --port 8000
 # Dynamic Mode: Multi-namespace HTTP/SSE server
 uvx --from datus-agent datus-mcp --dynamic --transport http --host 127.0.0.1 --port 8000
 uvx --from datus-agent datus-mcp --dynamic --transport sse --host 127.0.0.1 --port 8000
 
-# Or run with python directly
-python -m datus.mcp_server --namespace bird_sqlite
+# Or run directly
+datus-mcp --namespace <your namespace>
 # Dynamic Mode: Multi-namespace HTTP/SSE server
-python -m datus.mcp_server --dynamic --transport http --host 127.0.0.1 --port 8000
-python -m datus.mcp_server --dynamic --transport sse --host 127.0.0.1 --port 8000
+datus-mcp --dynamic --transport http --host 127.0.0.1 --port 8000
+datus-mcp --dynamic --transport sse --host 127.0.0.1 --port 8000
 ```
 
 ## Client Integration
@@ -47,10 +47,10 @@ Start the Datus MCP server, then add it to Claude Code:
 
 ```bash
 # Start server (SSE mode)
-python -m datus.mcp_server --dynamic --transport sse --port 8000
+datus-mcp --dynamic --transport sse --port 8000
 
 # Add to Claude Code
-claude mcp add --transport sse datus http://127.0.0.1:8000/sse/bird_sqlite
+claude mcp add --transport sse datus http://127.0.0.1:8000/sse/<your namespace>
 ```
 
 ### Claude Desktop
@@ -71,7 +71,7 @@ cat > ~/Library/Application\ Support/Claude/claude_desktop_config.json << EOF
       "command": "$NPX_PATH",
       "args": [
         "mcp-remote@latest",
-        "http://127.0.0.1:8000/sse/bird_sqlite",
+        "http://127.0.0.1:8000/sse/<your namespace>",
         "--transport",
         "sse-only"
       ],
@@ -93,7 +93,7 @@ Or manually add the following to your `claude_desktop_config.json`:
       "command": "npx",
       "args": [
         "mcp-remote@latest",
-        "http://127.0.0.1:8000/sse/bird_sqlite",
+        "http://127.0.0.1:8000/sse/<your namespace>",
         "--transport",
         "sse-only"
       ]
@@ -121,7 +121,7 @@ For MCP clients that support stdio transport:
         "datus-agent",
         "datus-mcp",
         "--namespace",
-        "bird_sqlite",
+        "<your namespace>",
         "--transport",
         "stdio"
       ]
@@ -141,7 +141,7 @@ For MCP clients that support stdio transport:
         "-m",
         "datus.mcp_server",
         "--namespace",
-        "bird_sqlite",
+        "<your namespace>",
         "--transport",
         "stdio"
       ]
@@ -157,7 +157,7 @@ For MCP clients that support HTTP/SSE transport:
 {
   "mcpServers": {
     "DatusServer": {
-      "url": "http://127.0.0.1:8000/sse/bird_sqlite",
+      "url": "http://127.0.0.1:8000/sse/<your namespace>",
       "transport": "sse"
     }
   }
@@ -169,7 +169,7 @@ For MCP clients that support HTTP/SSE transport:
 {
   "mcpServers": {
     "DatusServer": {
-      "url": "http://127.0.0.1:8000/mcp/bird_sqlite",
+      "url": "http://127.0.0.1:8000/mcp/<your namespace>",
       "transport": "http"
     }
   }
@@ -182,10 +182,10 @@ For MCP clients that support HTTP/SSE transport:
 
 ```bash
 # Streamable HTTP (default, bidirectional)
-datus-mcp --namespace bird_sqlite --transport http --host 0.0.0.0 --port 8000
+datus-mcp --namespace <your namespace> --transport http --host 0.0.0.0 --port 8000
 
 # SSE mode (for web clients)
-datus-mcp --namespace bird_sqlite --transport sse --port 8000
+datus-mcp --namespace <your namespace> --transport sse --port 8000
 ```
 
 Connect to:
@@ -213,9 +213,9 @@ Connect to specific namespace:
 
 Example:
 
-- `http://localhost:8000/mcp/bird_sqlite`
-- `http://localhost:8000/sse/bird_sqlite`
-- `http://localhost:8000/mcp/superset?subagent=sales_dashboard`
+- Streamable HTTP, namespace `bird_sqlite`: `http://localhost:8000/mcp/bird_sqlite`
+- SSE, namespace `bird_sqlite`: `http://localhost:8000/sse/bird_sqlite`
+- Streamable HTTP, namespace `superset`, subagent `sales_dashboard`: `http://localhost:8000/mcp/superset?subagent=sales_dashboard`
 
 Info endpoints:
 
