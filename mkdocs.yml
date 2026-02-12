@@ -27,6 +27,7 @@ nav:
     - Knowledge Base:
       - Introduction: knowledge_base/introduction.md
       - External Knowledge: knowledge_base/ext_knowledge.md
+      - Platform Documentation: knowledge_base/platform_doc.md
       - Metadata: knowledge_base/metadata.md
       - Semantic Models: knowledge_base/semantic_model.md
       - Metrics: knowledge_base/metrics.md
@@ -89,6 +90,7 @@ plugins:
             Chatbot: chatbot
             Knowledge Base: 知识库
             External Knowledge: 外部知识
+            Platform Documentation: 平台文档
             Metadata: 元数据
             Semantic Models: 语义模型
             Metrics: 指标
@@ -222,5 +224,4 @@ markdown_extensions:
 
 extra_css:
   - stylesheets/extra.css
-
 
