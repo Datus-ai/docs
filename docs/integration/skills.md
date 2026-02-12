@@ -187,23 +187,35 @@ By default, the **chat subagent loads all discovered skills** automatically. Oth
 
 ### Enabling Skills for Customized Subagents
 
+Each subagent in `agentic_nodes` supports three types of tool extensions that can be mixed together:
+
+| Field | Source | Description |
+|-------|--------|-------------|
+| `tools` | Built-in | Datus native tools (e.g. `db_tools.*`, `context_search_tools.*`, `date_parsing_tools.*`) |
+| `mcp` | Third-party | External MCP server tools, configured via `.mcp.json` (e.g. `metricflow_mcp`, `filesystem`) |
+| `skills` | User-defined | Skills discovered from `SKILL.md` files — can define workflows in Markdown and extend with custom scripts |
+
 To enable skills in a customized subagent, add the `skills` field under the subagent's config in `agentic_nodes` section of `agent.yml`:
 
 ```yaml
 agentic_nodes:
-  # This subagent only sees report and data skills
+  # Mixing tools + mcp + skills in a single subagent
   school_report:
     node_class: gen_report
+    tools: db_tools.*, context_search_tools.*
+    mcp: metricflow_mcp
     skills: "report-*, data-*"
     model: deepseek
 
-  # This subagent only sees SQL-related skills
+  # SQL subagent with only native tools and SQL skills
   school_sql:
+    tools: db_tools.*, date_parsing_tools.*
     skills: "sql-*"
     model: deepseek
 
-  # This subagent sees all skills (chat loads all by default, but explicit is clearer)
+  # Chat subagent with all skills
   school_chat:
+    tools: db_tools.*, context_search_tools.*
     skills: "*"
     model: deepseek
 ```
@@ -227,11 +239,12 @@ skills:
 agentic_nodes:
   attribution_report:
     node_class: gen_report
+    tools: db_tools.*
     skills: "report-generator"
     model: deepseek
 ```
 
-With this configuration, the `attribution_report` subagent will have access to the `report-generator` skill. The LLM can call `load_skill(skill_name="report-generator")` to get instructions, then use `skill_execute_command()` to run scripts.
+With this configuration, the `attribution_report` subagent will have access to built-in database tools and the `report-generator` skill. The LLM can call `load_skill(skill_name="report-generator")` to get instructions, then use `skill_execute_command()` to run scripts defined in the skill.
 
 !!! note
     If no global `skills:` section is present in `agent.yml`, the system automatically creates a default skill manager that scans `~/.datus/skills` and `./skills`.

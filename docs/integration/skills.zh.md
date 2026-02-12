@@ -187,23 +187,35 @@ agentic_nodes:
 
 ### 为自定义 Subagent 启用技能
 
+`agentic_nodes` 中的每个 Subagent 支持三种工具扩展方式，可以混合使用：
+
+| 字段 | 来源 | 描述 |
+|------|------|------|
+| `tools` | 内置 | Datus 原生工具（如 `db_tools.*`、`context_search_tools.*`、`date_parsing_tools.*`） |
+| `mcp` | 第三方 | 外部 MCP 服务器工具，通过 `.mcp.json` 配置（如 `metricflow_mcp`、`filesystem`） |
+| `skills` | 用户自定义 | 从 `SKILL.md` 文件发现的技能 — 可在 Markdown 中定义工作流，也可通过自定义脚本扩展能力 |
+
 要在自定义 Subagent 中启用技能，请在 `agent.yml` 的 `agentic_nodes` 部分中为对应 Subagent 添加 `skills` 字段：
 
 ```yaml
 agentic_nodes:
-  # 此 Subagent 仅加载报告和数据类技能
+  # 在单个 Subagent 中混合使用 tools + mcp + skills
   school_report:
     node_class: gen_report
+    tools: db_tools.*, context_search_tools.*
+    mcp: metricflow_mcp
     skills: "report-*, data-*"
     model: deepseek
 
-  # 此 Subagent 仅加载 SQL 相关技能
+  # SQL Subagent，仅使用原生工具和 SQL 技能
   school_sql:
+    tools: db_tools.*, date_parsing_tools.*
     skills: "sql-*"
     model: deepseek
 
-  # 此 Subagent 加载所有技能（chat 默认加载全部，但显式声明更清晰）
+  # Chat Subagent，加载所有技能
   school_chat:
+    tools: db_tools.*, context_search_tools.*
     skills: "*"
     model: deepseek
 ```
@@ -227,11 +239,12 @@ skills:
 agentic_nodes:
   attribution_report:
     node_class: gen_report
+    tools: db_tools.*
     skills: "report-generator"
     model: deepseek
 ```
 
-通过此配置，`attribution_report` Subagent 将可以访问 `report-generator` 技能。LLM 可以调用 `load_skill(skill_name="report-generator")` 获取指令，然后使用 `skill_execute_command()` 运行脚本。
+通过此配置，`attribution_report` Subagent 将可以访问内置数据库工具和 `report-generator` 技能。LLM 可以调用 `load_skill(skill_name="report-generator")` 获取指令，然后使用 `skill_execute_command()` 运行技能中定义的脚本。
 
 !!! note
     如果 `agent.yml` 中没有全局 `skills:` 部分，系统会自动创建默认的技能管理器，扫描 `~/.datus/skills` 和 `./skills`。
