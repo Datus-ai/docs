@@ -26,17 +26,17 @@ pip install datus-agent
 
 ```bash
 # 静态模式：单命名空间
-uvx --from datus-agent datus-mcp --namespace bird_sqlite
-uvx --from datus-agent datus-mcp --namespace bird_sqlite --transport http --host 127.0.0.1 --port 8000
+uvx --from datus-agent datus-mcp --namespace <your namespace>
+uvx --from datus-agent datus-mcp --namespace <your namespace> --transport http --host 127.0.0.1 --port 8000
 # 动态模式：多命名空间 HTTP/SSE 服务
 uvx --from datus-agent datus-mcp --dynamic --transport http --host 127.0.0.1 --port 8000
 uvx --from datus-agent datus-mcp --dynamic --transport sse --host 127.0.0.1 --port 8000
 
-# 或者直接使用 python 运行
-python -m datus.mcp_server --namespace bird_sqlite
+# 或者直接运行
+datus-mcp --namespace <your namespace>
 # 动态模式：多命名空间 HTTP/SSE 服务
-python -m datus.mcp_server --dynamic --transport http --host 127.0.0.1 --port 8000
-python -m datus.mcp_server --dynamic --transport sse --host 127.0.0.1 --port 8000
+datus-mcp --dynamic --transport http --host 127.0.0.1 --port 8000
+datus-mcp --dynamic --transport sse --host 127.0.0.1 --port 8000
 ```
 
 ## 客户端集成
@@ -47,10 +47,10 @@ python -m datus.mcp_server --dynamic --transport sse --host 127.0.0.1 --port 800
 
 ```bash
 # 启动服务（SSE 模式）
-python -m datus.mcp_server --dynamic --transport sse --port 8000
+datus-mcp --dynamic --transport sse --port 8000
 
 # 添加到 Claude Code
-claude mcp add --transport sse datus http://127.0.0.1:8000/sse/bird_sqlite
+claude mcp add --transport sse datus http://127.0.0.1:8000/sse/<your namespace>
 ```
 
 ### Claude Desktop
@@ -71,7 +71,7 @@ cat > ~/Library/Application\ Support/Claude/claude_desktop_config.json << EOF
       "command": "$NPX_PATH",
       "args": [
         "mcp-remote@latest",
-        "http://127.0.0.1:8000/sse/bird_sqlite",
+        "http://127.0.0.1:8000/sse/<your namespace>",
         "--transport",
         "sse-only"
       ],
@@ -93,7 +93,7 @@ EOF
       "command": "npx",
       "args": [
         "mcp-remote@latest",
-        "http://127.0.0.1:8000/sse/bird_sqlite",
+        "http://127.0.0.1:8000/sse/<your namespace>",
         "--transport",
         "sse-only"
       ]
@@ -121,7 +121,7 @@ EOF
         "datus-agent",
         "datus-mcp",
         "--namespace",
-        "bird_sqlite",
+        "<your namespace>",
         "--transport",
         "stdio"
       ]
@@ -141,7 +141,7 @@ EOF
         "-m",
         "datus.mcp_server",
         "--namespace",
-        "bird_sqlite",
+        "<your namespace>",
         "--transport",
         "stdio"
       ]
@@ -157,7 +157,7 @@ EOF
 {
   "mcpServers": {
     "DatusServer": {
-      "url": "http://127.0.0.1:8000/sse/bird_sqlite",
+      "url": "http://127.0.0.1:8000/sse/<your namespace>",
       "transport": "sse"
     }
   }
@@ -169,7 +169,7 @@ EOF
 {
   "mcpServers": {
     "DatusServer": {
-      "url": "http://127.0.0.1:8000/mcp/bird_sqlite",
+      "url": "http://127.0.0.1:8000/mcp/<your namespace>",
       "transport": "http"
     }
   }
@@ -182,10 +182,10 @@ EOF
 
 ```bash
 # Streamable HTTP（默认，双向通信）
-datus-mcp --namespace bird_sqlite --transport http --host 0.0.0.0 --port 8000
+datus-mcp --namespace <your namespace> --transport http --host 0.0.0.0 --port 8000
 
 # SSE 模式（适用于 Web 客户端）
-datus-mcp --namespace bird_sqlite --transport sse --port 8000
+datus-mcp --namespace <your namespace> --transport sse --port 8000
 ```
 
 连接地址：
@@ -207,15 +207,15 @@ datus-mcp --dynamic --host 0.0.0.0 --port 8000 --transport http
 
 连接指定命名空间：
 
-- HTTP：`http://localhost:8000/mcp/{namespace}`
+- Streamable HTTP：`http://localhost:8000/mcp/{namespace}`
 - SSE：`http://localhost:8000/sse/{namespace}`
 - 指定 subagent：`http://localhost:8000/mcp/{namespace}?subagent={subagent_name}`
 
 示例：
 
-- `http://localhost:8000/mcp/bird_sqlite`
-- `http://localhost:8000/sse/bird_sqlite`
-- `http://localhost:8000/mcp/superset?subagent=sales_dashboard`
+- Streamable HTTP，namespace 为 `bird_sqlite`：`http://localhost:8000/mcp/bird_sqlite`
+- SSE，namespace 为 `bird_sqlite`：`http://localhost:8000/sse/bird_sqlite`
+- Streamable HTTP，namespace 为 `superset`，子代理为 `sales_dashboard`：`http://localhost:8000/mcp/superset?subagent=sales_dashboard`
 
 信息端点：
 
