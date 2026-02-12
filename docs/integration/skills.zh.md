@@ -176,18 +176,16 @@ agentic_nodes:
           permission: deny
 ```
 
-## 为自定义 Subagent 启用技能
+## 在 Subagent 中使用技能
 
 默认情况下，**聊天 Subagent 会自动加载所有已发现的技能**。其他 Subagent（报告生成、SQL 生成、指标等）**不会加载任何技能**，除非在 `agent.yml` 中显式配置。
-
-### 默认行为
 
 | Subagent 类型 | 默认加载的技能 |
 |---------------|---------------|
 | Chat | 所有已发现的技能 |
 | 其他所有 Subagent（报告、SQL、指标等） | 无 |
 
-### 为 Subagent 配置技能
+### 为自定义 Subagent 启用技能
 
 要在自定义 Subagent 中启用技能，请在 `agent.yml` 的 `agentic_nodes` 部分中为对应 Subagent 添加 `skills` 字段：
 
@@ -201,20 +199,16 @@ agentic_nodes:
 
   # 此 Subagent 仅加载 SQL 相关技能
   school_sql:
-    node_class: gen_sql
     skills: "sql-*"
     model: deepseek
 
-  # 此 Subagent 加载所有技能
-  school_all:
-    node_class: chat
+  # 此 Subagent 加载所有技能（chat 默认加载全部，但显式声明更清晰）
+  school_chat:
     skills: "*"
     model: deepseek
 ```
 
-`skills` 字段接受逗号分隔的 glob 模式列表。只有名称匹配至少一个模式的技能才会对该 Subagent 可用。
-
-### 工作原理
+`skills` 字段接受逗号分隔的 glob 模式列表。只有名称匹配至少一个模式的技能才会对该 Subagent 可用。`node_class` 字段支持两个值：`gen_sql`（默认）和 `gen_report`。
 
 当 Subagent 配置了 `skills` 时：
 
@@ -223,7 +217,7 @@ agentic_nodes:
 3. **权限过滤** — `permissions` 规则进一步过滤哪些技能被允许、拒绝或需要确认。
 4. **系统提示注入** — 可用技能以 `<available_skills>` XML 形式附加到 Subagent 的系统提示中，使 LLM 能够调用 `load_skill()` 和 `skill_execute_command()`。
 
-### 示例：在 Subagent 中启用报告生成
+**示例：在 Subagent 中启用报告生成技能**
 
 ```yaml
 skills:
@@ -245,13 +239,9 @@ agentic_nodes:
 !!! tip
     `skill_execute_command` 工具默认使用 `ask` 权限级别。这意味着在技能脚本执行前用户会收到确认提示，除非在 `permissions` 配置中显式覆盖。
 
-## 在隔离 Subagent 中使用技能
+### 在隔离 Subagent 中运行技能
 
-技能可以配置为在隔离的 Subagent 上下文中运行，适用于复杂任务。
-
-### 配置 Subagent 执行
-
-在 SKILL.md frontmatter 中添加 `context: fork` 并指定 `agent` 类型：
+技能也可以通过在 SKILL.md frontmatter 中设置 `context: fork` 来在隔离的 Subagent 上下文中运行：
 
 ```markdown
 ---
@@ -265,39 +255,15 @@ agent: Explore
 # Deep Analysis Skill
 
 This skill runs in an isolated Explore subagent for thorough investigation.
-
-## When to Use
-- Complex multi-step analysis
-- Tasks requiring extensive exploration
-- Investigations that may take multiple turns
 ```
 
-### 可用的 Subagent 类型
+可用的隔离执行 Subagent 类型：
 
 | Agent 类型 | 用途 |
 |------------|------|
 | `Explore` | 代码库探索、文件搜索、理解结构 |
 | `Plan` | 实现规划、架构决策 |
 | `general-purpose` | 多步骤任务、复杂研究 |
-
-### 示例：带 Subagent 的研究技能
-
-```markdown
----
-name: codebase-research
-description: Research codebase patterns and architecture
-context: fork
-agent: Explore
-user_invocable: true
----
-
-# Codebase Research
-
-When invoked, this skill spawns an Explore subagent to:
-1. Search for relevant files and patterns
-2. Analyze code structure
-3. Report findings back to the main conversation
-```
 
 ### 调用控制
 

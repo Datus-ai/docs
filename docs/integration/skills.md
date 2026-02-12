@@ -176,18 +176,16 @@ agentic_nodes:
           permission: deny
 ```
 
-## Enabling Skills for Customized Subagents
+## Using Skills in Subagents
 
 By default, the **chat subagent loads all discovered skills** automatically. Other subagents (report generation, SQL generation, metrics, etc.) **do not load any skills** unless explicitly configured in `agent.yml`.
-
-### Default Behavior
 
 | Subagent Type | Skills Loaded by Default |
 |---------------|------------------------|
 | Chat | All discovered skills |
 | All other subagents (report, SQL, metrics, etc.) | None |
 
-### Configure Skills for a Subagent
+### Enabling Skills for Customized Subagents
 
 To enable skills in a customized subagent, add the `skills` field under the subagent's config in `agentic_nodes` section of `agent.yml`:
 
@@ -201,20 +199,16 @@ agentic_nodes:
 
   # This subagent only sees SQL-related skills
   school_sql:
-    node_class: gen_sql
     skills: "sql-*"
     model: deepseek
 
-  # This subagent sees all skills
-  school_all:
-    node_class: chat
+  # This subagent sees all skills (chat loads all by default, but explicit is clearer)
+  school_chat:
     skills: "*"
     model: deepseek
 ```
 
-The `skills` field accepts a comma-separated list of glob patterns. Only skills whose names match at least one pattern will be available to that subagent.
-
-### How It Works
+The `skills` field accepts a comma-separated list of glob patterns. Only skills whose names match at least one pattern will be available to that subagent. The `node_class` field supports two values: `gen_sql` (default) and `gen_report`.
 
 When a subagent has `skills` configured:
 
@@ -223,7 +217,7 @@ When a subagent has `skills` configured:
 3. **Permission filtering** — The `permissions` rules further filter which skills are allowed, denied, or require confirmation.
 4. **System prompt injection** — Available skills are appended as `<available_skills>` XML to the subagent's system prompt, enabling the LLM to call `load_skill()` and `skill_execute_command()`.
 
-### Example: Enable Report Generation in a Subagent
+**Example: Enable Report Generation Skill in a Subagent**
 
 ```yaml
 skills:
@@ -245,13 +239,9 @@ With this configuration, the `attribution_report` subagent will have access to t
 !!! tip
     The `skill_execute_command` tool defaults to `ask` permission level. This means the user will be prompted for confirmation before any skill script executes, unless explicitly overridden in the `permissions` config.
 
-## Using Skills in Isolated Subagent
+### Running Skills in Isolated Subagent
 
-Skills can be configured to run in an isolated subagent context for complex tasks.
-
-### Configure Subagent Execution
-
-Add `context: fork` and specify the `agent` type in the SKILL.md frontmatter:
+Skills can also be configured to run in an isolated subagent context by setting `context: fork` in the SKILL.md frontmatter:
 
 ```markdown
 ---
@@ -265,39 +255,15 @@ agent: Explore
 # Deep Analysis Skill
 
 This skill runs in an isolated Explore subagent for thorough investigation.
-
-## When to Use
-- Complex multi-step analysis
-- Tasks requiring extensive exploration
-- Investigations that may take multiple turns
 ```
 
-### Available Subagent Types
+Available subagent types for isolated execution:
 
 | Agent Type | Use Case |
 |------------|----------|
 | `Explore` | Codebase exploration, file searching, understanding structure |
 | `Plan` | Implementation planning, architectural decisions |
 | `general-purpose` | Multi-step tasks, complex research |
-
-### Example: Research Skill with Subagent
-
-```markdown
----
-name: codebase-research
-description: Research codebase patterns and architecture
-context: fork
-agent: Explore
-user_invocable: true
----
-
-# Codebase Research
-
-When invoked, this skill spawns an Explore subagent to:
-1. Search for relevant files and patterns
-2. Analyze code structure
-3. Report findings back to the main conversation
-```
 
 ### Invocation Control
 
