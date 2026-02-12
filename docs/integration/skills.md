@@ -112,7 +112,7 @@ The agent will:
 
 The report will be generated in the skill's working directory:
 
-![Generated markdown report showing the analysis results](../assets/skill5final.png)
+![Generated markdown report showing the analysis results](../assets/skill5.png)
 
 ## Permission System
 
@@ -176,7 +176,76 @@ agentic_nodes:
           permission: deny
 ```
 
-## Using Skills in Subagent
+## Enabling Skills for Customized Subagents
+
+By default, the **chat subagent loads all discovered skills** automatically. Other subagents (report generation, SQL generation, metrics, etc.) **do not load any skills** unless explicitly configured in `agent.yml`.
+
+### Default Behavior
+
+| Subagent Type | Skills Loaded by Default |
+|---------------|------------------------|
+| Chat | All discovered skills |
+| All other subagents (report, SQL, metrics, etc.) | None |
+
+### Configure Skills for a Subagent
+
+To enable skills in a customized subagent, add the `skills` field under the subagent's config in `agentic_nodes` section of `agent.yml`:
+
+```yaml
+agentic_nodes:
+  # This subagent only sees report and data skills
+  school_report:
+    node_class: gen_report
+    skills: "report-*, data-*"
+    model: deepseek
+
+  # This subagent only sees SQL-related skills
+  school_sql:
+    node_class: gen_sql
+    skills: "sql-*"
+    model: deepseek
+
+  # This subagent sees all skills
+  school_all:
+    node_class: chat
+    skills: "*"
+    model: deepseek
+```
+
+The `skills` field accepts a comma-separated list of glob patterns. Only skills whose names match at least one pattern will be available to that subagent.
+
+### How It Works
+
+When a subagent has `skills` configured:
+
+1. **Skill discovery** — The system scans `skills.directories` (or defaults: `~/.datus/skills`, `./skills`) to find all `SKILL.md` files.
+2. **Pattern filtering** — Only skills matching the subagent's `skills` glob patterns are exposed.
+3. **Permission filtering** — The `permissions` rules further filter which skills are allowed, denied, or require confirmation.
+4. **System prompt injection** — Available skills are appended as `<available_skills>` XML to the subagent's system prompt, enabling the LLM to call `load_skill()` and `skill_execute_command()`.
+
+### Example: Enable Report Generation in a Subagent
+
+```yaml
+skills:
+  directories:
+    - ~/.datus/skills
+
+agentic_nodes:
+  attribution_report:
+    node_class: gen_report
+    skills: "report-generator"
+    model: deepseek
+```
+
+With this configuration, the `attribution_report` subagent will have access to the `report-generator` skill. The LLM can call `load_skill(skill_name="report-generator")` to get instructions, then use `skill_execute_command()` to run scripts.
+
+!!! note
+    If no global `skills:` section is present in `agent.yml`, the system automatically creates a default skill manager that scans `~/.datus/skills` and `./skills`.
+
+!!! tip
+    The `skill_execute_command` tool defaults to `ask` permission level. This means the user will be prompted for confirmation before any skill script executes, unless explicitly overridden in the `permissions` config.
+
+## Using Skills in Isolated Subagent
 
 Skills can be configured to run in an isolated subagent context for complex tasks.
 

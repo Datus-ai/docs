@@ -3,17 +3,14 @@
 ## 0.2
 
 ### 0.2.4 
-**Dashboard Copilot (Auto-generation)**
 
-- Dashboard to Sub-Agent: Automatically generate sub-agents from BI dashboard configurations [#339](https://github.com/Datus-ai/Datus-agent/pull/339)
-- Automatic semantic model generation during BI dashboard bootstrap [#368](https://github.com/Datus-ai/Datus-agent/pull/368)
-- Generate metrics definitions directly from Dashboard components [#363](https://github.com/Datus-ai/Datus-agent/pull/363)
+**New Features** 
 
-**Better Semantic Layer Integration**
+- **Dashboard Copilot (Auto-generation)**: Automatically generate sub-agents(reference sql/tables/metrics) from BI dashboard configurations [#339](https://github.com/Datus-ai/Datus-agent/pull/339) [#368](https://github.com/Datus-ai/Datus-agent/pull/368) [#363](https://github.com/Datus-ai/Datus-agent/pull/363)
 
-- Semantic Adapter: Pluggable adapter for external metric layer integration [#355](https://github.com/Datus-ai/Datus-agent/pull/355)
-- External Knowledge Storage: Vector-based knowledge retrieval for enhanced SQL generation context [#359](https://github.com/Datus-ai/Datus-agent/pull/359)
-- Added SQL field to metrics schema definition [#364](https://github.com/Datus-ai/Datus-agent/pull/364)
+- **Better Semantic Layer Integration** Semantic Adapter: Pluggable adapter for external metric layer integration [#355](https://github.com/Datus-ai/Datus-agent/pull/355)
+
+- **Extract Knowledge From Evaluation Feedback**: Improve External Knowledge Storage: Vector-based knowledge retrieval for enhanced SQL generation context [#359](https://github.com/Datus-ai/Datus-agent/pull/359)
 
 **Enhancements**
 
@@ -21,7 +18,6 @@
 - Enhanced ContextSearch methods and display [#347](https://github.com/Datus-ai/Datus-agent/pull/347)
 - Improved Plan Mode: Chat node inherits from GenSQL agentic node [#334](https://github.com/Datus-ai/Datus-agent/pull/334)
 - Catalog screen improvements: column comments and nested table row styles [#345](https://github.com/Datus-ai/Datus-agent/pull/345) [#378](https://github.com/Datus-ai/Datus-agent/pull/378)
-- Tool execution feedback with context and start events [#340](https://github.com/Datus-ai/Datus-agent/pull/340) [#341](https://github.com/Datus-ai/Datus-agent/pull/341)
 - Enhanced prompt version handling [#367](https://github.com/Datus-ai/Datus-agent/pull/367) [#379](https://github.com/Datus-ai/Datus-agent/pull/379)
 - Clean deprecated metric metadata and YAML directory on overwrite [#362](https://github.com/Datus-ai/Datus-agent/pull/362) [#365](https://github.com/Datus-ai/Datus-agent/pull/365)
 

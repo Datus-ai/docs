@@ -112,7 +112,7 @@ Agent 将执行以下操作：
 
 报告将在技能的工作目录中生成：
 
-![生成的 Markdown 报告展示分析结果](../assets/skill5final.png)
+![生成的 Markdown 报告展示分析结果](../assets/skill5.png)
 
 ## 权限系统
 
@@ -176,7 +176,76 @@ agentic_nodes:
           permission: deny
 ```
 
-## 在 Subagent 中使用技能
+## 为自定义 Subagent 启用技能
+
+默认情况下，**聊天 Subagent 会自动加载所有已发现的技能**。其他 Subagent（报告生成、SQL 生成、指标等）**不会加载任何技能**，除非在 `agent.yml` 中显式配置。
+
+### 默认行为
+
+| Subagent 类型 | 默认加载的技能 |
+|---------------|---------------|
+| Chat | 所有已发现的技能 |
+| 其他所有 Subagent（报告、SQL、指标等） | 无 |
+
+### 为 Subagent 配置技能
+
+要在自定义 Subagent 中启用技能，请在 `agent.yml` 的 `agentic_nodes` 部分中为对应 Subagent 添加 `skills` 字段：
+
+```yaml
+agentic_nodes:
+  # 此 Subagent 仅加载报告和数据类技能
+  school_report:
+    node_class: gen_report
+    skills: "report-*, data-*"
+    model: deepseek
+
+  # 此 Subagent 仅加载 SQL 相关技能
+  school_sql:
+    node_class: gen_sql
+    skills: "sql-*"
+    model: deepseek
+
+  # 此 Subagent 加载所有技能
+  school_all:
+    node_class: chat
+    skills: "*"
+    model: deepseek
+```
+
+`skills` 字段接受逗号分隔的 glob 模式列表。只有名称匹配至少一个模式的技能才会对该 Subagent 可用。
+
+### 工作原理
+
+当 Subagent 配置了 `skills` 时：
+
+1. **技能发现** — 系统扫描 `skills.directories`（或默认路径：`~/.datus/skills`、`./skills`）查找所有 `SKILL.md` 文件。
+2. **模式过滤** — 仅暴露匹配 Subagent `skills` glob 模式的技能。
+3. **权限过滤** — `permissions` 规则进一步过滤哪些技能被允许、拒绝或需要确认。
+4. **系统提示注入** — 可用技能以 `<available_skills>` XML 形式附加到 Subagent 的系统提示中，使 LLM 能够调用 `load_skill()` 和 `skill_execute_command()`。
+
+### 示例：在 Subagent 中启用报告生成
+
+```yaml
+skills:
+  directories:
+    - ~/.datus/skills
+
+agentic_nodes:
+  attribution_report:
+    node_class: gen_report
+    skills: "report-generator"
+    model: deepseek
+```
+
+通过此配置，`attribution_report` Subagent 将可以访问 `report-generator` 技能。LLM 可以调用 `load_skill(skill_name="report-generator")` 获取指令，然后使用 `skill_execute_command()` 运行脚本。
+
+!!! note
+    如果 `agent.yml` 中没有全局 `skills:` 部分，系统会自动创建默认的技能管理器，扫描 `~/.datus/skills` 和 `./skills`。
+
+!!! tip
+    `skill_execute_command` 工具默认使用 `ask` 权限级别。这意味着在技能脚本执行前用户会收到确认提示，除非在 `permissions` 配置中显式覆盖。
+
+## 在隔离 Subagent 中使用技能
 
 技能可以配置为在隔离的 Subagent 上下文中运行，适用于复杂任务。
 
