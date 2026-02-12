@@ -6,7 +6,7 @@
 
 The end-to-end pipeline is:
 
-```
+```text
 Fetch → Parse → Clean → Chunk → Embed → Store
 ```
 
@@ -173,7 +173,7 @@ To expose these tools in custom nodes or subagents, include `platform_doc_tools`
 
 **`get_document` expects one document at a time**. Pass a single hierarchy path like:
 
-```
+```text
 titles=["DDL", "CREATE TABLE"]
 ```
 
@@ -183,7 +183,7 @@ To retrieve multiple documents, call it multiple times.
 
 Inside `datus-cli`, use:
 
-```
+```bash
 !sd
 !search_document
 ```

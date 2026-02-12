@@ -6,7 +6,7 @@
 
 完整流水线：
 
-```
+```text
 抓取 → 解析 → 清洗 → 分块 → 向量化 → 存储
 ```
 
@@ -172,7 +172,7 @@ datus-agent platform-doc --platform starrocks --github-ref 4.0.5
 
 **`get_document` 一次只取一篇文档**，示例：
 
-```
+```text
 titles=["DDL", "CREATE TABLE"]
 ```
 
@@ -182,7 +182,7 @@ titles=["DDL", "CREATE TABLE"]
 
 在 `datus-cli` 中可使用：
 
-```
+```bash
 !sd
 !search_document
 ```
