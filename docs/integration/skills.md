@@ -352,21 +352,21 @@ The Town Marketplace requires authentication for all API operations. Use the `lo
 
 ```bash
 # Interactive login (prompts for email and password)
-datus skill login --marketplace http://my-town:9000
+datus skill login --marketplace http://datus-marketplace:9000
 
 # Non-interactive login
-datus skill login --marketplace http://my-town:9000 --email user@example.com --password secret
+datus skill login --marketplace http://datus-marketplace:9000 --email user@example.com --password secret
 
 # Logout (clear saved token)
-datus skill logout --marketplace http://my-town:9000
+datus skill logout --marketplace http://datus-marketplace:9000
 ```
 
 In the REPL:
 ```
-datus> .skill login http://my-town:9000
+datus> .skill login http://datus-marketplace:9000
 Email: user@example.com
 Password: ****
-Login successful! Token saved for http://my-town:9000
+Login successful! Token saved for http://datus-marketplace:9000
 ```
 
 Tokens are saved at `~/.datus/marketplace_auth.json` and automatically included in all subsequent marketplace requests. Tokens expire after 24 hours; re-run `login` to refresh.
@@ -388,7 +388,7 @@ skills:
 Or override the marketplace URL per-command with `--marketplace`:
 
 ```bash
-datus skill search sql --marketplace http://my-town:9000
+datus skill search sql --marketplace http://datus-marketplace:9000
 ```
 
 ### Command Reference
@@ -458,7 +458,7 @@ datus skill publish ./skills/sql-optimization
 datus skill publish ./skills/sql-optimization --owner "murphy"
 
 # Publish to a specific marketplace
-datus skill publish ./skills/sql-optimization --marketplace http://my-town:9000
+datus skill publish ./skills/sql-optimization --marketplace http://datus-marketplace:9000
 ```
 
 Requirements:

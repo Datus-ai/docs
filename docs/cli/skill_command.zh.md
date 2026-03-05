@@ -28,13 +28,13 @@
 
 ```bash
 # 交互式登录
-datus skill login --marketplace http://my-town:9000
+datus skill login --marketplace http://datus-marketplace:9000
 
 # 非交互式登录
-datus skill login --marketplace http://my-town:9000 --email user@example.com --password secret
+datus skill login --marketplace http://datus-marketplace:9000 --email user@example.com --password secret
 
 # 登出
-datus skill logout --marketplace http://my-town:9000
+datus skill logout --marketplace http://datus-marketplace:9000
 ```
 
 ### 列出本地技能

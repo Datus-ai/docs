@@ -28,13 +28,13 @@ The `datus skill` command provides a CLI interface for managing skills locally a
 
 ```bash
 # Interactive login
-datus skill login --marketplace http://my-town:9000
+datus skill login --marketplace http://datus-marketplace:9000
 
 # Non-interactive login
-datus skill login --marketplace http://my-town:9000 --email user@example.com --password secret
+datus skill login --marketplace http://datus-marketplace:9000 --email user@example.com --password secret
 
 # Logout
-datus skill logout --marketplace http://my-town:9000
+datus skill logout --marketplace http://datus-marketplace:9000
 ```
 
 ### List Local Skills
