@@ -17,6 +17,7 @@ nav:
       - Execution Command: cli/execution_command.md
       - MCP Extensions: cli/mcp_extensions.md
       - SQL Execution: cli/sql_execution.md
+      - Skill Command: cli/skill_command.md
       - Reference: cli/reference.md
       - Plan Mode: cli/plan_mode.md
     - Subagent:
@@ -82,6 +83,7 @@ plugins:
             Execution Command: 执行命令
             MCP Extensions: MCP 扩展
             SQL Execution: SQL 执行
+            Skill Command: 技能命令
             Reference: 参考
             Plan Mode: 计划模式
             Subagent: Subagent

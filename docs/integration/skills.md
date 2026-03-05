@@ -341,3 +341,248 @@ Enable debug logging:
 ```bash
 export DATUS_LOG_LEVEL=DEBUG
 ```
+
+## Skill Marketplace CLI
+
+Datus includes a built-in CLI for interacting with the AgenticDataStack Town Skills Marketplace. You can search, install, publish, and manage skills directly from the command line.
+
+### Authentication
+
+The Town Marketplace requires authentication for all API operations. Use the `login` command to authenticate before using marketplace features.
+
+```bash
+# Interactive login (prompts for email and password)
+datus skill login --marketplace http://my-town:9000
+
+# Non-interactive login
+datus skill login --marketplace http://my-town:9000 --email user@example.com --password secret
+
+# Logout (clear saved token)
+datus skill logout --marketplace http://my-town:9000
+```
+
+In the REPL:
+```
+datus> .skill login http://my-town:9000
+Email: user@example.com
+Password: ****
+Login successful! Token saved for http://my-town:9000
+```
+
+Tokens are saved at `~/.datus/marketplace_auth.json` and automatically included in all subsequent marketplace requests. Tokens expire after 24 hours; re-run `login` to refresh.
+
+### Configuration
+
+Marketplace settings in `agent.yml`:
+
+```yaml
+skills:
+  directories:
+    - ~/.datus/skills
+    - ./skills
+  marketplace_url: "http://localhost:9000"  # Town backend URL
+  auto_sync: false                          # Auto-sync promoted skills on startup
+  install_dir: "~/.datus/skills"            # Where marketplace skills are installed
+```
+
+Or override the marketplace URL per-command with `--marketplace`:
+
+```bash
+datus skill search sql --marketplace http://my-town:9000
+```
+
+### Command Reference
+
+#### `datus skill list`
+
+List all locally installed skills.
+
+```bash
+datus skill list
+```
+
+Output:
+```
+┌──────────────────┬─────────┬─────────────┬─────────────────────────┐
+│ Name             │ Version │ Source      │ Tags                    │
+├──────────────────┼─────────┼─────────────┼─────────────────────────┤
+│ sql-optimization │ 1.0.0   │ marketplace │ sql, optimization       │
+│ report-generator │ 1.0.0   │ local       │ report, analysis        │
+└──────────────────┴─────────┴─────────────┴─────────────────────────┘
+```
+
+#### `datus skill search <query>`
+
+Search for skills in the Town Marketplace.
+
+```bash
+datus skill search sql
+datus skill search optimization
+datus skill search --marketplace http://localhost:9000 report
+```
+
+Output:
+```
+Searching for 'sql'...
+  sql-optimization v1.0.0 — Optimize SQL queries for better performance
+  sql-linting v0.3.0 — Lint SQL queries against best practices
+```
+
+#### `datus skill install <name> [version]`
+
+Install a skill from the Marketplace to your local `install_dir`.
+
+```bash
+# Install latest version
+datus skill install sql-optimization
+
+# Install specific version
+datus skill install sql-optimization 1.0.0
+```
+
+What happens:
+
+1. Downloads the skill bundle (`.tar.gz`) from Town Backend
+2. Extracts to `~/.datus/skills/<name>/`
+3. Registers the skill with `source=marketplace` in the local registry
+
+#### `datus skill publish <path> [--owner <name>]`
+
+Publish a local skill directory to the Town Marketplace.
+
+```bash
+# Publish from a skill directory (must contain SKILL.md)
+datus skill publish ./skills/sql-optimization
+
+# Publish with owner
+datus skill publish ./skills/sql-optimization --owner "murphy"
+
+# Publish to a specific marketplace
+datus skill publish ./skills/sql-optimization --marketplace http://my-town:9000
+```
+
+Requirements:
+
+- The directory must contain a valid `SKILL.md` with YAML frontmatter
+- Required frontmatter fields: `name`, `description`
+- Recommended fields: `version`, `tags`, `allowed_commands`, `license`
+
+Example `SKILL.md`:
+
+```markdown
+---
+name: sql-optimization
+description: Optimize SQL queries for better performance
+tags: [sql, optimization, performance]
+version: "1.0.0"
+license: Apache-2.0
+compatibility:
+  datus: ">=0.2.0"
+allowed_commands:
+  - "python:scripts/*.py"
+  - "sh:scripts/*.sh"
+---
+
+# SQL Optimization Skill
+...
+```
+
+What happens:
+
+1. Reads and validates `SKILL.md` frontmatter
+2. Creates a `.tar.gz` bundle of the skill directory
+3. POSTs skill metadata to `POST /api/skills`
+4. Uploads the bundle to `POST /api/skills/<name>/<version>/upload`
+5. Skill appears in the Town Marketplace UI at `/skills`
+
+#### `datus skill info <name>`
+
+Show details about a skill (checks both local and marketplace).
+
+```bash
+datus skill info sql-optimization
+```
+
+Output:
+```
+Local: sql-optimization v1.0.0 (marketplace)
+  Optimize SQL queries for better performance
+Marketplace: sql-optimization v1.0.0
+  Owner: murphy  Promoted: True
+```
+
+#### `datus skill update`
+
+Update all marketplace-installed skills to the latest version.
+
+```bash
+datus skill update
+```
+
+This checks each marketplace-installed skill and re-downloads if a newer version is available.
+
+#### `datus skill remove <name>`
+
+Remove a locally installed skill from the registry.
+
+```bash
+datus skill remove sql-optimization
+```
+
+### REPL Commands
+
+The same skill operations are available inside the interactive REPL session:
+
+```
+datus> .skill list                          # List local skills
+datus> .skill search sql                    # Search marketplace
+datus> .skill install sql-optimization      # Install from marketplace
+datus> .skill publish ./skills/my-skill     # Publish to marketplace
+datus> .skill info sql-optimization         # Show skill details
+datus> .skill update                        # Update marketplace skills
+datus> .skill remove sql-optimization       # Remove local skill
+```
+
+### End-to-End Workflow Example
+
+```bash
+# 1. Create a skill locally
+mkdir -p ./skills/my-etl-helper/scripts
+cat > ./skills/my-etl-helper/SKILL.md << 'EOF'
+---
+name: my-etl-helper
+description: Helper utilities for ETL pipeline development
+tags: [etl, pipeline, data-engineering]
+version: "1.0.0"
+allowed_commands:
+  - "python:scripts/*.py"
+---
+
+# ETL Helper Skill
+Provides utilities for building and testing ETL pipelines.
+EOF
+
+# 2. Publish to marketplace
+datus skill publish ./skills/my-etl-helper --owner murphy
+
+# 3. Verify it appears in marketplace
+datus skill search etl
+
+# 4. Install on another machine / agent
+datus skill install my-etl-helper
+
+# 5. Verify local installation
+datus skill list
+
+# 6. View in Town UI
+open http://localhost:3000/skills
+```
+
+### Town Marketplace UI
+
+After publishing, skills are visible in the Town Frontend:
+
+- **Skills List** (`/skills`): Browse all skills with search and tag filtering
+- **Skill Detail** (`/skills/<name>`): View version history, metadata, promote/delete
+- **Publish Form**: Publish new skills directly from the web UI
+- **Promote**: Mark a skill as "Town Default" so all agents auto-install it
