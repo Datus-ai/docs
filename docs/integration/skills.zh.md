@@ -342,3 +342,248 @@ prefix:glob_pattern
 ```bash
 export DATUS_LOG_LEVEL=DEBUG
 ```
+
+## 技能市场 CLI
+
+Datus 内置了与 AgenticDataStack Town 技能市场交互的 CLI。您可以直接从命令行搜索、安装、发布和管理技能。
+
+### 认证
+
+Town 市场的所有 API 操作都需要认证。在使用市场功能之前，请使用 `login` 命令进行认证。
+
+```bash
+# 交互式登录（提示输入邮箱和密码）
+datus skill login --marketplace http://datus-marketplace:9000
+
+# 非交互式登录
+datus skill login --marketplace http://datus-marketplace:9000 --email user@example.com --password secret
+
+# 登出（清除已保存的令牌）
+datus skill logout --marketplace http://datus-marketplace:9000
+```
+
+在 REPL 中：
+```
+datus> .skill login http://datus-marketplace:9000
+Email: user@example.com
+Password: ****
+Login successful! Token saved for http://datus-marketplace:9000
+```
+
+令牌保存在 `~/.datus/marketplace_auth.json`，并自动包含在所有后续市场请求中。令牌在 24 小时后过期；重新运行 `login` 以刷新。
+
+### 配置
+
+`agent.yml` 中的市场设置：
+
+```yaml
+skills:
+  directories:
+    - ~/.datus/skills
+    - ./skills
+  marketplace_url: "http://localhost:9000"  # Town 后端 URL
+  auto_sync: false                          # 启动时自动同步推荐技能
+  install_dir: "~/.datus/skills"            # 市场技能的安装目录
+```
+
+或通过 `--marketplace` 参数为单个命令指定市场 URL：
+
+```bash
+datus skill search sql --marketplace http://datus-marketplace:9000
+```
+
+### 命令参考
+
+#### `datus skill list`
+
+列出所有本地已安装的技能。
+
+```bash
+datus skill list
+```
+
+输出：
+```
+┌──────────────────┬─────────┬─────────────┬─────────────────────────┐
+│ Name             │ Version │ Source      │ Tags                    │
+├──────────────────┼─────────┼─────────────┼─────────────────────────┤
+│ sql-optimization │ 1.0.0   │ marketplace │ sql, optimization       │
+│ report-generator │ 1.0.0   │ local       │ report, analysis        │
+└──────────────────┴─────────┴─────────────┴─────────────────────────┘
+```
+
+#### `datus skill search <query>`
+
+在 Town 市场中搜索技能。
+
+```bash
+datus skill search sql
+datus skill search optimization
+datus skill search --marketplace http://localhost:9000 report
+```
+
+输出：
+```
+Searching for 'sql'...
+  sql-optimization v1.0.0 — Optimize SQL queries for better performance
+  sql-linting v0.3.0 — Lint SQL queries against best practices
+```
+
+#### `datus skill install <name> [version]`
+
+从市场安装技能到本地 `install_dir`。
+
+```bash
+# 安装最新版本
+datus skill install sql-optimization
+
+# 安装指定版本
+datus skill install sql-optimization 1.0.0
+```
+
+安装过程：
+
+1. 从 Town 后端下载技能包（`.tar.gz`）
+2. 解压到 `~/.datus/skills/<name>/`
+3. 在本地注册表中以 `source=marketplace` 注册技能
+
+#### `datus skill publish <path> [--owner <name>]`
+
+将本地技能目录发布到 Town 市场。
+
+```bash
+# 从技能目录发布（必须包含 SKILL.md）
+datus skill publish ./skills/sql-optimization
+
+# 指定所有者发布
+datus skill publish ./skills/sql-optimization --owner "murphy"
+
+# 发布到指定市场
+datus skill publish ./skills/sql-optimization --marketplace http://datus-marketplace:9000
+```
+
+要求：
+
+- 目录必须包含带有 YAML frontmatter 的有效 `SKILL.md`
+- 必需的 frontmatter 字段：`name`、`description`
+- 推荐字段：`version`、`tags`、`allowed_commands`、`license`
+
+`SKILL.md` 示例：
+
+```markdown
+---
+name: sql-optimization
+description: Optimize SQL queries for better performance
+tags: [sql, optimization, performance]
+version: "1.0.0"
+license: Apache-2.0
+compatibility:
+  datus: ">=0.2.0"
+allowed_commands:
+  - "python:scripts/*.py"
+  - "sh:scripts/*.sh"
+---
+
+# SQL Optimization Skill
+...
+```
+
+发布过程：
+
+1. 读取并验证 `SKILL.md` frontmatter
+2. 创建技能目录的 `.tar.gz` 包
+3. 将技能元数据 POST 到 `POST /api/skills`
+4. 上传包到 `POST /api/skills/<name>/<version>/upload`
+5. 技能出现在 Town 市场 UI 的 `/skills` 页面
+
+#### `datus skill info <name>`
+
+显示技能详情（检查本地和市场）。
+
+```bash
+datus skill info sql-optimization
+```
+
+输出：
+```
+Local: sql-optimization v1.0.0 (marketplace)
+  Optimize SQL queries for better performance
+Marketplace: sql-optimization v1.0.0
+  Owner: murphy  Promoted: True
+```
+
+#### `datus skill update`
+
+将所有市场安装的技能更新到最新版本。
+
+```bash
+datus skill update
+```
+
+此命令检查每个市场安装的技能，如果有更新版本可用则重新下载。
+
+#### `datus skill remove <name>`
+
+从注册表中移除本地已安装的技能。
+
+```bash
+datus skill remove sql-optimization
+```
+
+### REPL 命令
+
+在交互式 REPL 会话中也可以使用相同的技能操作：
+
+```
+datus> .skill list                          # 列出本地技能
+datus> .skill search sql                    # 搜索市场
+datus> .skill install sql-optimization      # 从市场安装
+datus> .skill publish ./skills/my-skill     # 发布到市场
+datus> .skill info sql-optimization         # 显示技能详情
+datus> .skill update                        # 更新市场技能
+datus> .skill remove sql-optimization       # 移除本地技能
+```
+
+### 端到端工作流示例
+
+```bash
+# 1. 在本地创建技能
+mkdir -p ./skills/my-etl-helper/scripts
+cat > ./skills/my-etl-helper/SKILL.md << 'EOF'
+---
+name: my-etl-helper
+description: Helper utilities for ETL pipeline development
+tags: [etl, pipeline, data-engineering]
+version: "1.0.0"
+allowed_commands:
+  - "python:scripts/*.py"
+---
+
+# ETL Helper Skill
+Provides utilities for building and testing ETL pipelines.
+EOF
+
+# 2. 发布到市场
+datus skill publish ./skills/my-etl-helper --owner murphy
+
+# 3. 验证是否出现在市场中
+datus skill search etl
+
+# 4. 在另一台机器/agent 上安装
+datus skill install my-etl-helper
+
+# 5. 验证本地安装
+datus skill list
+
+# 6. 在 Town UI 中查看
+open http://localhost:3000/skills
+```
+
+### Town 市场 UI
+
+发布后，技能在 Town 前端可见：
+
+- **技能列表** (`/skills`)：浏览所有技能，支持搜索和标签过滤
+- **技能详情** (`/skills/<name>`)：查看版本历史、元数据、推荐/删除
+- **发布表单**：直接从 Web UI 发布新技能
+- **推荐**：将技能标记为"Town 默认"，所有 agent 自动安装
